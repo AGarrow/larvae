@@ -21,6 +21,11 @@ class PopoloBase(dict):
         it.
 
         On error, this will raise a `validictory.ValidationError`.
+
+        This also expects that the schemas assume that omitting required
+        in the schema asserts the field is optional, not required. This is
+        due to upstream schemas being in JSON Schema v3, and not validictory's
+        modified syntax.
         """
         curpath = os.path.dirname(os.path.abspath(__file__))
         schema = json.load(open(os.path.join(

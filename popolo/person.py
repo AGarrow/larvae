@@ -18,3 +18,5 @@ class PopoloPerson(PopoloBase):
         """
         self['name'] = name
         self['id'] = guid
+        for arg in kwargs:
+            self[arg] = kwargs[arg]
