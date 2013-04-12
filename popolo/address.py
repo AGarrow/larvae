@@ -18,5 +18,6 @@ class PopoloAddress(PopoloBase):
         for arg in kwargs:
             self[arg] = kwargs[arg]
 
+    def _validate(self):
         if set(self.keys()).intersection(set(self._address_types)) == set([]):
             raise ValueError("Expected at least one address entry")
