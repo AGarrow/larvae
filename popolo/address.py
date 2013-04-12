@@ -12,6 +12,11 @@ class PopoloAddress(PopoloBase):
 
     def __init__(self, guid, type_, **kwargs):
         """
+        Constructor for the Address object.
+
+        We require a unique ID and type for the address.
+        Additional arguments may be given, which match those
+        defined by popolo, which will be added to the object.
         """
         self['id'] = guid
         self['type'] = type_
