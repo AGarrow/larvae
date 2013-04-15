@@ -18,5 +18,17 @@ class PopoloPerson(PopoloBase):
         """
         self['name'] = name
         self['id'] = guid
+        self['links'] = []
+        self['other_names'] = []
         for arg in kwargs:
             self[arg] = kwargs[arg]
+
+    def add_link(self, note, url, **kwargs):
+        payload = kwargs.copy()
+        payload.update({"note": note, "url": url})
+        self['links'].append(payload)
+
+    def add_name(self, name, note, **kwargs):
+        payload = kwargs.copy()
+        payload.update({"name": name, "note": note})
+        self['other_names'].append(payload)
