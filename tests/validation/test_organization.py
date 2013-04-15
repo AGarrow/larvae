@@ -26,3 +26,11 @@ def test_add_post():
             None, "Human Readable Name", "Chef"))
     except ValidationError:
         pass
+
+    assert orga['posts'] == [
+        {"organization_id": "guid",
+         "id": "pguid",
+         "role": "Chef",
+         "label": "Human Readable Name",
+        }
+    ]
