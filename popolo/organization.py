@@ -1,4 +1,5 @@
 from popolo.base import PopoloBase
+from popolo.post import PopoloPost
 
 
 class PopoloOrganization(PopoloBase):
@@ -17,6 +18,7 @@ class PopoloOrganization(PopoloBase):
         self['name'] = name
         self['id'] = guid
         self['identifiers'] = []
+        self['posts'] = []
         for arg in kwargs:
             self[arg] = kwargs[arg]
 
@@ -24,3 +26,8 @@ class PopoloOrganization(PopoloBase):
         data = kwargs.copy()
         data.update({"identifier": identifier})
         self['identifiers'].append(data)
+
+    def add_post(self, guid, label, role, **kwargs):
+        post = PopoloPost(guid, label, self['id'], role, **kwargs)
+        post.validate()
+        self['posts'].append(post)

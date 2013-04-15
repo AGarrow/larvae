@@ -52,6 +52,13 @@
             },
             "type": "array"
         },
+        "posts": {
+            "description": "All posts.",
+            "items": {
+                "$ref": "http://popoloproject.com/schemas/post.json#"
+            },
+            "type": "array"
+        },
         "parent_id": {
             "description": "An organization that contains this organization",
             "type": "string"

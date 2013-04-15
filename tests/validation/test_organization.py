@@ -12,3 +12,17 @@ def test_basic_invalid_organization():
         assert "Garbage test compare" == orga.validate()
     except ValidationError:
         pass
+
+
+def test_add_post():
+    """ Test that we can hack posts in on the fly'"""
+    orga = PopoloOrganization("guid", "name")
+    orga.validate()
+
+    orga.add_post("pguid", "Human Readable Name", "Chef")
+
+    try:
+        assert ("This shouldn't return" == orga.add_post(
+            None, "Human Readable Name", "Chef"))
+    except ValidationError:
+        pass
