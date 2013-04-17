@@ -26,7 +26,6 @@ class Organization(PopoloBase):
         self.id = guid
         self.identifiers = []
         self.posts = []
-        self.contact_details = []
         for arg in kwargs:
             self[arg] = kwargs[arg]
 
@@ -43,10 +42,3 @@ class Organization(PopoloBase):
                     '{0} not a valid kwarg for add_post'.format(k))
             post[k] = v
         self.posts.append(post)
-
-    def add_contact(self, key, value, group):
-        self.contact_details.append({
-            "key": key,
-            "value": value,
-            "group": group
-        })
