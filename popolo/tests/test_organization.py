@@ -7,7 +7,7 @@ def test_basic_invalid_organization():
     orga = PopoloOrganization("guid", "name")
     orga.validate()
 
-    orga['name'] = None
+    orga.name = None
     try:
         assert "Garbage test compare" == orga.validate()
     except ValidationError:
@@ -20,17 +20,18 @@ def test_add_post():
     orga.validate()
 
     orga.add_post("pguid", "Human Readable Name", "Chef")
+    print orga.posts
 
-    try:
-        assert ("This shouldn't return" == orga.add_post(
-            None, "Human Readable Name", "Chef"))
-    except ValidationError:
-        pass
-
-    assert orga['posts'] == [
-        {"organization_id": "guid",
-         "id": "pguid",
+    assert orga.posts == [
+        {"id": "pguid",
          "role": "Chef",
          "label": "Human Readable Name",
         }
     ]
+
+    try:
+        orga.add_post(None, "Human Readable Name", "Chef")
+        assert ("Garbage compare") == orga.validate()
+    except ValidationError:
+        pass
+
