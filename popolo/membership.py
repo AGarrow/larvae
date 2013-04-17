@@ -7,6 +7,9 @@ class PopoloMembership(PopoloBase):
     """
 
     _schema_name = "membership"
+    __slots__ = ("id", "organization_id", "person_id", "post_id",
+                 "role", "start_date", "end_date")
+
 
     def __init__(self, guid, person_id, organization_id, **kwargs):
         """
@@ -16,8 +19,8 @@ class PopoloMembership(PopoloBase):
         popolo spec. Additional arguments may be given, which match those
         defined by popolo.
         """
-        self['id'] = guid
-        self['person_id'] = person_id
-        self['organization_id'] = organization_id
-        for arg in kwargs:
-            self[arg] = kwargs[arg]
+        self.id = guid
+        self.person_id = person_id
+        self.organization_id = organization_id
+        for k, v in kwargs.items():
+            setattr(self, k, v)

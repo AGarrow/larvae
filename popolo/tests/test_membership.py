@@ -6,7 +6,7 @@ def test_basic_invalid_membership():
     membership = PopoloMembership("guid", "person_id", "orga_id")
     membership.validate()
 
-    membership['person_id'] = None
+    membership.person_id = None
     try:
         assert "nonsense" == membership.validate()
     except ValueError:
