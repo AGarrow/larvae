@@ -15,6 +15,7 @@ def test_basic_invalid_person():
 
 
 def test_magic_methods():
+    """ Test the magic methods work """
     bob = Person("John Q. Public, Esq.",
                  gender="male", image="http://example.com/john.jpg",
                  summary="Some person")
