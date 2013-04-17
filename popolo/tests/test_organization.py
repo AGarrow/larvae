@@ -20,7 +20,6 @@ def test_add_post():
     orga.validate()
 
     orga.add_post("pguid", "Human Readable Name", "Chef")
-    print orga.posts
 
     assert orga.posts == [
         {"id": "pguid",
