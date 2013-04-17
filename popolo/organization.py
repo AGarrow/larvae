@@ -1,5 +1,4 @@
 from popolo.base import PopoloBase
-from popolo.post import PopoloPost
 
 
 class PopoloOrganization(PopoloBase):

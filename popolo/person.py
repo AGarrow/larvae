@@ -1,34 +1,34 @@
 from popolo.base import PopoloBase
 
 
-class PopoloPerson(PopoloBase):
+class Person(PopoloBase):
     """
-    A single popolo encoded Person.
+    Details for a Person in Popolo format.
     """
 
     _schema_name = "person"
 
-    def __init__(self, guid, name, **kwargs):
-        """
-        Constructor for the Person object.
+    __slots__ = ('name', 'id', 'gender', 'birth_date', 'death_date', 'image',
+                 'summary', 'biography', 'links', 'other_names', 'extras')
+    _other_name_slots = ('name', 'start_date', 'end_date', 'note')
 
-        We require a unique ID and name for the person, as required by the
-        popolo spec. Additional arguments may be given, which match those
-        defined by popolo.
-        """
-        self['name'] = name
-        self['id'] = guid
-        self['links'] = []
-        self['other_names'] = []
-        for arg in kwargs:
-            self[arg] = kwargs[arg]
+    def __init__(self, name, **kwargs):
+        self.name = name
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
-    def add_link(self, note, url, **kwargs):
-        payload = kwargs.copy()
-        payload.update({"note": note, "url": url})
-        self['links'].append(payload)
+        self.links = []
+        self.other_names = []
+        self.extras = {}
 
-    def add_name(self, name, note, **kwargs):
-        payload = kwargs.copy()
-        payload.update({"name": name, "note": note})
-        self['other_names'].append(payload)
+    def add_name(self, name, **kwargs):
+        other_name = {'name': name}
+        for k, v in kwargs.items():
+            if k not in self._other_name_slots:
+                raise AttributeError('{0} not a valid kwarg for add_name'
+                                     .format(k))
+            other_name[k] = v
+        self.other_names.append(other_name)
+
+    def add_link(self, note, url):
+        self.links.append({"note": note, "url": url})

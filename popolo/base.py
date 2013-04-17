@@ -3,22 +3,18 @@ import json
 import os
 
 
-class PopoloBase(dict):
+class PopoloBase(object):
     """
     This is the base class for all the Popolo objects. This contains
     commom methods and abstractions for popolo objects.
-
-    All popolo objects subclass the native `dict bits.
     """
 
-    _schema_name = None  # to be overridden by children. Something like
-    #             "person" or "organizations". Used in :func:`validate`.
+    # needs slots defined so children __slots__ are enforced
+    __slots__ = ('_schema_name',)
 
-    def _validate(self):
-        """
-        Implementation-local validation method.
-        """
-        pass
+    # to be overridden by children. Something like "person" or "organization".
+    # Used in :func:`validate`.
+    _schema_name = None
 
     def validate(self):
         """
@@ -34,8 +30,19 @@ class PopoloBase(dict):
         due to upstream schemas being in JSON Schema v3, and not validictory's
         modified syntax.
         """
-        self._validate()
         curpath = os.path.dirname(os.path.abspath(__file__))
         schema = json.load(open(os.path.join(
             curpath, "schemas", "%s.json" % (self._schema_name)), 'r'))
-        validictory.validate(self, schema, required_by_default=False)
+        validictory.validate(self.as_dict(), schema, required_by_default=False)
+
+    def as_dict(self):
+        d = {}
+        all_slots = set(self.__slots__)
+        for cls in self.__class__.__mro__:
+            if cls == PopoloBase:
+                break
+            all_slots |= set(cls.__slots__)
+        for attr in all_slots:
+            if hasattr(self, attr):
+                d[attr] = getattr(self, attr)
+        return d

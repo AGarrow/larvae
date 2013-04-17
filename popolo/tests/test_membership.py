@@ -1,4 +1,4 @@
-from popolo.membership import PopoloMembership
+from ..membership import PopoloMembership
 
 
 def test_basic_invalid_membership():

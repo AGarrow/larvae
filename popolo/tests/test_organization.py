@@ -1,4 +1,4 @@
-from popolo.organization import PopoloOrganization
+from ..organization import PopoloOrganization
 from validictory import ValidationError
 
 

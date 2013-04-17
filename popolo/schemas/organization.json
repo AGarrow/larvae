@@ -54,10 +54,51 @@
         },
         "posts": {
             "description": "All posts.",
+            "type": "array",
             "items": {
-                "$ref": "http://popoloproject.com/schemas/post.json#"
-            },
-            "type": "array"
+                "description": "A position that exists independent of the person holding it",
+                "properties": {
+                    "addresses": {
+                        "description": "Addresses at which the post is based",
+                        "items": {
+                            "$ref": "http://popoloproject.com/schemas/address.json#"
+                        },
+                        "type": "array"
+                    },
+                    "end_date": {
+                        "description": "Ending date of the post.",
+                        "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
+                        "type": "string"
+                    },
+                    "id": {
+                        "description": "The post's unique identifier",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "label": {
+                        "description": "A label describing the post",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "organization_id": {
+                        "description": "The ID of the organization in which the post is held",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "role": {
+                        "description": "The role that the holder of the post fulfills",
+                        "required": true,
+                        "type": "string"
+                    },
+                    "start_date": {
+                        "description": "Startting date of the post.",
+                        "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
+                        "type": "string"
+                    }
+                },
+                "title": "Post",
+                "type": "object"
+            }
         },
         "parent_id": {
             "description": "An organization that contains this organization",
