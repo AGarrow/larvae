@@ -1,7 +1,7 @@
 from popolo.base import PopoloBase
 
 
-class PopoloMembership(PopoloBase):
+class Membership(PopoloBase):
     """
     A single popolo encoded Membership.
     """

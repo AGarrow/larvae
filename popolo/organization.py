@@ -1,7 +1,7 @@
 from popolo.base import PopoloBase
 
 
-class PopoloOrganization(PopoloBase):
+class Organization(PopoloBase):
     """
     A single popolo encoded Organization
     """
