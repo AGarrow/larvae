@@ -20,9 +20,10 @@ type_tables = {
 
 def save_objects(payload):
     for entry in payload:
-        print entry
         table = getattr(nudb, type_tables[type(entry)])
-        table.save(entry.as_dict())
+        eo = entry.as_dict()
+        eo['_id'] = eo['id']
+        table.save(eo)
 
 
 def save_object(payload):
@@ -50,9 +51,20 @@ def create_committee_orgs():
         save_object(orga)
 
 
+def create_cow(abbr):
+    metad = db.metadata.find_one({"_id": abbr})
+    cow = Organization(abbr, metad['legislature_name'])
+    for post in db.districts.find({"abbr": abbr}):
+        for seat in range(int(post['num_seats'])):
+            sid = "%s.%s" % (post['_id'], seat)
+            cow.add_post(sid, post['name'], "Member")
+            # , chamber=post['chamber'])
+
+    return cow
+
+
 def convert_people():
     cows = {}  # Committee on the whole
-    chambers = {}
     parties = {}
     people = []
     memberships = []
@@ -68,9 +80,7 @@ def convert_people():
 
         cow = cows.get(state, None)
         if not cow:
-            # XXX: Use metadata to create better name.
-            cow = Organization(state, "{state} Legislature".format(**locals()))
-            cows[state] = cow
+            cows[state] = cow = create_cow(state)
 
         party_org = parties.get(party, None)
         if not party_org:
@@ -79,28 +89,10 @@ def convert_people():
                                "{state} {party} Party".format(**locals()))
             parties[party] = party_org
 
-        chamber_org = chambers.get(chamber, None)
-        if not chamber_org:
-            chamber_org = Organization(
-                "{state}-{chamber}".format(**locals()),
-                "{state} {chamber} Chamber".format(**locals()))
-            chambers[chamber] = chamber_org
-
-        post_id = "{state}-{chamber}-{district}".format(**locals())
-
-        cow.add_post(post_id,
-                     "{state} {chamber} {district} district",
-                     "Member",)  # XXX Metadata name
-
         memberships.append(Membership(
-            "{post_id}.{person_id}".format(**locals()),
+            "{cow.id}.{person_id}".format(**locals()),
             person_id,
             cow.id))  # COW membership
-
-        memberships.append(Membership(
-            "{state}-{chamber}.{person_id}".format(**locals()),
-            person_id,
-            chamber_org.id))  # COW membership
 
         memberships.append(Membership(
             "{party}.{person_id}".format(**locals()),
@@ -115,7 +107,6 @@ def convert_people():
     save_objects(memberships)
     save_objects(cows.values())
     save_objects(parties.values())
-    save_objects(chambers.values())
 
 
 if __name__ == "__main__":
