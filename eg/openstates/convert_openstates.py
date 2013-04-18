@@ -6,9 +6,23 @@ from popolo.person import Person
 
 from billy.core import db
 
+from pymongo import Connection
+connection = Connection('localhost', 27017)
+nudb = connection.popolo  # XXX: Fix the db name
+
+
+type_tables = {
+    Organization: "organizations",
+    Membership: "memberships",
+    Person: "people"
+}
+
 
 def save_objects(payload):
-    pass
+    for entry in payload:
+        print entry
+        table = getattr(nudb, type_tables[type(entry)])
+        table.save(entry.as_dict())
 
 
 def save_object(payload):
@@ -33,7 +47,7 @@ def create_committee_orgs():
             memberships.append(Membership(guid, person_id, orga.id))
 
         save_objects(memberships)
-        save_object(committee)
+        save_object(orga)
 
 
 def convert_people():
