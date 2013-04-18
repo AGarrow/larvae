@@ -34,3 +34,14 @@ def test_add_post():
     except ValidationError:
         pass
 
+    try:
+        assert "Garbage" == orga.add_identifier("id10t", foo="bar")
+    except TypeError:
+        pass
+
+    orga.add_identifier("id10t")
+    orga.add_identifier("l0l", scheme="kruft")
+
+    assert orga.identifiers[-1]['scheme'] == "kruft"
+    assert orga.identifiers[0]['identifier'] == "id10t"
+    assert not hasattr(orga.identifiers[0], "scheme")

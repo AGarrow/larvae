@@ -29,9 +29,10 @@ class Organization(PopoloBase):
         for arg in kwargs:
             self[arg] = kwargs[arg]
 
-    def add_identifier(self, identifier, **kwargs):
-        data = kwargs.copy()
-        data.update({"identifier": identifier})
+    def add_identifier(self, identifier, scheme=None):
+        data = {"identifier": identifier}
+        if scheme:
+            data['scheme'] = scheme
         self.identifiers.append(data)
 
     def add_post(self, guid, label, role, **kwargs):
