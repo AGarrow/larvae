@@ -34,6 +34,10 @@ def create_committee_orgs():
     for committee in db.committees.find():
         orga = Organization(committee['_id'],
                             committee['committee'])
+
+        if hasattr(committee, "parent_id") and committee['parent_id']:
+            orga.parent_id = commitee['parent_id']
+
         memberships = []
         # XXX: Fix how we do subcommittees. Pass one to get all committees,
         # then pass over again and assoc as members?
