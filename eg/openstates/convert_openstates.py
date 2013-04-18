@@ -33,5 +33,8 @@ def create_committee_orgs():
         save_objects(memberships)
         save_object(committee)
 
+
+def create_
+
 if __name__ == "__main__":
     create_committee_orgs()
