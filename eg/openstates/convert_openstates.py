@@ -2,6 +2,8 @@
 
 from popolo.organization import Organization
 from popolo.membership import Membership
+from popolo.person import Person
+
 from billy.core import db
 
 
@@ -34,7 +36,74 @@ def create_committee_orgs():
         save_object(committee)
 
 
-def create_
+def convert_people():
+    cows = {}  # Committee on the whole
+    chambers = {}
+    parties = {}
+    people = []
+    memberships = []
+
+    for person in db.legislators.find({"active": True}):
+        state = person['state']
+        current_role = person['roles'][0]
+        person_id = person['_id']
+
+        chamber = current_role['chamber']
+        party = current_role['party']
+        district = current_role['district']
+
+        cow = cows.get(state, None)
+        if not cow:
+            # XXX: Use metadata to create better name.
+            cow = Organization(state, "{state} Legislature".format(**locals()))
+            cows[state] = cow
+
+        party_org = parties.get(party, None)
+        if not party_org:
+            party = party.encode('utf-8')
+            party_org = Organization("{state}-{party}".format(**locals()),
+                               "{state} {party} Party".format(**locals()))
+            parties[party] = party_org
+
+        chamber_org = chambers.get(chamber, None)
+        if not chamber_org:
+            chamber_org = Organization(
+                "{state}-{chamber}".format(**locals()),
+                "{state} {chamber} Chamber".format(**locals()))
+            chambers[chamber] = chamber_org
+
+        post_id = "{state}-{chamber}-{district}".format(**locals())
+
+        cow.add_post(post_id,
+                     "{state} {chamber} {district} district",
+                     "Member",)  # XXX Metadata name
+
+        memberships.append(Membership(
+            "{post_id}.{person_id}".format(**locals()),
+            person_id,
+            cow.id))  # COW membership
+
+        memberships.append(Membership(
+            "{state}-{chamber}.{person_id}".format(**locals()),
+            person_id,
+            chamber_org.id))  # COW membership
+
+        memberships.append(Membership(
+            "{party}.{person_id}".format(**locals()),
+            person_id,
+            party_org.id))  # Party membership
+
+        who = Person(person['full_name'],
+                     id=person_id)
+        people.append(who)
+
+    save_objects(people)
+    save_objects(memberships)
+    save_objects(cows.values())
+    save_objects(parties.values())
+    save_objects(chambers.values())
+
 
 if __name__ == "__main__":
+    convert_people()
     create_committee_orgs()
