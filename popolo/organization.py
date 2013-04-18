@@ -32,7 +32,7 @@ class Organization(PopoloBase):
     def add_identifier(self, identifier, **kwargs):
         data = kwargs.copy()
         data.update({"identifier": identifier})
-        self['identifiers'].append(data)
+        self.identifiers.append(data)
 
     def add_post(self, guid, label, role, **kwargs):
         post = {"id": guid, "label": label, "role": role}
