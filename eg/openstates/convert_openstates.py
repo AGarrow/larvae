@@ -85,8 +85,8 @@ def convert_people():
         party_org = parties.get(party, None)
         if not party_org:
             party = party.encode('utf-8')
-            party_org = Organization("{state}-{party}".format(**locals()),
-                               "{state} {party} Party".format(**locals()))
+            party_org = Organization("{party}".format(**locals()),
+                               "{party} Party".format(**locals()))
             parties[party] = party_org
 
         memberships.append(Membership(
@@ -110,5 +110,12 @@ def convert_people():
 
 
 if __name__ == "__main__":
+    for entry in type_tables.values():
+        print("Dropping %s" % (entry))
+        nudb.drop_collection(entry)
+
+    print("Converting people")
     convert_people()
+
+    print("Converting committees")
     create_committee_orgs()
