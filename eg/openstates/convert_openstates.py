@@ -35,8 +35,8 @@ def create_committee_orgs():
         orga = Organization(committee['_id'],
                             committee['committee'])
 
-        if hasattr(committee, "parent_id") and committee['parent_id']:
-            orga.parent_id = commitee['parent_id']
+        if committee.get("parent_id", None):
+            orga.parent_id = committee['parent_id']
 
         memberships = []
         # XXX: Fix how we do subcommittees. Pass one to get all committees,
