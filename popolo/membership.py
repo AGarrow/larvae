@@ -10,7 +10,6 @@ class Membership(PopoloBase):
     __slots__ = ("id", "organization_id", "person_id", "post_id",
                  "role", "start_date", "end_date")
 
-
     def __init__(self, guid, person_id, organization_id, **kwargs):
         """
         Constructor for the Person object.

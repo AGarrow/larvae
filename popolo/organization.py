@@ -13,7 +13,6 @@ class Organization(PopoloBase):
     _post_slots = ('contact_details', 'end_date', 'id', 'label',
                    'organization_id', 'role', 'start_date',)
 
-
     _schema_name = "organization"
 
     def __init__(self, guid, name, **kwargs):
