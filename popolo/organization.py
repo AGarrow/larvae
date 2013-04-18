@@ -11,7 +11,8 @@ class Organization(PopoloBase):
                  'posts',)
 
     _post_slots = ('contact_details', 'end_date', 'id', 'label',
-                   'organization_id', 'role', 'start_date',)
+                   'organization_id', 'role', 'start_date', 'chamber',
+                   'district')
 
     _schema_name = "organization"
 

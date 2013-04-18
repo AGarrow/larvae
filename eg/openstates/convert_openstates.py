@@ -57,8 +57,8 @@ def create_cow(abbr):
     for post in db.districts.find({"abbr": abbr}):
         for seat in range(int(post['num_seats'])):
             sid = "%s.%s" % (post['_id'], seat)
-            cow.add_post(sid, post['name'], "Member")
-            # , chamber=post['chamber'])
+            cow.add_post(sid, post['name'], "Member",
+                         chamber=post['chamber'], district=post['name'])
 
     return cow
 
