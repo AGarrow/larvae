@@ -136,10 +136,14 @@ def convert_people():
 
         who = Person(person['full_name'],
                      id=person_id)
+
         for entry in person:
+            # let's copy fields over into extras.
             if entry in person_copy_block:
                 continue
-            who.extras[entry] = person[entry]
+
+            if person[entry]:
+                who.extras[entry] = person[entry]
 
         people.append(who)
 
