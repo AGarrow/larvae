@@ -85,7 +85,6 @@
                     },
                     "organization_id": {
                         "description": "The ID of the organization in which the post is held",
-                        "required": true,
                         "type": "string"
                     },
                     "role": {

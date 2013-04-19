@@ -20,6 +20,7 @@ type_tables = {
 
 def save_objects(payload):
     for entry in payload:
+        entry.validate()
         table = getattr(nudb, type_tables[type(entry)])
         eo = entry.as_dict()
         eo['_id'] = eo['id']
