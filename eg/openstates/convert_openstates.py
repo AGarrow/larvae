@@ -76,7 +76,19 @@ def convert_people():
     people = []
     memberships = []
     allocated_posts = set([])
-
+    person_copy_block = set([
+        "updated_at",
+        "created_at",
+        "full_name",
+        "old_roles",
+        "roles",
+        "email",
+        "_locked_fields",
+        "photo_url",
+        "_all_ids",  # XXX: Need to translate this
+        "offices",  # XXX: move to post
+        "id", "_id", "leg_id"
+    ])
 
     def allocate_post(person, orga):
         district = person['district']
@@ -88,7 +100,6 @@ def convert_people():
         pid = post['id']
         allocated_posts.add(pid)
         return pid
-
 
     for person in db.legislators.find({"active": True}):
         state = person['state']
@@ -125,6 +136,11 @@ def convert_people():
 
         who = Person(person['full_name'],
                      id=person_id)
+        for entry in person:
+            if entry in person_copy_block:
+                continue
+            who.extras[entry] = person[entry]
+
         people.append(who)
 
     save_objects(people)

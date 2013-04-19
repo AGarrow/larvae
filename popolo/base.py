@@ -1,3 +1,4 @@
+from collections import defaultdict
 import validictory
 import json
 import os
@@ -15,6 +16,7 @@ class PopoloBase(object):
     # to be overridden by children. Something like "person" or "organization".
     # Used in :func:`validate`.
     _schema_name = None
+    _schema_cache = defaultdict(lambda: None)
 
     def validate(self):
         """
@@ -30,9 +32,12 @@ class PopoloBase(object):
         due to upstream schemas being in JSON Schema v3, and not validictory's
         modified syntax.
         """
-        curpath = os.path.dirname(os.path.abspath(__file__))
-        schema = json.load(open(os.path.join(
-            curpath, "schemas", "%s.json" % (self._schema_name)), 'r'))
+        schema = PopoloBase._schema_cache[self._schema_name]
+        if schema is None:
+            curpath = os.path.dirname(os.path.abspath(__file__))
+            schema = json.load(open(os.path.join(
+                curpath, "schemas", "%s.json" % (self._schema_name)), 'r'))
+            PopoloBase._schema_cache[self._schema_name] = schema
         validictory.validate(self.as_dict(), schema, required_by_default=False)
 
     def as_dict(self):
