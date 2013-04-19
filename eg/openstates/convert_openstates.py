@@ -43,8 +43,6 @@ def create_committee_orgs():
             orga.parent_id = cow['id']
 
         memberships = []
-        # XXX: Fix how we do subcommittees. Pass one to get all committees,
-        # then pass over again and assoc as members?
 
         for member in committee['members']:
             if not member.get("leg_id", None):
