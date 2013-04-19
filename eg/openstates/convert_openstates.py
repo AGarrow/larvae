@@ -37,6 +37,10 @@ def create_committee_orgs():
 
         if committee.get("parent_id", None):
             orga.parent_id = committee['parent_id']
+        else:
+            # the parent is the COW
+            cow = nudb.organizations.find_one({"id": committee['state']})
+            orga.parent_id = cow['id']
 
         memberships = []
         # XXX: Fix how we do subcommittees. Pass one to get all committees,
