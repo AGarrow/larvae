@@ -75,6 +75,20 @@ def convert_people():
     parties = {}
     people = []
     memberships = []
+    allocated_posts = set([])
+
+
+    def allocate_post(person, orga):
+        district = person['district']
+        for post in filter(lambda x: x['district'] == district, orga.posts):
+            if post['id'] in allocated_posts:
+                continue
+            break
+
+        pid = post['id']
+        allocated_posts.add(pid)
+        return pid
+
 
     for person in db.legislators.find({"active": True}):
         state = person['state']
@@ -96,10 +110,13 @@ def convert_people():
                                "{party} Party".format(**locals()))
             parties[party] = party_org
 
+        post_id = allocate_post(person, cow)
+
         memberships.append(Membership(
             "{cow.id}.{person_id}".format(**locals()),
             person_id,
-            cow.id))  # COW membership
+            cow.id,
+            post_id=post_id))  # COW membership
 
         memberships.append(Membership(
             "{party}.{person_id}".format(**locals()),
