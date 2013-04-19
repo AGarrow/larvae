@@ -92,14 +92,16 @@ def convert_people():
 
     def allocate_post(person, orga):
         district = person['district']
-        for post in filter(lambda x: x['district'] == district, orga.posts):
+        for i, post in enumerate(
+            filter(lambda x: x['district'] == district, orga.posts)
+        ):
             if post['id'] in allocated_posts:
                 continue
             break
 
         pid = post['id']
         allocated_posts.add(pid)
-        return pid
+        return pid, i
 
     for person in db.legislators.find({"active": True}):
         state = person['state']
@@ -121,21 +123,30 @@ def convert_people():
                                "{party} Party".format(**locals()))
             parties[party] = party_org
 
-        post_id = allocate_post(person, cow)
+        post_id, post_offset = allocate_post(person, cow)
+        post = cow.posts[post_offset]
+        post['addresses'] = []
+
+        for address in person['offices']:
+            for entry in address:
+                if entry == "name":
+                    continue
+
+                if address[entry]:
+                    post['addresses'].append({
+                        "key": entry,
+                        "value": address[entry]
+                    })
 
         memberships.append(Membership(
             "{cow.id}.{person_id}".format(**locals()),
-            person_id,
-            cow.id,
-            post_id=post_id))  # COW membership
+            person_id, cow.id, post_id=post_id))  # COW membership
 
         memberships.append(Membership(
             "{party}.{person_id}".format(**locals()),
-            person_id,
-            party_org.id))  # Party membership
+            person_id, party_org.id))  # Party membership
 
-        who = Person(person['full_name'],
-                     id=person_id)
+        who = Person(person['full_name'], id=person_id)
 
         for entry in person:
             # let's copy fields over into extras.

@@ -63,10 +63,17 @@
                 "properties": {
                     "addresses": {
                         "description": "Addresses at which the post is based",
-                        "items": {
-                            "$ref": "http://popoloproject.com/schemas/address.json#"
+                        "key": {
+                            "description": "Type of Addreess.",
+                            "required": true,
+                            "type": "string"
                         },
-                        "type": "array"
+                        "type": "array",
+                        "value": {
+                            "description": "Address entry.",
+                            "required": true,
+                            "type": "string"
+                        }
                     },
                     "end_date": {
                         "description": "Ending date of the post.",
