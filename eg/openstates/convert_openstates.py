@@ -7,6 +7,8 @@ from popolo.person import Person
 from billy.core import db
 
 from pymongo import Connection
+import uuid
+
 connection = Connection('localhost', 27017)
 nudb = connection.popolo  # XXX: Fix the db name
 
@@ -110,6 +112,14 @@ def convert_people():
         allocated_posts.add(pid)
         return pid, i
 
+    def get_party(party):
+        party_org = parties.get(party, None)
+        if not party_org:
+            party_org = Organization(str(uuid.uuid4()),
+                                     "{party} Party".format(**locals()))
+            parties[party] = party_org
+        return parties[party]
+
     for person in db.legislators.find({"active": True}):
         state = person['state']
         current_role = person['roles'][0]
@@ -123,12 +133,8 @@ def convert_people():
         if not cow:
             cows[state] = cow = create_cow(state)
 
-        party_org = parties.get(party, None)
-        if not party_org:
-            party = party.encode('utf-8')
-            party_org = Organization("{party}".format(**locals()),
-                               "{party} Party".format(**locals()))
-            parties[party] = party_org
+        party = party.encode('utf-8')
+        party_org = get_party(party)
 
         post_id, post_offset = allocate_post(person, cow)
         post = cow.posts[post_offset]
