@@ -53,8 +53,7 @@ def create_committee_orgs():
 
             person_id = member["leg_id"]
             cid = committee['_id']
-            guid = "{cid}.{person_id}".format(**locals())
-            memberships.append(Membership(guid, person_id, orga.id))
+            memberships.append(Membership(str(uuid.uuid4), person_id, orga.id))
 
         save_objects(memberships)
         save_object(orga)
@@ -152,14 +151,14 @@ def convert_people():
                     })
 
         memberships.append(Membership(
-            "{cow.id}.{person_id}".format(**locals()),
+            str(uuid.uuid4()),
             person_id,
             cow.id,
             post_id=post_id,
             addresses=addresses))
 
         memberships.append(Membership(
-            "{party}.{person_id}".format(**locals()),
+            str(uuid.uuid4()),
             person_id, party_org.id))  # Party membership
 
         who = Person(person['full_name'], id=person_id)
