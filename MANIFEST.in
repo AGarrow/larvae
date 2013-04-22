@@ -1,2 +1,2 @@
 include LICENSE
-recursive-include popolo/schemas *
+recursive-include larvae/schemas *

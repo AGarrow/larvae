@@ -1,5 +1,0 @@
-#
-
-
-class PopoloError(Exception):
-    pass

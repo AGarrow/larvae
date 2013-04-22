@@ -1,4 +1,4 @@
-from popolo.base import PopoloBase
+from larvae.base import LarvaeBase
 
 
 class Person(PopoloBase):

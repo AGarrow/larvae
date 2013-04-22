@@ -23,12 +23,12 @@
             "required": true,
             "type": "string"
         },
-        "role": {
-            "description": "The role that the holder of the post fulfills",
-            "type": "string"
-        },
         "post_id": {
             "description": "Post ID key.",
+            "type": "string"
+        },
+        "role": {
+            "description": "The role that the holder of the post fulfills",
             "type": "string"
         },
         "start_date": {

@@ -4,10 +4,10 @@ import json
 import os
 
 
-class PopoloBase(object):
+class LarvaeBase(object):
     """
-    This is the base class for all the Popolo objects. This contains
-    commom methods and abstractions for popolo objects.
+    This is the base class for all the Open Civic objects. This contains
+    commom methods and abstractions for OCD objects.
     """
 
     # needs slots defined so children __slots__ are enforced
