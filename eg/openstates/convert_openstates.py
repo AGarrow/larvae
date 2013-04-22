@@ -77,6 +77,13 @@ def convert_people():
     memberships = []
     allocated_posts = set([])
     person_copy_block = set([
+        "district",
+        "chamber",
+        "country",
+        "_scraped_name",
+        "state",
+        "active",
+        "party",
         "updated_at",
         "created_at",
         "full_name",
