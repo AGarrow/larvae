@@ -8,11 +8,11 @@ class Organization(LarvaeBase):
 
     __slots__ = ('classification', 'dissolution_date', 'founding_date',
                  'id', 'identifiers', 'name', 'other_names', 'parent_id',
-                 'posts',)
+                 'posts', 'geography_id', 'contact_details')
 
     _post_slots = ('contact_details', 'end_date', 'id', 'label',
                    'organization_id', 'role', 'start_date', 'chamber',
-                   'district')
+                   'district', 'geography_id')
 
     _schema_name = "organization"
 
@@ -24,8 +24,8 @@ class Organization(LarvaeBase):
         self.name = name
         self.identifiers = []
         self.posts = []
-        for arg in kwargs:
-            self[arg] = kwargs[arg]
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
     def add_identifier(self, identifier, scheme=None):
         data = {"identifier": identifier}
