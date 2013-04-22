@@ -34,3 +34,7 @@ class Person(LarvaeBase):
 
     def add_link(self, url, note):
         self.links.append({"note": note, "url": url})
+
+    def __unicode__(self):
+        return self.name
+    __str__ = __unicode__
