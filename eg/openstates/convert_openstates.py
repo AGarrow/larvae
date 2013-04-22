@@ -132,22 +132,25 @@ def convert_people():
 
         post_id, post_offset = allocate_post(person, cow)
         post = cow.posts[post_offset]
-        post['addresses'] = []
+        addresses = []
 
         for address in person['offices']:
             for entry in address:
-                if entry == "name":
+                if entry in ["name", "type"]:
                     continue
 
                 if address[entry]:
-                    post['addresses'].append({
+                    addresses.append({
                         "key": entry,
                         "value": address[entry]
                     })
 
         memberships.append(Membership(
             "{cow.id}.{person_id}".format(**locals()),
-            person_id, cow.id, post_id=post_id))  # COW membership
+            person_id,
+            cow.id,
+            post_id=post_id,
+            addresses=addresses))
 
         memberships.append(Membership(
             "{party}.{person_id}".format(**locals()),
