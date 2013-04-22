@@ -4,7 +4,7 @@ from validictory import ValidationError
 
 def test_basic_invalid_organization():
     """ Make sure we can make an invalid orga """
-    orga = Organization("guid", "name")
+    orga = Organization("name")
     orga.validate()
 
     orga.name = None
@@ -16,7 +16,7 @@ def test_basic_invalid_organization():
 
 def test_add_post():
     """ Test that we can hack posts in on the fly'"""
-    orga = Organization("guid", "name")
+    orga = Organization("name")
     orga.validate()
 
     orga.add_post("pguid", "Human Readable Name", "Chef")

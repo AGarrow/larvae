@@ -10,7 +10,7 @@
         },
         "id": {
             "description": "The membership's unique identifier",
-            "required": true,
+            "required": false,
             "type": "string"
         },
         "organization_id": {

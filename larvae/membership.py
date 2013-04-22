@@ -10,15 +10,15 @@ class Membership(LarvaeBase):
     __slots__ = ("id", "organization_id", "person_id", "post_id",
                  "role", "start_date", "end_date", "addresses")
 
-    def __init__(self, guid, person_id, organization_id, **kwargs):
+    def __init__(self, person_id, organization_id, **kwargs):
         """
         Constructor for the Person object.
 
-        We require a unique ID, person ID, organization ID, as required by the
+        We require a person ID and organization ID, as required by the
         popolo spec. Additional arguments may be given, which match those
         defined by popolo.
         """
-        self.id = guid
+        super(Membership, self).__init__()
         self.person_id = person_id
         self.organization_id = organization_id
         self.addresses = []

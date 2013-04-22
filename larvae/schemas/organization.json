@@ -19,7 +19,7 @@
         },
         "id": {
             "description": "The organization's unique identifier",
-            "required": true,
+            "required": false,
             "type": "string"
         },
         "identifiers": {

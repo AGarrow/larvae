@@ -8,11 +8,13 @@ class Person(LarvaeBase):
 
     _schema_name = "person"
 
-    __slots__ = ('name', 'id', 'gender', 'birth_date', 'death_date', 'image',
-                 'summary', 'biography', 'links', 'other_names', 'extras')
+    __slots__ = ('name', 'id', 'gender', 'birth_date',
+                 'death_date', 'image', 'summary', 'biography', 'links',
+                 'other_names', 'extras')
     _other_name_slots = ('name', 'start_date', 'end_date', 'note')
 
     def __init__(self, name, **kwargs):
+        super(Person, self).__init__()
         self.name = name
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -30,5 +32,5 @@ class Person(LarvaeBase):
             other_name[k] = v
         self.other_names.append(other_name)
 
-    def add_link(self, note, url):
+    def add_link(self, url, note):
         self.links.append({"note": note, "url": url})

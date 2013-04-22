@@ -16,14 +16,12 @@ class Organization(LarvaeBase):
 
     _schema_name = "organization"
 
-    def __init__(self, guid, name, **kwargs):
+    def __init__(self, name, **kwargs):
         """
         Constructor for the Organization object.
-
-        We require an ID and a Name, as required by the Popolo spec.
         """
+        super(Organization, self).__init__()
         self.name = name
-        self.id = guid
         self.identifiers = []
         self.posts = []
         for arg in kwargs:

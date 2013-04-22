@@ -21,8 +21,7 @@ def test_magic_methods():
                  summary="Some person")
     bob.validate()
 
-    bob.add_link("Twitter Account",
-                 "http://twitter.com/ev")
+    bob.add_link("http://twitter.com/ev", "Twitter Account")
 
     assert bob.links == [
         {"note": "Twitter Account",
