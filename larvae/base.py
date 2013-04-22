@@ -32,19 +32,19 @@ class LarvaeBase(object):
         due to upstream schemas being in JSON Schema v3, and not validictory's
         modified syntax.
         """
-        schema = PopoloBase._schema_cache[self._schema_name]
+        schema = LarvaeBase._schema_cache[self._schema_name]
         if schema is None:
             curpath = os.path.dirname(os.path.abspath(__file__))
             schema = json.load(open(os.path.join(
                 curpath, "schemas", "%s.json" % (self._schema_name)), 'r'))
-            PopoloBase._schema_cache[self._schema_name] = schema
+            LarvaeBase._schema_cache[self._schema_name] = schema
         validictory.validate(self.as_dict(), schema, required_by_default=False)
 
     def as_dict(self):
         d = {}
         all_slots = set(self.__slots__)
         for cls in self.__class__.__mro__:
-            if cls == PopoloBase:
+            if cls == LarvaeBase:
                 break
             all_slots |= set(cls.__slots__)
         for attr in all_slots:

@@ -1,7 +1,7 @@
 from larvae.base import LarvaeBase
 
 
-class Person(PopoloBase):
+class Person(LarvaeBase):
     """
     Details for a Person in Popolo format.
     """

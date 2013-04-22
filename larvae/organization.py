@@ -1,7 +1,7 @@
 from larvae.base import LarvaeBase
 
 
-class Organization(PopoloBase):
+class Organization(LarvaeBase):
     """
     A single popolo encoded Organization
     """

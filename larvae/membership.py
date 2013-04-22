@@ -1,7 +1,7 @@
-from larvae.base import PopoloBase
+from larvae.base import LarvaeBase
 
 
-class Membership(PopoloBase):
+class Membership(LarvaeBase):
     """
     A single popolo encoded Membership.
     """
