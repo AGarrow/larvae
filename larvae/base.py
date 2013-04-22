@@ -48,9 +48,9 @@ class LarvaeBase(object):
         d = {}
         all_slots = set(self.__slots__)
         for cls in self.__class__.__mro__:
+            all_slots |= set(cls.__slots__)
             if cls == LarvaeBase:
                 break
-            all_slots |= set(cls.__slots__)
         for attr in all_slots:
             if hasattr(self, attr):
                 d[attr] = getattr(self, attr)
