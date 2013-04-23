@@ -121,6 +121,18 @@ def migrate_people():
         save_object(who)  # gives who an id, btw.
 
         m = Membership(who.id, legislature)
+        for office in entry['offices']:
+            note = office['name']
+            for key, value in office.items():
+                if not value or key in ["name", "type"]:
+                    continue
+
+                m.contact_details.append([
+                    key,
+                    value,
+                    note
+                ])
+
         save_object(m)
         # XXX: Also add membership in their party.
 
@@ -129,7 +141,7 @@ SEQUENCE = [
     drop_existing_data,
     migrate_legislatures,
     migrate_people,  # depends on legislatures
-    migrate_committees,  # depends on people
+    # migrate_committees,  # depends on people
 ]
 
 
