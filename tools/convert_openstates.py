@@ -128,8 +128,8 @@ def migrate_people():
 SEQUENCE = [
     drop_existing_data,
     migrate_legislatures,
-    migrate_people,
-    migrate_committees,
+    migrate_people,  # depends on legislatures
+    migrate_committees,  # depends on people
 ]
 
 

@@ -8,7 +8,7 @@ class Membership(LarvaeBase):
 
     _schema_name = "membership"
     __slots__ = ("id", "organization_id", "person_id", "post_id",
-                 "role", "start_date", "end_date", "addresses")
+                 "role", "start_date", "end_date", "contact_details")
 
     def __init__(self, person_id, organization_id, **kwargs):
         """
@@ -21,7 +21,7 @@ class Membership(LarvaeBase):
         super(Membership, self).__init__()
         self.person_id = person_id
         self.organization_id = organization_id
-        self.addresses = []
+        self.contact_details = []
 
         for k, v in kwargs.items():
             setattr(self, k, v)
