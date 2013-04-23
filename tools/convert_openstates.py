@@ -68,7 +68,9 @@ def lookup_entry_id(collection, openstates_id):
     if org is None:
         return None
 
-    return str(org['_id'])
+    id_ = str(org['_id'])
+    _hot_cache[openstates_id] = id_
+    return id_
 
 
 def migrate_committees():
