@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from popolo.organization import Organization
-from popolo.membership import Membership
-from popolo.person import Person
+from larvae.organization import Organization
+from larvae.membership import Membership
+from larvae.person import Person
 
 from billy.core import db
 
@@ -10,7 +10,7 @@ from pymongo import Connection
 import uuid
 
 connection = Connection('localhost', 27017)
-nudb = connection.popolo  # XXX: Fix the db name
+nudb = connection.larvae  # XXX: Fix the db name
 
 
 type_tables = {
