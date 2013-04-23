@@ -19,6 +19,7 @@ type_tables = {
     Person: "people"
 }
 
+_hot_cache = {}
 
 def save_objects(payload):
     for entry in payload:
@@ -28,6 +29,8 @@ def save_objects(payload):
         eo = entry.as_dict()
         nid = table.save(eo)
         entry.id = str(nid)
+        if hasattr(entry, "openstates_id"):
+            _hot_cache[entry.openstates_id] = entry.id
 
         sys.stdout.write(what[0].lower())
         sys.stdout.flush()
@@ -54,6 +57,10 @@ def migrate_legislatures():
 
 
 def lookup_entry_id(collection, openstates_id):
+    hcid = _hot_cache.get(openstates_id, None)
+    if hcid:
+        return hcid
+
     org = getattr(nudb, collection).find_one({
         "openstates_id": openstates_id
     })
