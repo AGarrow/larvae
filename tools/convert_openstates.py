@@ -141,7 +141,7 @@ SEQUENCE = [
     drop_existing_data,
     migrate_legislatures,
     migrate_people,  # depends on legislatures
-    # migrate_committees,  # depends on people
+    migrate_committees,  # depends on people
 ]
 
 
