@@ -143,6 +143,28 @@ def migrate_people():
         who.openstates_id = entry['_id']
         # XXX: Convert more.
 
+        for k, v in {
+            "photo_url": "image",
+            "chamber": "chamber",
+            "district": "district",
+        }.items():
+            if entry.get(k, None):
+                setattr(who, v, entry[k])
+
+        home = entry.get('url', None)
+        if home:
+            who.add_link(home, "Homepage")
+
+        blacklist = ["photo_url", "chamber", "district", "url",
+                     "roles", "offices", "updated_at", "created_at",
+                     "party", "state", "_locked_fields", "sources",
+                     "active", "old_roles"]
+
+        for key, value in entry.items():
+            if key in blacklist or not value:
+                continue
+            who.extras[key] = value
+
         legislature = lookup_entry_id('organizations', entry['state'])
         if legislature is None:
             raise Exception("Someone's in the void.")
