@@ -117,6 +117,26 @@ def drop_existing_data():
         nudb.drop_collection(entry)
 
 
+def create_or_get_party(what):
+    hcid = _hot_cache.get(what, None)
+    if hcid:
+        return hcid
+
+    org = nudb.organizations.find_one({
+        "name": what
+    })
+    if org:
+        return org['_id']
+
+    org = Organization(what)
+    save_object(org)
+
+    _hot_cache[what] = org.id
+
+    return org.id
+
+
+
 def migrate_people():
     for entry in db.legislators.find():
         who = Person(entry['full_name'])
@@ -128,6 +148,12 @@ def migrate_people():
             raise Exception("Someone's in the void.")
 
         save_object(who)  # gives who an id, btw.
+
+        party = entry.get('party', None)
+
+        if party:
+            m = Membership(who.id, create_or_get_party(entry['party']))
+            save_object(m)
 
         m = Membership(who.id, legislature)
         for office in entry['offices']:
