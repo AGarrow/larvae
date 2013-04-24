@@ -17,12 +17,12 @@ class LarvaeBase(object):
     # to be overridden by children. Something like "person" or "organization".
     # Used in :func:`validate`.
     _schema_name = None
+    _type = None
     _schema_cache = defaultdict(lambda: None)
 
     def __init__(self):
         self._id = str(uuid.uuid1())
         self.sources = []
-        self._type = self._schema_name
 
     def validate(self):
         """
@@ -56,6 +56,7 @@ class LarvaeBase(object):
         for attr in all_slots:
             if attr != '_related' and hasattr(self, attr):
                 d[attr] = getattr(self, attr)
+        d['_type'] = self._type
         return d
 
     def add_source(self, url, note=None):

@@ -9,7 +9,7 @@ class Person(LarvaeBase):
     Details for a Person in Popolo format.
     """
 
-    _schema_name = "person"
+    _type = _schema_name = "person"
 
     __slots__ = ('name', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',
