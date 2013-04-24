@@ -7,7 +7,7 @@ class Membership(LarvaeBase):
     """
 
     _type = _schema_name = "membership"
-    __slots__ = ("_id", "organization_id", "person_id", "post_id",
+    __slots__ = ("organization_id", "person_id", "post_id",
                  "role", "start_date", "end_date", "contact_details")
 
     def __init__(self, person_id, organization_id, **kwargs):

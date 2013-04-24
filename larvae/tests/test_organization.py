@@ -19,18 +19,14 @@ def test_add_post():
     orga = Organization("name")
     orga.validate()
 
-    orga.add_post("pguid", "Human Readable Name", "Chef")
+    orga.add_post("Human Readable Name", "Chef")
 
-    assert orga.posts == [
-        {"id": "pguid",
-         "role": "Chef",
-         "label": "Human Readable Name",
-        }
-    ]
+    assert orga.posts[0]['role'] == 'Chef'
+    assert orga.posts[0]['label'] == 'Human Readable Name'
 
     try:
-        orga.add_post(None, "Human Readable Name", "Chef")
-        assert ("Garbage compare") == orga.validate()
+        orga.add_post(None, "Chef")
+        assert "Garbage compare" == orga.validate()
     except ValidationError:
         pass
 

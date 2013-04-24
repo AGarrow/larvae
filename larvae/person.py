@@ -11,7 +11,7 @@ class Person(LarvaeBase):
 
     _type = _schema_name = "person"
 
-    __slots__ = ('name', '_id', 'gender', 'birth_date',
+    __slots__ = ('name', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',
                  'other_names', 'extras', 'contact_details', 'openstates_id',
                  'chamber', 'district')
@@ -48,7 +48,7 @@ class Person(LarvaeBase):
         if isinstance(organization, six.string_types):
             organization = Organization(organization)
             self._related.append(organization)
-        membership = Membership(self.uuid, organization.uuid, **kwargs)
+        membership = Membership(self._id, organization._id, **kwargs)
         self._related.append(membership)
         return membership
 
