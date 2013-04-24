@@ -38,11 +38,11 @@ def save_objects(payload):
             entry._id = entry.uuid
 
         eo = entry.as_dict()
-        nid = table.save(eo)
+        table.save(eo)
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
 
-        sys.stdout.write(what[0].lower())
+        sys.stdout.write(entry._type[0])
         sys.stdout.flush()
 
 
@@ -57,13 +57,12 @@ def migrate_legislatures():
         cow.openstates_id = abbr
 
         for post in db.districts.find({"abbr": abbr}):
-            for seat in range(int(post['num_seats'])):
-                sid = "%s.%s" % (post['_id'], seat)
 
-                cow.add_post(label="Member",
-                             role="member",
-                             chamber=post['chamber'],
-                             district=post['name'])
+            cow.add_post(label="Member",
+                         role="member",
+                         num_seats=post['num_seats'],
+                         chamber=post['chamber'],
+                         district=post['name'])
 
         save_object(cow)
 

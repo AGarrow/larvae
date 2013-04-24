@@ -9,7 +9,7 @@ class Person(LarvaeBase):
     Details for a Person in Popolo format.
     """
 
-    _type = _schema_name = "person"
+    _schema_name = "person"
 
     __slots__ = ('name', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',
@@ -20,6 +20,7 @@ class Person(LarvaeBase):
     def __init__(self, name, **kwargs):
         super(Person, self).__init__()
         self.name = name
+
         for k, v in kwargs.items():
             setattr(self, k, v)
 

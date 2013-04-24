@@ -21,12 +21,13 @@ def test_add_post():
 
     orga.add_post("Human Readable Name", "Chef")
 
-    assert orga.posts[0]['role'] == 'Chef'
-    assert orga.posts[0]['label'] == 'Human Readable Name'
+    assert orga.posts[0]['role'] == "Chef"
+    assert orga.posts[0]['label'] == "Human Readable Name"
 
     try:
-        orga.add_post(None, "Chef")
-        assert "Garbage compare" == orga.validate()
+        orga.add_post("Human Readable Name", "Chef")
+        orga.posts[1]['id'] = None
+        assert ("Garbage compare") == orga.validate()
     except ValidationError:
         pass
 

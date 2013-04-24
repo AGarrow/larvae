@@ -11,11 +11,11 @@ class Organization(LarvaeBase):
                  'identifiers', 'name', 'other_names', 'parent_id',
                  'posts', 'openstates_id', 'contact_details', 'geography_id')
 
-    _post_slots = ('contact_details', 'end_date', 'id', 'label',
-                   'organization_id', 'role', 'start_date', 'chamber',
-                   'district', 'geography_id')
+    _post_slots = ('end_date', 'id', 'label', 'organization_id', 'role',
+                   'start_date', 'chamber', 'district', 'geography_id',
+                   'num_seats')
 
-    _type = _schema_name = "organization"
+    _schema_name = "organization"
 
     def __init__(self, name, **kwargs):
         """
