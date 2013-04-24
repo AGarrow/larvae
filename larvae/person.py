@@ -1,8 +1,7 @@
+import six
 from larvae.base import LarvaeBase
 from larvae.organization import Organization
 from larvae.membership import Membership
-
-_str_types = (str, unicode)
 
 
 class Person(LarvaeBase):
@@ -46,7 +45,7 @@ class Person(LarvaeBase):
             add a membership in an organization and return the membership
             object in case there are more details to add
         """
-        if isinstance(organization, _str_types):
+        if isinstance(organization, six.string_types):
             organization = Organization(organization)
             self._related.append(organization)
         membership = Membership(self.uuid, organization.uuid, **kwargs)

@@ -20,5 +20,5 @@ setup(
     license          = "BSD-3",
 
     platforms        = ['any'],
-    install_requires = ['validictory'],
+    install_requires = ['six', 'validictory'],
 )
