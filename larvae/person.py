@@ -12,11 +12,10 @@ class Person(LarvaeBase):
 
     _schema_name = "person"
 
-    __slots__ = ('name', 'id', 'gender', 'birth_date',
+    __slots__ = ('name', '_id', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',
-                 'other_names', 'extras', 'openstates_id', 'chamber',
-                 'district')
-
+                 'other_names', 'extras', 'contact_details', 'openstates_id',
+                 'chamber', 'district')
     _other_name_slots = ('name', 'start_date', 'end_date', 'note')
 
     def __init__(self, name, **kwargs):
