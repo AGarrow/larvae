@@ -52,6 +52,6 @@ class Person(LarvaeBase):
         self._related.append(membership)
         return membership
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
-    __str__ = __unicode__
+    __unicode__ = __str__

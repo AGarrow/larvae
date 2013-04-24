@@ -28,6 +28,10 @@ class Organization(LarvaeBase):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
+    def __str__(self):
+        return self.name
+    __unicode__ = __str__
+
     def add_identifier(self, identifier, scheme=None):
         data = {"identifier": identifier}
         if scheme:
