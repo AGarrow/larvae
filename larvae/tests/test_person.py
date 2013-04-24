@@ -13,6 +13,7 @@ def test_basic_invalid_person():
     except ValidationError:
         pass
 
+
 def test_str():
     """ test __str__ method """
     assert str(Person("Bob B. Johnson")) == "Bob B. Johnson"

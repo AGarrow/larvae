@@ -21,6 +21,7 @@ type_tables = {
 
 _hot_cache = {}
 
+
 def save_objects(payload):
     for entry in payload:
         entry.validate()
@@ -110,7 +111,6 @@ def migrate_committees():
         attach_members(committee, org)
 
 
-
 def drop_existing_data():
     for entry in type_tables.values():
         print("Dropping %s" % (entry))
@@ -134,7 +134,6 @@ def create_or_get_party(what):
     _hot_cache[what] = org.id
 
     return org.id
-
 
 
 def migrate_people():

@@ -4,6 +4,7 @@ import uuid
 from collections import defaultdict
 import validictory
 
+
 class LarvaeBase(object):
     """
     This is the base class for all the Open Civic objects. This contains
