@@ -60,8 +60,10 @@ def migrate_legislatures():
             for seat in range(int(post['num_seats'])):
                 sid = "%s.%s" % (post['_id'], seat)
 
-                cow.add_post(sid, post['name'], "Member",
-                    chamber=post['chamber'], district=post['name'])
+                cow.add_post(label="Member",
+                             role="member",
+                             chamber=post['chamber'],
+                             district=post['name'])
 
         save_object(cow)
 
