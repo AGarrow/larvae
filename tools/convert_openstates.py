@@ -186,6 +186,16 @@ def migrate_people():
             save_object(m)
 
         m = Membership(who._id, legislature)
+
+        chamber, district = (entry.get(x, None)
+                             for x in ['chamber', 'district'])
+
+        if chamber:
+            m.chamber = chamber
+
+        if district:
+            m.district = district
+
         for office in entry['offices']:
             note = office['name']
             for key, value in office.items():
