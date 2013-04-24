@@ -27,11 +27,20 @@ def save_objects(payload):
         entry.validate()
         what = type_tables[type(entry)]
         table = getattr(nudb, what)
+
+        _id = None
+        try:
+            _id = entry._id
+        except AttributeError:
+            pass
+
+        if _id is None:
+            entry._id = entry.uuid
+
         eo = entry.as_dict()
         nid = table.save(eo)
-        entry.id = str(nid)
         if hasattr(entry, "openstates_id"):
-            _hot_cache[entry.openstates_id] = entry.id
+            _hot_cache[entry.openstates_id] = entry._id
 
         sys.stdout.write(what[0].lower())
         sys.stdout.flush()
@@ -81,7 +90,7 @@ def migrate_committees():
             osid = member.get('leg_id', None)
             person_id = lookup_entry_id('people', osid)
             if person_id:
-                m = Membership(person_id, org.id)
+                m = Membership(person_id, org._id)
                 save_object(m)
 
     for committee in db.committees.find({"subcommittee": None}):
@@ -131,9 +140,9 @@ def create_or_get_party(what):
     org = Organization(what)
     save_object(org)
 
-    _hot_cache[what] = org.id
+    _hot_cache[what] = org._id
 
-    return org.id
+    return org._id
 
 
 def migrate_people():
@@ -172,10 +181,10 @@ def migrate_people():
         party = entry.get('party', None)
 
         if party:
-            m = Membership(who.id, create_or_get_party(entry['party']))
+            m = Membership(who._id, create_or_get_party(entry['party']))
             save_object(m)
 
-        m = Membership(who.id, legislature)
+        m = Membership(who._id, legislature)
         for office in entry['offices']:
             note = office['name']
             for key, value in office.items():
