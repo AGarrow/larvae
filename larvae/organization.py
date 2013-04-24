@@ -11,9 +11,8 @@ class Organization(LarvaeBase):
                  '_id', 'identifiers', 'name', 'other_names', 'parent_id',
                  'posts', 'openstates_id', 'contact_details', 'geography_id')
 
-    _post_slots = ('contact_details', 'end_date', 'id', 'label',
-                   'organization_id', 'role', 'start_date', 'chamber',
-                   'district', 'geography_id')
+    _post_slots = ('end_date', 'id', 'label', 'organization_id', 'role',
+                   'start_date', 'chamber', 'district', 'geography_id')
 
     _type = _schema_name = "organization"
 
