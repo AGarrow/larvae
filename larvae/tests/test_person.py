@@ -14,6 +14,11 @@ def test_basic_invalid_person():
         pass
 
 
+def test_str():
+    """ test __str__ method """
+    assert str(Person("Bob B. Johnson")) == "Bob B. Johnson"
+
+
 def test_magic_methods():
     """ Test the magic methods work """
     bob = Person("John Q. Public, Esq.",

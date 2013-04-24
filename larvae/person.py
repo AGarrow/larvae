@@ -10,7 +10,8 @@ class Person(LarvaeBase):
 
     __slots__ = ('name', '_id', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',
-                 'other_names', 'extras', 'contact_details')
+                 'other_names', 'extras', 'contact_details', 'openstates_id',
+                 'chamber', 'district')
     _other_name_slots = ('name', 'start_date', 'end_date', 'note')
 
     def __init__(self, name, **kwargs):
@@ -34,3 +35,7 @@ class Person(LarvaeBase):
 
     def add_link(self, url, note):
         self.links.append({"note": note, "url": url})
+
+    def __unicode__(self):
+        return self.name
+    __str__ = __unicode__

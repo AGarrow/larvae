@@ -61,19 +61,9 @@
             "items": {
                 "description": "A position that exists independent of the person holding it",
                 "properties": {
-                    "addresses": {
-                        "description": "Addresses at which the post is based",
-                        "key": {
-                            "description": "Type of Addreess.",
-                            "required": true,
-                            "type": "string"
-                        },
-                        "type": "array",
-                        "value": {
-                            "description": "Address entry.",
-                            "required": true,
-                            "type": "string"
-                        }
+                    "contact_details": {
+                        "description": "Details regarding how to contact the person.",
+                        "type": "array"
                     },
                     "end_date": {
                         "description": "Ending date of the post.",

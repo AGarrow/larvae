@@ -1,5 +1,0 @@
-#
-
-
-class LarvaeError(Exception):
-    pass

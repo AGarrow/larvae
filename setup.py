@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) Sunlight Labs, 2012 under the terms and conditions
+# Copyright (c) Sunlight Labs, 2013 under the terms and conditions
 # of the LICENSE file.
 
 from larvae import __appname__, __version__
@@ -19,5 +19,6 @@ setup(
     description      = 'Validation layer for open civic data objects.',
     license          = "BSD-3",
 
-    platforms        = ['any']
+    platforms        = ['any'],
+    install_requires = ['validictory'],
 )
