@@ -1,4 +1,5 @@
 from larvae.base import LarvaeBase
+import uuid
 
 
 class Organization(LarvaeBase):
@@ -33,8 +34,8 @@ class Organization(LarvaeBase):
             data['scheme'] = scheme
         self.identifiers.append(data)
 
-    def add_post(self, guid, label, role, **kwargs):
-        post = {"id": guid, "label": label, "role": role}
+    def add_post(self, label, role, **kwargs):
+        post = {"id": str(uuid.uuid1()), "label": label, "role": role}
         for k, v in kwargs.items():
             if k not in self._post_slots:
                 raise AttributeError(
