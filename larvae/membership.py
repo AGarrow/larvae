@@ -6,7 +6,7 @@ class Membership(LarvaeBase):
     A single popolo encoded Membership.
     """
 
-    _type = _schema_name = "membership"
+    _schema_name = "membership"
     __slots__ = ("_id", "organization_id", "person_id", "post_id",
                  "role", "start_date", "end_date", "contact_details")
 

@@ -17,16 +17,13 @@ class LarvaeBase(object):
     # to be overridden by children. Something like "person" or "organization".
     # Used in :func:`validate`.
     _schema_name = None
-
-    # To be set by children / subclasses beyond. Helpful to call a `Legislator'
-    # a 'legislator' type, even though the `_schema_name' is still `person'.
-    _type = None
-
     _schema_cache = defaultdict(lambda: None)
 
     def __init__(self):
         self.uuid = str(uuid.uuid1())
         self.sources = []
+        self._type = None
+        self._type = self._schema_name
 
     def validate(self):
         """

@@ -38,11 +38,11 @@ def save_objects(payload):
             entry._id = entry.uuid
 
         eo = entry.as_dict()
-        nid = table.save(eo)
+        table.save(eo)
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
 
-        sys.stdout.write(what[0].lower())
+        sys.stdout.write(entry._type[0])
         sys.stdout.flush()
 
 
