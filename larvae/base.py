@@ -12,11 +12,16 @@ class LarvaeBase(object):
     """
 
     # needs slots defined so children __slots__ are enforced
-    __slots__ = ('uuid', 'sources', '_related')
+    __slots__ = ('uuid', 'sources', '_related', '_type')
 
     # to be overridden by children. Something like "person" or "organization".
     # Used in :func:`validate`.
     _schema_name = None
+
+    # To be set by children / subclasses beyond. Helpful to call a `Legislator'
+    # a 'legislator' type, even though the `_schema_name' is still `person'.
+    _type = None
+
     _schema_cache = defaultdict(lambda: None)
 
     def __init__(self):

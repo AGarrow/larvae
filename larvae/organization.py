@@ -14,7 +14,7 @@ class Organization(LarvaeBase):
                    'organization_id', 'role', 'start_date', 'chamber',
                    'district', 'geography_id')
 
-    _schema_name = "organization"
+    _type = _schema_name = "organization"
 
     def __init__(self, name, **kwargs):
         """
