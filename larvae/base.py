@@ -22,7 +22,6 @@ class LarvaeBase(object):
     def __init__(self):
         self._id = str(uuid.uuid1())
         self.sources = []
-        self._type = None
         self._type = self._schema_name
 
     def validate(self):
