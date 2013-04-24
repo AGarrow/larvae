@@ -141,7 +141,6 @@ def migrate_people():
     for entry in db.legislators.find():
         who = Person(entry['full_name'])
         who.openstates_id = entry['_id']
-        # XXX: Convert more.
 
         for k, v in {
             "photo_url": "image",
@@ -191,7 +190,6 @@ def migrate_people():
                 ])
 
         save_object(m)
-        # XXX: Also add membership in their party.
 
 
 SEQUENCE = [
