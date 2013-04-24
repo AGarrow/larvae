@@ -8,7 +8,7 @@ class Person(LarvaeBase):
 
     _schema_name = "person"
 
-    __slots__ = ('name', 'id', 'gender', 'birth_date',
+    __slots__ = ('name', '_id', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',
                  'other_names', 'extras', 'contact_details')
     _other_name_slots = ('name', 'start_date', 'end_date', 'note')
