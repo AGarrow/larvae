@@ -1,4 +1,8 @@
 from larvae.base import LarvaeBase
+from larvae.organization import Organization
+from larvae.membership import Membership
+
+_str_types = (str, unicode)
 
 
 class Person(LarvaeBase):
@@ -24,6 +28,7 @@ class Person(LarvaeBase):
         self.links = []
         self.other_names = []
         self.extras = {}
+        self._related = []
 
     def add_name(self, name, **kwargs):
         other_name = {'name': name}
@@ -36,6 +41,18 @@ class Person(LarvaeBase):
 
     def add_link(self, url, note):
         self.links.append({"note": note, "url": url})
+
+    def add_membership(self, organization, **kwargs):
+        """
+            add a membership in an organization and return the membership
+            object in case there are more details to add
+        """
+        if isinstance(organization, _str_types):
+            organization = Organization(organization)
+            self._related.append(organization)
+        membership = Membership(self.uuid, organization.uuid, **kwargs)
+        self._related.append(membership)
+        return membership
 
     def __unicode__(self):
         return self.name

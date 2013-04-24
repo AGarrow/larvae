@@ -11,7 +11,7 @@ class LarvaeBase(object):
     """
 
     # needs slots defined so children __slots__ are enforced
-    __slots__ = ('uuid', 'sources')
+    __slots__ = ('uuid', 'sources', '_related')
 
     # to be overridden by children. Something like "person" or "organization".
     # Used in :func:`validate`.
@@ -52,7 +52,7 @@ class LarvaeBase(object):
                 break
             all_slots |= set(cls.__slots__)
         for attr in all_slots:
-            if hasattr(self, attr):
+            if attr != '_related' and hasattr(self, attr):
                 d[attr] = getattr(self, attr)
         return d
 
