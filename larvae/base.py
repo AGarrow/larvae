@@ -21,7 +21,7 @@ class LarvaeBase(object):
     _schema_cache = defaultdict(lambda: None)
 
     def __init__(self):
-        self._id = None
+        self._id = str(uuid.uuid1())
         self.sources = []
 
     def validate(self):
