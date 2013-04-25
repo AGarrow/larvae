@@ -100,6 +100,7 @@ def migrate_committees():
         org = Organization(committee['committee'])
         org.parent_id = lookup_entry_id('organizations', committee['state'])
         org.openstates_id = committee['_id']
+        org.sources = committee['sources']
         # Look into posts; but we can't be sure.
         save_object(org)
         attach_members(committee, org)
@@ -116,6 +117,7 @@ def migrate_committees():
         )
 
         org.openstates_id = committee['_id']
+        org.sources = committee['sources']
         # Look into posts; but we can't be sure.
         save_object(org)
         attach_members(committee, org)
@@ -158,6 +160,8 @@ def migrate_people():
         }.items():
             if entry.get(k, None):
                 setattr(who, v, entry[k])
+
+        who.sources = entry['sources']
 
         home = entry.get('url', None)
         if home:
