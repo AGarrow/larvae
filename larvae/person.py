@@ -46,9 +46,6 @@ class Person(LarvaeBase):
             add a membership in an organization and return the membership
             object in case there are more details to add
         """
-        if isinstance(organization, six.string_types):
-            organization = Organization(organization)
-            self._related.append(organization)
         membership = Membership(self._id, organization._id, **kwargs)
         self._related.append(membership)
         return membership
