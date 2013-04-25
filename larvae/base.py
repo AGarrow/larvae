@@ -12,7 +12,7 @@ class LarvaeBase(object):
     """
 
     # needs slots defined so children __slots__ are enforced
-    __slots__ = ('_id', 'sources', '_related', '_type')
+    __slots__ = ('_id', 'sources', '_related')
 
     # to be overridden by children. Something like "person" or "organization".
     # Used in :func:`validate`.
@@ -21,7 +21,7 @@ class LarvaeBase(object):
     _schema_cache = defaultdict(lambda: None)
 
     def __init__(self):
-        self._id = str(uuid.uuid1())
+        self._id = None
         self.sources = []
 
     def validate(self):
@@ -44,7 +44,7 @@ class LarvaeBase(object):
             schema = json.load(open(os.path.join(
                 curpath, "schemas", "%s.json" % (self._schema_name)), 'r'))
             LarvaeBase._schema_cache[self._schema_name] = schema
-        validictory.validate(self.as_dict(), schema, required_by_default=False)
+        validictory.validate(self.as_dict(), schema, required_by_default=True)
 
     def as_dict(self):
         d = {}

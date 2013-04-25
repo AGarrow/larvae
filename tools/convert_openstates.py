@@ -7,6 +7,7 @@ from larvae.person import Person
 from billy.core import db
 
 from pymongo import Connection
+import uuid
 import sys
 
 connection = Connection('localhost', 27017)
@@ -22,6 +23,15 @@ type_tables = {
 _hot_cache = {}
 
 
+def ocd_namer(obj):
+    # ocd-person/UUID
+    # ocd-organization/UUID
+    if obj._type in ["person", "organization"]:
+        return "ocd-{type_}/{uuid}".format(type_=obj._type,
+                                           uuid=uuid.uuid1())
+    return None
+
+
 def save_objects(payload):
     for entry in payload:
         entry.validate()
@@ -34,11 +44,16 @@ def save_objects(payload):
         except AttributeError:
             pass
 
-        if _id is None:
-            entry._id = entry.uuid
+        ocd_id = ocd_namer(entry)
+        if _id is None and ocd_id:
+            entry._id = ocd_id
 
         eo = entry.as_dict()
-        table.save(eo)
+        mongo_id = table.save(eo)
+
+        if _id is None and ocd_id is None:
+            entry._id = mongo_id
+
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
 
@@ -100,6 +115,7 @@ def migrate_committees():
         org = Organization(committee['committee'])
         org.parent_id = lookup_entry_id('organizations', committee['state'])
         org.openstates_id = committee['_id']
+        org.sources = committee['sources']
         # Look into posts; but we can't be sure.
         save_object(org)
         attach_members(committee, org)
@@ -116,6 +132,7 @@ def migrate_committees():
         )
 
         org.openstates_id = committee['_id']
+        org.sources = committee['sources']
         # Look into posts; but we can't be sure.
         save_object(org)
         attach_members(committee, org)
@@ -159,6 +176,8 @@ def migrate_people():
             if entry.get(k, None):
                 setattr(who, v, entry[k])
 
+        who.sources = entry['sources']
+
         home = entry.get('url', None)
         if home:
             who.add_link(home, "Homepage")
@@ -186,6 +205,16 @@ def migrate_people():
             save_object(m)
 
         m = Membership(who._id, legislature)
+
+        chamber, district = (entry.get(x, None)
+                             for x in ['chamber', 'district'])
+
+        if chamber:
+            m.chamber = chamber
+
+        if district:
+            m.district = district
+
         for office in entry['offices']:
             note = office['name']
             for key, value in office.items():
