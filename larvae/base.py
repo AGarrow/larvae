@@ -44,7 +44,7 @@ class LarvaeBase(object):
             schema = json.load(open(os.path.join(
                 curpath, "schemas", "%s.json" % (self._schema_name)), 'r'))
             LarvaeBase._schema_cache[self._schema_name] = schema
-        validictory.validate(self.as_dict(), schema, required_by_default=False)
+        validictory.validate(self.as_dict(), schema, required_by_default=True)
 
     def as_dict(self):
         d = {}
