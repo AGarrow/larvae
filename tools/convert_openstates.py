@@ -7,6 +7,7 @@ from larvae.person import Person
 from billy.core import db
 
 from pymongo import Connection
+import uuid
 import sys
 
 connection = Connection('localhost', 27017)
@@ -22,6 +23,15 @@ type_tables = {
 _hot_cache = {}
 
 
+def ocd_namer(obj):
+    # ocd-person/UUID
+    # ocd-organization/UUID
+    if obj._type in ["person", "organization"]:
+        return "ocd-{type_}/{uuid}".format(type_=obj._type,
+                                           uuid=uuid.uuid1())
+    return None
+
+
 def save_objects(payload):
     for entry in payload:
         entry.validate()
@@ -34,11 +44,16 @@ def save_objects(payload):
         except AttributeError:
             pass
 
-        if _id is None:
-            entry._id = entry.uuid
+        ocd_id = ocd_namer(entry)
+        if _id is None and ocd_id:
+            entry._id = ocd_id
 
         eo = entry.as_dict()
-        table.save(eo)
+        mongo_id = table.save(eo)
+
+        if _id is None and ocd_id is None:
+            entry._id = mongo_id
+
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
 
