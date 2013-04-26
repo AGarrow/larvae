@@ -79,7 +79,8 @@
                     },
                     "id": {
                         "description": "The post's unique identifier",
-                        "type": "string"
+                        "type": "string",
+                        "required": false
                     },
                     "label": {
                         "description": "A label describing the post",

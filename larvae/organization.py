@@ -39,7 +39,7 @@ class Organization(LarvaeBase):
         self.identifiers.append(data)
 
     def add_post(self, label, role, **kwargs):
-        post = {"id": str(uuid.uuid1()), "label": label, "role": role}
+        post = {"label": label, "role": role}
         for k, v in kwargs.items():
             if k not in self._post_slots:
                 raise AttributeError(
