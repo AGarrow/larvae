@@ -32,6 +32,10 @@ def ocd_namer(obj):
     return None
 
 
+def is_ocd_id(string):
+    return string.startswith("ocd-")
+
+
 def save_objects(payload):
     for entry in payload:
         entry.validate()
@@ -45,6 +49,9 @@ def save_objects(payload):
             pass
 
         ocd_id = ocd_namer(entry)
+        if _id and not is_ocd_id(_id):
+            _id = None
+
         if _id is None and ocd_id:
             entry._id = ocd_id
 
