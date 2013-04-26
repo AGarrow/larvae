@@ -41,12 +41,13 @@ class Person(LarvaeBase):
     def add_link(self, url, note):
         self.links.append({"note": note, "url": url})
 
-    def add_membership(self, organization, **kwargs):
+    def add_membership(self, organization, role='member', **kwargs):
         """
             add a membership in an organization and return the membership
             object in case there are more details to add
         """
-        membership = Membership(self._id, organization._id, **kwargs)
+        membership = Membership(self._id, organization._id, role=role,
+                                **kwargs)
         self._related.append(membership)
         return membership
 
