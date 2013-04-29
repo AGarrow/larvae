@@ -68,3 +68,14 @@ def test_verify_documents():
         assert ("This shouldn't happen") == b.validate()
     except ValidationError:
         pass
+
+
+def test_verify_sponsors():
+    """ Make sure sponsors work """
+    b = toy_bill()
+    b.add_sponsor(name="Joe Bleu",
+                  sponsorship_type="Author",
+                  entity_type="legislator",
+                  primary=True,
+                  chamber="upper")
+    b.validate()

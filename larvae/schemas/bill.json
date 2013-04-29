@@ -200,7 +200,7 @@
                         "type": "string"
                     },
                     "primary": {
-                        "type": "bool"
+                        "type": "boolean"
                     },
                     "sponsorship_type": {
                         "type": "string"

@@ -68,6 +68,7 @@ class Bill(LarvaeBase):
     def add_sponsor(self, name, sponsorship_type,
                     entity_type, primary, chamber=None):
         ret = {
+            "name": name,
             "sponsorship_type": sponsorship_type,
             "entity_type": entity_type,
             "primary": primary,
