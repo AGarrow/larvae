@@ -82,7 +82,38 @@ def test_verify_sponsors():
 
 
 def test_subjects():
+    """ Test we can add subjects """
     b = toy_bill()
     b.add_subject("Foo")
     b.add_subject("Bar")
     b.validate()
+
+
+def test_versions():
+    """ Test that versions work right """
+    b = toy_bill()
+    b.add_version(name="Final Version",
+                  date="2013-04",
+                  type='foo')
+
+    links = [{
+        "url": "http://foo.bar.baz",
+    }, {
+        "url": "http://hi.example.com/foo#bar",
+        "mimetype": "text/html"
+    }]
+    b.add_version(name="Introduced Version",
+                  date="2013-04",
+                  type='foo',
+                  links=links)
+    b.validate()
+
+    links.append({"mimetype": "foo"})
+    b.add_version(name="With Committee Markup",
+                  date="2013-04",
+                  type='foo',
+                  links=links)
+    try:
+        assert ("This shouldn't happen") == b.validate()
+    except ValidationError:
+        pass
