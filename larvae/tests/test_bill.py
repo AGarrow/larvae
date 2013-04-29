@@ -79,3 +79,10 @@ def test_verify_sponsors():
                   primary=True,
                   chamber="upper")
     b.validate()
+
+
+def test_subjects():
+    b = toy_bill()
+    b.add_subject("Foo")
+    b.add_subject("Bar")
+    b.validate()
