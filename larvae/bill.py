@@ -12,9 +12,23 @@ class Bill(LarvaeBase):
                  'sources', 'sponsors', 'subjects', 'title', 'type',
                  'versions')
 
-    def __init__(self, **kwargs):
+    def __init__(self, bill_id, session, title, **kwargs):
         super(Bill, self).__init__()
-        # set instance vars
+
+        self.bill_id = bill_id
+        self.session = session
+        self.title = title
+
+        self.actions = []
+        self.alternate_bill_ids = []
+        self.alternate_titles = []
+        self.documents = []
+        self.related_bills = []
+        self.sponsors = []
+        self.subjects = []
+        self.summaries = []
+        self.versions = []
+
         for k, v in kwargs.items():
             setattr(self, k, v)
 
