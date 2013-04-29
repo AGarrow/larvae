@@ -67,12 +67,9 @@ class Bill(LarvaeBase):
             "entity_type": entity_type,
             "primary": primary,
         }
-
         if chamber:
             ret['chamber'] = chamber
-
         self.sponsors.append(ret)
-
 
     def add_subject(self, subject):
         self.subjects.append(subject)
@@ -80,7 +77,6 @@ class Bill(LarvaeBase):
     def add_version(self, name, date, type, links=None):
         if links is None:
             links = []
-
         self.versions.append({
             "name": name,
             "date": date,
