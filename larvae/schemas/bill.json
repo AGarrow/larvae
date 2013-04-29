@@ -73,7 +73,11 @@
             "type": "array"
         },
         "bill_id": { "type": "string" },
-        "chamber": { "enum": [ "upper", "lower" ], "type": "string", "required": "false" },
+        "chamber": {
+            "enum": [ "upper", "lower" ],
+            "type": "string",
+            "required": false
+        },
         "documents": {
             "items": {
                 "properties": {

@@ -9,15 +9,18 @@ class Bill(LarvaeBase):
     _type = _schema_name = "bill"
     __slots__ = ('actions', 'alternate_bill_ids', 'alternate_titles',
                  'related_bills', 'bill_id', 'chamber', 'documents', 'session',
-                 'sources', 'sponsors', 'subjects', 'title', 'type',
-                 'versions')
+                 'sources', 'sponsors', 'summaries', 'subjects', 'title',
+                 'type', 'versions')
 
-    def __init__(self, bill_id, session, title, **kwargs):
+    def __init__(self, bill_id, session, title, type=None, **kwargs):
         super(Bill, self).__init__()
 
         self.bill_id = bill_id
         self.session = session
         self.title = title
+        if not isinstance(type, list):
+            type = [type]
+        self.type = type
         # force'd params
 
         self.actions = []
