@@ -1,0 +1,162 @@
+{
+    "description": "bill data",
+    "properties": {
+        "_type": { "enum": [ "bill" ], "type": "string" },
+        "actions": {
+            "items": {
+                "properties": {
+                    "action": { "type": "string" },
+                    "actor": { "type": "string", "required": "false" },
+                    "date": { "type": "datetime" },
+                    "related_entities": {
+                        "items": {
+                            "properties": {
+                                "id": { "required": false, "type": "string" },
+                                "name": { "type": "string" },
+                                "type": {
+                                    "enum": ["committee", "legislator"],
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "required": true,
+                        "type": "array"
+                    },
+                    "type": {
+                        "items": {
+                            "enum": [
+                                "introduced",
+                                "reading:1",
+                                "reading:2",
+                                "reading:3"
+                            ],
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "alternate_bill_ids": {
+            "items": {
+                "type": "object",
+                "properties": {
+                    "bill_id": { "type": "string" },
+                    "note": { "type": "string" }
+                }
+            },
+            "type": "array"
+        },
+        "alternate_titles": {
+            "items": {
+                "type": "object",
+                "properties": {
+                    "title": { "type": "string" },
+                    "note": { "type": "string" }
+                }
+            },
+            "type": "array"
+        },
+        "related_bills": {
+            "items": {
+                "properties": {
+                    "bill_id": { "type": "string" },
+                    "session": { "type": "string" },
+                    "chamber": { "enum": [ "upper", "lower" ], "type": ["string", "null"] },
+                    "relation_type": { "enum": [ "companion" ], "type": "string"}
+                },
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "bill_id": { "type": "string" },
+        "chamber": { "enum": [ "upper", "lower" ], "type": "string", "required": "false" },
+        "documents": {
+            "items": {
+                "properties": {
+                    "name": { "type": "string" },
+                    "date": { "type": "datetime", "required": "false" },
+                    "type": { "type": "string" },
+                    "links": { "type": "array", "items": {
+                        "type": "object",
+                        "properties": {
+                            "mimetype": { "required": false, "type": "string" },
+                            "url": { "type": "string" }
+                        }
+                    }
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "session": { "type": "string" },
+        "sources": {
+            "items": {
+                "properties": {
+                    "url": { "type": "string" },
+                    "note": { "type": "string" }
+                },
+                "type": "object"
+            },
+            "minItems": 1,
+            "type": "array"
+        },
+        "sponsors": {
+            "items": {
+                "properties": {
+                    "name": { "type": "string" },
+                    "sponsorship_type": { "type": "string" },
+                    "entity_type": { "type": "string" },
+                    "primary": { "type": "bool" },
+                    "chamber": {
+                        "enum": ["upper", "lower"],
+                        "required": false, "type": "string"
+                    },
+                },
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "subjects": {
+            "items": { "type": "string" },
+            "required": false,
+            "type": "array"
+        },
+        "title": { "type": "string" },
+        "summaries": {
+            "items": {
+                "type": "object",
+                "properties": {
+                    "text": { "type": "string" },
+                    "note": { "type": "string" }
+                }
+            },
+            "type": "array"
+        },
+        "type": { "items": { "type": "string" }, "type": "array" },
+        "versions": {
+            "items": {
+                "properties": {
+                    "name": { "type": "string" },
+                    "date": { "type": "datetime", "required": "false" },
+                    "type": { "type": "string" },
+                    "links": { "type": "array", "items": {
+                        "type": "object",
+                        "properties": {
+                            "mimetype": { "required": false, "type": "string" },
+                            "url": { "type": "string" }
+                        }
+                    }
+                    }
+                },
+                "type": "object"
+            },
+            "type": "array"
+        }
+    },
+    "type": "object"
+}
