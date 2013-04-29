@@ -38,3 +38,33 @@ def test_verify_related_bill():
                        chamber="upper",
                        relation="companion")  # continuation?
     b.validate()
+
+
+def test_verify_documents():
+    """ Make sure we can add documents """
+    b = toy_bill()
+    b.add_document(name="Fiscal Impact",
+                   date="2013-04",
+                   type='foo')
+
+    links = [{
+        "url": "http://foo.bar.baz",
+    }, {
+        "url": "http://hi.example.com/foo#bar",
+        "mimetype": "text/html"
+    }]
+    b.add_document(name="Fiscal Impact",
+                   date="2013-04",
+                   type='foo',
+                   links=links)
+    b.validate()
+
+    links.append({"mimetype": "foo"})
+    b.add_document(name="Fiscal Impact",
+                   date="2013-04",
+                   type='foo',
+                   links=links)
+    try:
+        assert ("This shouldn't happen") == b.validate()
+    except ValidationError:
+        pass
