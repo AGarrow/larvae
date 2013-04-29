@@ -18,6 +18,7 @@ class Bill(LarvaeBase):
         self.bill_id = bill_id
         self.session = session
         self.title = title
+        # force'd params
 
         self.actions = []
         self.alternate_bill_ids = []
@@ -48,7 +49,10 @@ class Bill(LarvaeBase):
             "relation_type": relation  # validate
         })
 
-    def add_document(self, name, date, type, links):
+    def add_document(self, name, date, type, links=None):
+        if links is None:
+            links = []
+
         self.documents.append({
             "name": name,
             "date": date,
@@ -57,19 +61,26 @@ class Bill(LarvaeBase):
         })
 
     def add_sponsor(self, name, sponsorship_type,
-                    entity_type, primary, chamber):
-
-        self.sponsors.append({
+                    entity_type, primary, chamber=None):
+        ret = {
             "sponsorship_type": sponsorship_type,
             "entity_type": entity_type,
             "primary": primary,
-            "chamber": chamber
-        })
+        }
+
+        if chamber:
+            ret['chamber'] = chamber
+
+        self.sponsors.append(ret)
+
 
     def add_subject(self, subject):
         self.subjects.append(subject)
 
-    def add_version(self, name, date, type, links):
+    def add_version(self, name, date, type, links=None):
+        if links is None:
+            links = []
+
         self.versions.append({
             "name": name,
             "date": date,
