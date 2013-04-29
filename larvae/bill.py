@@ -36,12 +36,14 @@ class Bill(LarvaeBase):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
-    def add_action(self, action, actor, date, related_entities):
+    def add_action(self, action, actor, date,
+                   type=None, related_entities=None):
         self.actions.append({
             "action": action,
             "actor": actor,
             "date": date,
-            "related_entities": related_entities  # validate
+            "type": type or [],
+            "related_entities": related_entities or []  # validate
         })
 
     def add_related_bill(self, bill_id, session, chamber, relation):
