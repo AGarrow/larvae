@@ -27,3 +27,14 @@ def test_verify_actions():
     b = toy_bill()
     b.add_action("Some dude liked it.", "some dude", "2013-04-29")
     b.validate()
+    # XXX: Check output
+
+
+def test_verify_related_bill():
+    """ Make sure related bills work """
+    b = toy_bill()
+    b.add_related_bill(bill_id="HB 2020",
+                       session="2011A",
+                       chamber="upper",
+                       relation="companion")  # continuation?
+    b.validate()
