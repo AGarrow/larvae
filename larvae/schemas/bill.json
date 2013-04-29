@@ -115,7 +115,7 @@
                     "chamber": {
                         "enum": ["upper", "lower"],
                         "required": false, "type": "string"
-                    },
+                    }
                 },
                 "type": "object"
             },
@@ -160,3 +160,7 @@
     },
     "type": "object"
 }
+
+
+
+
