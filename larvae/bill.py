@@ -91,5 +91,5 @@ class Bill(LarvaeBase):
         })
 
     def __str__(self):
-        return self.person_id + ' membership in ' + self.organization_id
+        return self.bill_id + ' in ' + self.session
     __unicode__ = __str__

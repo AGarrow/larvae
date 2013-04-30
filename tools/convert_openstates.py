@@ -3,6 +3,7 @@
 from larvae.organization import Organization
 from larvae.membership import Membership
 from larvae.person import Person
+from larvae.bill import Bill
 
 from billy.core import db
 
@@ -237,11 +238,22 @@ def migrate_people():
         save_object(m)
 
 
+def migrate_bills():
+    bills = db.bills.find()
+    for bill in bills:
+        b = Bill(bill_id=bill['bill_id'],
+                 session=bill['session'],
+                 title=bill['title'],
+                 type=bill['type'])
+        print b
+
+
 SEQUENCE = [
     drop_existing_data,
-    migrate_legislatures,
-    migrate_people,  # depends on legislatures
-    migrate_committees,  # depends on people
+    #migrate_legislatures,
+    #migrate_people,  # depends on legislatures
+    #migrate_committees,  # depends on people
+    migrate_bills,
 ]
 
 
