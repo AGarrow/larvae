@@ -241,6 +241,8 @@ def migrate_people():
 
 
 def migrate_bills():
+    #bills = db.bills.find({"actions.related_entities": {"$exists": True,
+    #                                                    "$ne": []}})
     bills = db.bills.find()
     for bill in bills:
         b = Bill(bill_id=bill['bill_id'],
@@ -267,9 +269,20 @@ def migrate_bills():
             b.add_subject(subject)
 
         for action in bill['actions']:
-            if action.get("related_entities"):
-                print action
-                raise Exception
+            related_entities = None
+            related = action.get("related_entities")
+            if related:
+                related_entities = []
+                for rentry in related:
+                    type_ = {
+                        "committee": "organizations",
+                        "legislator": "people"
+                    }[rentry['type']]
+
+                    nid = rentry['id'] = lookup_entry_id(type_, rentry['id'])
+                    if nid is None:
+                        rentry.pop('id')
+                    related_entities.append(rentry)
 
             when = dt.datetime.strftime(action['date'], "%Y-%m-%d")
 
@@ -283,7 +296,8 @@ def migrate_bills():
             b.add_action(action=action['action'],
                          actor=action['actor'],
                          date=when,
-                         type=filter(lambda x: x is not None, type_))
+                         type=filter(lambda x: x is not None, type_),
+                         related_entities=related_entities)
 
         for sponsor in bill['sponsors']:
             type_ = 'people'
