@@ -326,9 +326,9 @@ def migrate_bills():
 
 SEQUENCE = [
     drop_existing_data,
-    #migrate_legislatures,
-    #migrate_people,  # depends on legislatures
-    #migrate_committees,  # depends on people
+    migrate_legislatures,
+    migrate_people,  # depends on legislatures
+    migrate_committees,  # depends on people
     migrate_bills,
 ]
 
