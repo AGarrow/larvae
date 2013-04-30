@@ -8,6 +8,7 @@ from larvae.bill import Bill
 from billy.core import db
 
 from pymongo import Connection
+import datetime as dt
 import uuid
 import sys
 
@@ -265,6 +266,25 @@ def migrate_bills():
         for subject in bill.get('subjects', []):
             b.add_subject(subject)
 
+        for action in bill['actions']:
+            if action.get("related_entities"):
+                print action
+                raise Exception
+
+            when = dt.datetime.strftime(action['date'], "%Y-%m-%d")
+
+            translate = {"bill:introduced": "introduced",
+                         "bill:reading:1": "reading:1",
+                         "bill:reading:2": "reading:2",
+                         "bill:reading:3": "reading:3",}
+
+            type_ = [translate.get(x, None) for x in action['type']]
+
+            b.add_action(action=action['action'],
+                         actor=action['actor'],
+                         date=when,
+                         type=filter(lambda x: x is not None, type_))
+
         for sponsor in bill['sponsors']:
             type_ = 'people'
             sponsor_id = sponsor.get('leg_id', None)
@@ -292,9 +312,9 @@ def migrate_bills():
 
 SEQUENCE = [
     drop_existing_data,
-    migrate_legislatures,
-    migrate_people,  # depends on legislatures
-    migrate_committees,  # depends on people
+    #migrate_legislatures,
+    #migrate_people,  # depends on legislatures
+    #migrate_committees,  # depends on people
     migrate_bills,
 ]
 
