@@ -262,15 +262,39 @@ def migrate_bills():
             b.add_version(name=version['name'],
                           links=[link])
 
+        for subject in bill.get('subjects', []):
+            b.add_subject(subject)
+
+        for sponsor in bill['sponsors']:
+            type_ = 'people'
+            sponsor_id = sponsor.get('leg_id', None)
+
+            if sponsor_id is None:
+                type_ = 'organizations'
+                sponsor_id = sponsor.get('committee_id', None)
+
+            if sponsor_id:
+                objid = lookup_entry_id(type_, sponsor_id)
+                etype = {"people": "person",
+                         "organizations": "committee"}[type_]
+                b.add_sponsor(
+                    name=sponsor['name'],
+                    sponsorship_type=sponsor['type'],
+                    entity_type=etype,
+                    primary=sponsor['type'] == 'primary',
+                    chamber=sponsor.get('chamber', None),
+                )
+
+
         b.validate()
         save_object(b)
 
 
 SEQUENCE = [
     drop_existing_data,
-    #migrate_legislatures,
-    #migrate_people,  # depends on legislatures
-    #migrate_committees,  # depends on people
+    migrate_legislatures,
+    migrate_people,  # depends on legislatures
+    migrate_committees,  # depends on people
     migrate_bills,
 ]
 
