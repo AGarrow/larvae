@@ -32,6 +32,14 @@ class Organization(LarvaeBase):
         return self.name
     __unicode__ = __str__
 
+    @property
+    def parent(self):
+        return self.parent_id
+
+    @parent.setter
+    def parent(self, val):
+        self.parent_id = val._id
+
     def add_identifier(self, identifier, scheme=None):
         data = {"identifier": identifier}
         if scheme:
