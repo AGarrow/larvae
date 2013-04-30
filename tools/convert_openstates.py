@@ -3,10 +3,12 @@
 from larvae.organization import Organization
 from larvae.membership import Membership
 from larvae.person import Person
+from larvae.bill import Bill
 
 from billy.core import db
 
 from pymongo import Connection
+import datetime as dt
 import uuid
 import sys
 
@@ -17,7 +19,8 @@ nudb = connection.larvae  # XXX: Fix the db name
 type_tables = {
     Organization: "organizations",
     Membership: "memberships",
-    Person: "people"
+    Person: "people",
+    Bill: "bills",
 }
 
 _hot_cache = {}
@@ -237,11 +240,96 @@ def migrate_people():
         save_object(m)
 
 
+def migrate_bills():
+    #bills = db.bills.find({"actions.related_entities": {"$exists": True,
+    #                                                    "$ne": []}})
+    bills = db.bills.find()
+    for bill in bills:
+        b = Bill(bill_id=bill['bill_id'],
+                 session=bill['session'],
+                 title=bill['title'],
+                 type=bill['type'])
+        for source in bill['sources']:
+            b.add_source(source['url'], note='old-source')
+
+        for document in bill['documents']:
+            b.add_document(name=document['name'],
+                           links=[{"url": document['url']}])
+
+        for version in bill['versions']:
+            link = {"url": version['url']}
+            mime = version.get("mimetype", None)
+            if mime:
+                link['mimetype'] = mime
+
+            b.add_version(name=version['name'],
+                          links=[link])
+
+        for subject in bill.get('subjects', []):
+            b.add_subject(subject)
+
+        for action in bill['actions']:
+            related_entities = None
+            related = action.get("related_entities")
+            if related:
+                related_entities = []
+                for rentry in related:
+                    type_ = {
+                        "committee": "organizations",
+                        "legislator": "people"
+                    }[rentry['type']]
+
+                    nid = rentry['id'] = lookup_entry_id(type_, rentry['id'])
+                    if nid is None:
+                        rentry.pop('id')
+                    related_entities.append(rentry)
+
+            when = dt.datetime.strftime(action['date'], "%Y-%m-%d")
+
+            translate = {"bill:introduced": "introduced",
+                         "bill:reading:1": "reading:1",
+                         "bill:reading:2": "reading:2",
+                         "bill:reading:3": "reading:3",}
+
+            type_ = [translate.get(x, None) for x in action['type']]
+
+            b.add_action(action=action['action'],
+                         actor=action['actor'],
+                         date=when,
+                         type=filter(lambda x: x is not None, type_),
+                         related_entities=related_entities)
+
+        for sponsor in bill['sponsors']:
+            type_ = 'people'
+            sponsor_id = sponsor.get('leg_id', None)
+
+            if sponsor_id is None:
+                type_ = 'organizations'
+                sponsor_id = sponsor.get('committee_id', None)
+
+            if sponsor_id:
+                objid = lookup_entry_id(type_, sponsor_id)
+                etype = {"people": "person",
+                         "organizations": "committee"}[type_]
+                b.add_sponsor(
+                    name=sponsor['name'],
+                    sponsorship_type=sponsor['type'],
+                    entity_type=etype,
+                    primary=sponsor['type'] == 'primary',
+                    chamber=sponsor.get('chamber', None),
+                )
+
+
+        b.validate()
+        save_object(b)
+
+
 SEQUENCE = [
     drop_existing_data,
     migrate_legislatures,
     migrate_people,  # depends on legislatures
     migrate_committees,  # depends on people
+    migrate_bills,
 ]
 
 

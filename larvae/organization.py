@@ -1,5 +1,4 @@
 from larvae.base import LarvaeBase
-import uuid
 
 
 class Organization(LarvaeBase):

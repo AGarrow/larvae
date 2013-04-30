@@ -1,6 +1,4 @@
-import six
 from larvae.base import LarvaeBase
-from larvae.organization import Organization
 from larvae.membership import Membership
 
 
