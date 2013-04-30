@@ -18,7 +18,8 @@ nudb = connection.larvae  # XXX: Fix the db name
 type_tables = {
     Organization: "organizations",
     Membership: "memberships",
-    Person: "people"
+    Person: "people",
+    Bill: "bills",
 }
 
 _hot_cache = {}
@@ -245,7 +246,11 @@ def migrate_bills():
                  session=bill['session'],
                  title=bill['title'],
                  type=bill['type'])
-        print b
+        for source in bill['sources']:
+            b.add_source(source['url'], note='old-source')
+
+        b.validate()
+        save_object(b)
 
 
 SEQUENCE = [
