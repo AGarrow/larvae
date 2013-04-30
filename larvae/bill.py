@@ -54,16 +54,17 @@ class Bill(LarvaeBase):
             "relation_type": relation  # validate
         })
 
-    def add_document(self, name, date, type, links=None):
-        if links is None:
-            links = []
-
-        self.documents.append({
+    def add_document(self, name, date=None, type='document', links=None):
+        ret = {
             "name": name,
-            "date": date,
             "type": type,
-            "links": links,  # validate
-        })
+            "links": links or [],
+        }
+
+        if date:
+            ret['date'] = date
+
+        self.documents.append(ret)
 
     def add_sponsor(self, name, sponsorship_type,
                     entity_type, primary, chamber=None):
@@ -80,15 +81,15 @@ class Bill(LarvaeBase):
     def add_subject(self, subject):
         self.subjects.append(subject)
 
-    def add_version(self, name, date, type, links=None):
-        if links is None:
-            links = []
-        self.versions.append({
+    def add_version(self, name, date=None, type='version', links=None):
+        ret = {
             "name": name,
-            "date": date,
             "type": type,
-            "links": links
-        })
+            "links": links or [],
+        }
+        if date:
+            ret['date'] = date
+        self.versions.append(ret)
 
     def __str__(self):
         return self.bill_id + ' in ' + self.session

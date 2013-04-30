@@ -249,6 +249,19 @@ def migrate_bills():
         for source in bill['sources']:
             b.add_source(source['url'], note='old-source')
 
+        for document in bill['documents']:
+            b.add_document(name=document['name'],
+                           links=[{"url": document['url']}])
+
+        for version in bill['versions']:
+            link = {"url": version['url']}
+            mime = version.get("mimetype", None)
+            if mime:
+                link['mimetype'] = mime
+
+            b.add_version(name=version['name'],
+                          links=[link])
+
         b.validate()
         save_object(b)
 
