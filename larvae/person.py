@@ -18,15 +18,13 @@ class Person(LarvaeBase):
     def __init__(self, name, **kwargs):
         super(Person, self).__init__()
         self.name = name
-
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-
         self.links = []
         self.other_names = []
         self.extras = {}
         self._related = []
         self.contact_details = []
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
     def add_name(self, name, **kwargs):
         other_name = {'name': name}
