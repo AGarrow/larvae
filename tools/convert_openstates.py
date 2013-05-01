@@ -3,10 +3,13 @@
 from larvae.organization import Organization
 from larvae.membership import Membership
 from larvae.person import Person
+from larvae.bill import Bill
 
 from billy.core import db
 
 from pymongo import Connection
+import datetime as dt
+import uuid
 import sys
 
 connection = Connection('localhost', 27017)
@@ -16,10 +19,24 @@ nudb = connection.larvae  # XXX: Fix the db name
 type_tables = {
     Organization: "organizations",
     Membership: "memberships",
-    Person: "people"
+    Person: "people",
+    Bill: "bills",
 }
 
 _hot_cache = {}
+
+
+def ocd_namer(obj):
+    # ocd-person/UUID
+    # ocd-organization/UUID
+    if obj._type in ["person", "organization"]:
+        return "ocd-{type_}/{uuid}".format(type_=obj._type,
+                                           uuid=uuid.uuid1())
+    return None
+
+
+def is_ocd_id(string):
+    return string.startswith("ocd-")
 
 
 def save_objects(payload):
@@ -34,15 +51,23 @@ def save_objects(payload):
         except AttributeError:
             pass
 
-        if _id is None:
-            entry._id = entry.uuid
+        ocd_id = ocd_namer(entry)
+        if _id and not is_ocd_id(_id):
+            _id = None
+
+        if _id is None and ocd_id:
+            entry._id = ocd_id
 
         eo = entry.as_dict()
-        nid = table.save(eo)
+        mongo_id = table.save(eo)
+
+        if _id is None and ocd_id is None:
+            entry._id = mongo_id
+
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
 
-        sys.stdout.write(what[0].lower())
+        sys.stdout.write(entry._type[0])
         sys.stdout.flush()
 
 
@@ -57,11 +82,12 @@ def migrate_legislatures():
         cow.openstates_id = abbr
 
         for post in db.districts.find({"abbr": abbr}):
-            for seat in range(int(post['num_seats'])):
-                sid = "%s.%s" % (post['_id'], seat)
 
-                cow.add_post(sid, post['name'], "Member",
-                    chamber=post['chamber'], district=post['name'])
+            cow.add_post(label="Member",
+                         role="member",
+                         num_seats=post['num_seats'],
+                         chamber=post['chamber'],
+                         district=post['name'])
 
         save_object(cow)
 
@@ -99,6 +125,7 @@ def migrate_committees():
         org = Organization(committee['committee'])
         org.parent_id = lookup_entry_id('organizations', committee['state'])
         org.openstates_id = committee['_id']
+        org.sources = committee['sources']
         # Look into posts; but we can't be sure.
         save_object(org)
         attach_members(committee, org)
@@ -115,6 +142,7 @@ def migrate_committees():
         )
 
         org.openstates_id = committee['_id']
+        org.sources = committee['sources']
         # Look into posts; but we can't be sure.
         save_object(org)
         attach_members(committee, org)
@@ -158,6 +186,8 @@ def migrate_people():
             if entry.get(k, None):
                 setattr(who, v, entry[k])
 
+        who.sources = entry['sources']
+
         home = entry.get('url', None)
         if home:
             who.add_link(home, "Homepage")
@@ -185,6 +215,16 @@ def migrate_people():
             save_object(m)
 
         m = Membership(who._id, legislature)
+
+        chamber, district = (entry.get(x, None)
+                             for x in ['chamber', 'district'])
+
+        if chamber:
+            m.chamber = chamber
+
+        if district:
+            m.district = district
+
         for office in entry['offices']:
             note = office['name']
             for key, value in office.items():
@@ -200,11 +240,96 @@ def migrate_people():
         save_object(m)
 
 
+def migrate_bills():
+    #bills = db.bills.find({"actions.related_entities": {"$exists": True,
+    #                                                    "$ne": []}})
+    bills = db.bills.find()
+    for bill in bills:
+        b = Bill(bill_id=bill['bill_id'],
+                 session=bill['session'],
+                 title=bill['title'],
+                 type=bill['type'])
+        for source in bill['sources']:
+            b.add_source(source['url'], note='old-source')
+
+        for document in bill['documents']:
+            b.add_document(name=document['name'],
+                           links=[{"url": document['url']}])
+
+        for version in bill['versions']:
+            link = {"url": version['url']}
+            mime = version.get("mimetype", None)
+            if mime:
+                link['mimetype'] = mime
+
+            b.add_version(name=version['name'],
+                          links=[link])
+
+        for subject in bill.get('subjects', []):
+            b.add_subject(subject)
+
+        for action in bill['actions']:
+            related_entities = None
+            related = action.get("related_entities")
+            if related:
+                related_entities = []
+                for rentry in related:
+                    type_ = {
+                        "committee": "organizations",
+                        "legislator": "people"
+                    }[rentry['type']]
+
+                    nid = rentry['id'] = lookup_entry_id(type_, rentry['id'])
+                    if nid is None:
+                        rentry.pop('id')
+                    related_entities.append(rentry)
+
+            when = dt.datetime.strftime(action['date'], "%Y-%m-%d")
+
+            translate = {"bill:introduced": "introduced",
+                         "bill:reading:1": "reading:1",
+                         "bill:reading:2": "reading:2",
+                         "bill:reading:3": "reading:3",}
+
+            type_ = [translate.get(x, None) for x in action['type']]
+
+            b.add_action(action=action['action'],
+                         actor=action['actor'],
+                         date=when,
+                         type=filter(lambda x: x is not None, type_),
+                         related_entities=related_entities)
+
+        for sponsor in bill['sponsors']:
+            type_ = 'people'
+            sponsor_id = sponsor.get('leg_id', None)
+
+            if sponsor_id is None:
+                type_ = 'organizations'
+                sponsor_id = sponsor.get('committee_id', None)
+
+            if sponsor_id:
+                objid = lookup_entry_id(type_, sponsor_id)
+                etype = {"people": "person",
+                         "organizations": "committee"}[type_]
+                b.add_sponsor(
+                    name=sponsor['name'],
+                    sponsorship_type=sponsor['type'],
+                    entity_type=etype,
+                    primary=sponsor['type'] == 'primary',
+                    chamber=sponsor.get('chamber', None),
+                )
+
+
+        b.validate()
+        save_object(b)
+
+
 SEQUENCE = [
     drop_existing_data,
     migrate_legislatures,
     migrate_people,  # depends on legislatures
     migrate_committees,  # depends on people
+    migrate_bills,
 ]
 
 

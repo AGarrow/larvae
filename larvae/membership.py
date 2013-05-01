@@ -6,9 +6,10 @@ class Membership(LarvaeBase):
     A single popolo encoded Membership.
     """
 
-    _schema_name = "membership"
-    __slots__ = ("_id", "organization_id", "person_id", "post_id",
-                 "role", "start_date", "end_date", "contact_details")
+    _type = _schema_name = "membership"
+    __slots__ = ("organization_id", "person_id", "post_id", "role",
+                 "start_date", "end_date", "contact_details", "district",
+                 "chamber")
 
     def __init__(self, person_id, organization_id, **kwargs):
         """
@@ -25,3 +26,7 @@ class Membership(LarvaeBase):
 
         for k, v in kwargs.items():
             setattr(self, k, v)
+
+    def __str__(self):
+        return self.person_id + ' membership in ' + self.organization_id
+    __unicode__ = __str__

@@ -1,4 +1,5 @@
 from larvae.base import LarvaeBase
+from larvae.membership import Membership
 
 
 class Person(LarvaeBase):
@@ -6,9 +7,9 @@ class Person(LarvaeBase):
     Details for a Person in Popolo format.
     """
 
-    _schema_name = "person"
+    _type = _schema_name = "person"
 
-    __slots__ = ('name', '_id', 'gender', 'birth_date',
+    __slots__ = ('name', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',
                  'other_names', 'extras', 'contact_details', 'openstates_id',
                  'chamber', 'district')
@@ -20,6 +21,7 @@ class Person(LarvaeBase):
         self.links = []
         self.other_names = []
         self.extras = {}
+        self._related = []
         for k, v in kwargs.items():
             setattr(self, k, v)
 
@@ -35,6 +37,16 @@ class Person(LarvaeBase):
     def add_link(self, url, note):
         self.links.append({"note": note, "url": url})
 
-    def __unicode__(self):
+    def add_membership(self, organization, role='member', **kwargs):
+        """
+            add a membership in an organization and return the membership
+            object in case there are more details to add
+        """
+        membership = Membership(self._id, organization._id, role=role,
+                                **kwargs)
+        self._related.append(membership)
+        return membership
+
+    def __str__(self):
         return self.name
-    __str__ = __unicode__
+    __unicode__ = __str__

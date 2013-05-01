@@ -5,7 +5,7 @@
 from larvae import __appname__, __version__
 from setuptools import setup
 
-long_description = open('README.md').read()
+long_description = ""  # XXX: FIXME
 
 setup(
     name       = __appname__,
@@ -20,5 +20,5 @@ setup(
     license          = "BSD-3",
 
     platforms        = ['any'],
-    install_requires = ['validictory'],
+    install_requires = ['six', 'validictory'],
 )
