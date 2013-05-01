@@ -24,6 +24,7 @@ class Organization(LarvaeBase):
         self.name = name
         self.identifiers = []
         self.posts = []
+        self.contact_details = []
         for k, v in kwargs.items():
             setattr(self, k, v)
 
@@ -53,3 +54,6 @@ class Organization(LarvaeBase):
                     '{0} not a valid kwarg for add_post'.format(k))
             post[k] = v
         self.posts.append(post)
+
+    def add_contact_detail(self, type, value, note):
+        self.contact_details.append([type, value, note])
