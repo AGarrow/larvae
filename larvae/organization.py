@@ -31,6 +31,12 @@ class Organization(LarvaeBase):
         return self.name
     __unicode__ = __str__
 
+    def __repr__(self):
+        as_dict = self.as_dict()
+        list(map(as_dict.pop, ('_type', '_id', 'name')))
+        args = (self.__class__.__name__, self.name, as_dict)
+        return '%s(name=%r, **%r)' % args
+
     @property
     def parent(self):
         return self.parent_id
