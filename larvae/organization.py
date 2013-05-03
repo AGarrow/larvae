@@ -25,6 +25,7 @@ class Organization(LarvaeBase):
         self.identifiers = []
         self.posts = []
         self.contact_details = []
+        self._related = []
         for k, v in kwargs.items():
             setattr(self, k, v)
 
