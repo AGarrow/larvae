@@ -39,7 +39,9 @@ class Person(LarvaeBase):
         self.links.append({"note": note, "url": url})
 
     def add_contact_detail(self, type, value, note):
-        self.contact_details.append([type, value, note])
+        self.contact_details.append({"type": type,
+                                     "value": value,
+                                     "note": note})
 
     def add_membership(self, organization, role='member', **kwargs):
         """

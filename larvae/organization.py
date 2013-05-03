@@ -56,4 +56,6 @@ class Organization(LarvaeBase):
         self.posts.append(post)
 
     def add_contact_detail(self, type, value, note):
-        self.contact_details.append([type, value, note])
+        self.contact_details.append({"type": type,
+                                     "value": value,
+                                     "note": note})
