@@ -43,27 +43,29 @@ def test_verify_related_bill():
 def test_verify_documents():
     """ Make sure we can add documents """
     b = toy_bill()
-    b.add_document(name="Fiscal Impact",
-                   date="2013-04",
-                   type='foo')
+    b.add_document_link(name="Fiscal Impact",
+                        date="2013-04",
+                        type='foo',
+                        url='http://foo.bar.baz')
 
-    links = [{
-        "url": "http://foo.bar.baz",
-    }, {
-        "url": "http://hi.example.com/foo#bar",
-        "mimetype": "text/html"
-    }]
-    b.add_document(name="Fiscal Impact",
-                   date="2013-04",
-                   type='foo',
-                   links=links)
+    b.add_document_link(name="Fiscal Impact",
+                        date="2013-04",
+                        type='foo',
+                        url="http://hi.example.com/foo#bar",
+                        mimetype="text/html")
+
+    b.add_document_link(name="Fiscal Impact",
+                        date="2013-04",
+                        type='foo',
+                        url='http://foobar.baz')
+
     b.validate()
 
-    links.append({"mimetype": "foo"})
-    b.add_document(name="Fiscal Impact",
-                   date="2013-04",
-                   type='foo',
-                   links=links)
+    b.add_document_link(name="Fiscal Impact",
+                        date="2013-04",
+                        type='foo',
+                        url=None,
+                        mimetype='foo')
     try:
         assert ("This shouldn't happen") == b.validate()
     except ValidationError:
@@ -92,28 +94,70 @@ def test_subjects():
 def test_versions():
     """ Test that versions work right """
     b = toy_bill()
-    b.add_version(name="Final Version",
-                  date="2013-04",
-                  type='foo')
 
-    links = [{
-        "url": "http://foo.bar.baz",
-    }, {
-        "url": "http://hi.example.com/foo#bar",
-        "mimetype": "text/html"
-    }]
-    b.add_version(name="Introduced Version",
-                  date="2013-04",
-                  type='foo',
-                  links=links)
+    b.add_version_link(
+        url="http://pault.ag/",
+        name="Final Version",
+        date="2013-04",
+        type='foo'
+    )
+
+    b.add_version_link(
+        url="http://pault.ag/foo",
+        name="Final Version",
+        date="2013-04",
+        type='foo'
+    )
     b.validate()
 
-    links.append({"mimetype": "foo"})
-    b.add_version(name="With Committee Markup",
-                  date="2013-04",
-                  type='foo',
-                  links=links)
+    assert len(b.versions) == 1
+    assert len(b.versions[0]['links']) == 2
+
     try:
-        assert ("This shouldn't happen") == b.validate()
-    except ValidationError:
+        b.add_version_link(
+            url="http://pault.ag/foo",
+            name="Final Version",
+            date="2013-04",
+            type='foo',
+        )
+        assert True == False, "We didn't break."
+    except ValueError:
         pass
+
+
+    b.add_version_link(
+        url="http://pault.ag/foo",
+        name="Final Version",
+        date="2013-04",
+        type='foo',
+        on_duplicate='ignore'
+    )
+
+    assert len(b.versions) == 1
+    assert len(b.versions[0]['links']) == 2
+
+    try:
+        b.add_version_link(
+            url="http://pault.ag/foo",
+            name="Finals Versions",
+            date="2013-04",
+            type='foo',
+        )
+        assert True == False, "We didn't break."
+    except ValueError:
+        pass
+
+    assert len(b.versions) == 1
+    assert len(b.versions[0]['links']) == 2
+
+    b.add_version_link(
+        url="http://pault.ag/foovbar",
+        name="Finals Versions",
+        date="2013-04",
+        type='foo',
+    )
+
+    assert len(b.versions) == 2
+    assert len(b.versions[1]['links']) == 1
+
+    b.validate()

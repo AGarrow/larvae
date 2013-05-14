@@ -17,7 +17,6 @@ class Bill(LarvaeBase):
     """
 
     _type = _schema_name = "bill"
-    _seen_links = set()
     __slots__ = ('actions', 'alternate_bill_ids', 'alternate_titles',
                  'related_bills', 'bill_id', 'chamber', 'documents', 'session',
                  'sources', 'sponsors', 'summaries', 'subjects', 'title',
@@ -62,18 +61,6 @@ class Bill(LarvaeBase):
             "relation_type": relation  # validate
         })
 
-    def add_document(self, name, date=None, type='document', links=None):
-        ret = {
-            "name": name,
-            "type": type,
-            "links": links or [],
-        }
-
-        if date:
-            ret['date'] = date
-
-        self.documents.append(ret)
-
     def add_sponsor(self, name, sponsorship_type,
                     entity_type, primary, chamber=None):
         ret = {
@@ -89,14 +76,27 @@ class Bill(LarvaeBase):
     def add_subject(self, subject):
         self.subjects.append(subject)
 
+    def add_document_link(
+        self, name, url, date=None, type='document',
+        mimetype=None, on_duplicate='error'
+    ):
+        return self._add_associated_link(
+            collection='documents',
+            name=name,
+            url=url,
+            date=date,
+            type=type,
+            mimetype=mimetype,
+            on_duplicate=on_duplicate)
+
     def add_version_link(
-        self, name, uri, date=None, type='version',
+        self, name, url, date=None, type='version',
         mimetype=None, on_duplicate='error'
     ):
         return self._add_associated_link(
             collection='versions',
             name=name,
-            uri=uri,
+            url=url,
             date=date,
             type=type,
             mimetype=mimetype,
@@ -105,16 +105,33 @@ class Bill(LarvaeBase):
 
     def _add_associated_link(self, collection, name, url, date,
                              type, mimetype, on_duplicate):
+        """
+        """
+
+        if on_duplicate not in ['error', 'ignore']:
+            raise TypeError("Sorry; we accept either `error' or `ignore' for "
+                            "on_duplicate behavior.")
+
         versions = getattr(self, collection)
         ver = {
             "name": name,
             "type": type,
-            "date": date,
             "links": []
         }
+
+        if date:
+            ver['date'] = date
+
+        seen_links = set()  # We iterate over everything anyway. Meh. Storing
+        # as an instance var is actually non-trivial, since we abuse __slots__
+        # for as_dict, and it's otherwise read-only or shared set() instance.
+
         matches = 0
         for version in versions:
-            if False not in (ver[x] == version[x]
+            for link in version['links']:
+                seen_links.add(link['url'])
+
+            if False not in (ver.get(x) == version.get(x)
                              for x in ["name", "type", "date"]):
                 matches =+ 1
                 ver = version
@@ -122,21 +139,38 @@ class Bill(LarvaeBase):
         if matches > 1:
             raise ValueError("Something went just very wrong internally")
 
-        if uri in self._seen_links:
+        if url in seen_links:
             if on_duplicate == 'error':
-                raise ValueError("Duplicate bill version URL: `%s'" % (
-                    uri))
-
-        self._seen_links.add(uri)
-
+                raise ValueError("Duplicate entry in `%s' - URL: `%s'" % (
+                    collection, url
+                ))
+            else:
+                # This means we're in ignore mode. This situation right here
+                # means we should *skip* adding this link silently and continue
+                # on with our scrape. This should *ONLY* be used when there's
+                # a site issue (Version 1 == Version 2 because of a bug) and
+                # *NEVER* because "Current" happens to match "Version 3". Fix
+                # that in the scraper, please.
+                #  - PRT
+                return None
 
         # OK. This is either new or old. Let's just go for it.
-        ver['links'].append({
-            "url": uri,
-            "mimetype": mimetype
-        })
-        return version
+        ret = {"url": url}
+
+        if mimetype:
+            ret["mimetype"] = mimetype
+
+        ver['links'].append(ret)
+
+        if matches == 0:
+            # in the event we've got a new entry; let's just insert it into
+            # the versions on this object. Otherwise it'll get thrown in
+            # automagically.
+            self.versions.append(ver)
+
+        return ver
 
     def __str__(self):
         return self.bill_id + ' in ' + self.session
+
     __unicode__ = __str__
