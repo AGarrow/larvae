@@ -22,13 +22,13 @@ class Bill(LarvaeBase):
                  'sources', 'sponsors', 'summaries', 'subjects', 'title',
                  'type', 'versions')
 
-    def __init__(self, bill_id, session, title, type='bill', **kwargs):
+    def __init__(self, bill_id, session, title, type=None, **kwargs):
         super(Bill, self).__init__()
 
         self.bill_id = bill_id
         self.session = session
         self.title = title
-        self.type = type
+        self.type = _cleanup_list(type, ['bill'])
 
         self.actions = []
         self.alternate_bill_ids = []
