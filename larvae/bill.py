@@ -7,6 +7,7 @@ class Bill(LarvaeBase):
     """
 
     _type = _schema_name = "bill"
+    _seen_links = set()
     __slots__ = ('actions', 'alternate_bill_ids', 'alternate_titles',
                  'related_bills', 'bill_id', 'chamber', 'documents', 'session',
                  'sources', 'sponsors', 'summaries', 'subjects', 'title',
@@ -81,15 +82,53 @@ class Bill(LarvaeBase):
     def add_subject(self, subject):
         self.subjects.append(subject)
 
-    def add_version(self, name, date=None, type='version', links=None):
-        ret = {
+    def add_version_link(
+        self, name, uri, date=None, type='version',
+        mimetype=None, on_duplicate='error'
+    ):
+        return self._add_associated_link(
+            collection='versions',
+            name=name,
+            uri=uri,
+            date=date,
+            type=type,
+            mimetype=mimetype,
+            on_duplicate=on_duplicate)
+
+
+    def _add_associated_link(self, collection, name, url, date,
+                             type, mimetype, on_duplicate):
+        versions = getattr(self, collection)
+        ver = {
             "name": name,
             "type": type,
-            "links": links or [],
+            "date": date,
+            "links": []
         }
-        if date:
-            ret['date'] = date
-        self.versions.append(ret)
+        matches = 0
+        for version in versions:
+            if False not in (ver[x] == version[x]
+                             for x in ["name", "type", "date"]):
+                matches =+ 1
+                ver = version
+
+        if matches > 1:
+            raise ValueError("Something went just very wrong internally")
+
+        if uri in self._seen_links:
+            if on_duplicate == 'error':
+                raise ValueError("Duplicate bill version URL: `%s'" % (
+                    uri))
+
+        self._seen_links.add(uri)
+
+
+        # OK. This is either new or old. Let's just go for it.
+        ver['links'].append({
+            "url": uri,
+            "mimetype": mimetype
+        })
+        return version
 
     def __str__(self):
         return self.bill_id + ' in ' + self.session
