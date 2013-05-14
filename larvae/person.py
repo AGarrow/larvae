@@ -12,7 +12,7 @@ class Person(LarvaeBase):
     __slots__ = ('name', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',
                  'other_names', 'extras', 'contact_details', 'openstates_id',
-                 'chamber', 'district')
+                 'chamber', 'district', 'uuid')
     _other_name_slots = ('name', 'start_date', 'end_date', 'note')
 
     def __init__(self, name, **kwargs):
@@ -23,6 +23,12 @@ class Person(LarvaeBase):
         self.extras = {}
         self._related = []
         self.contact_details = []
+
+        _type = kwargs.pop('_type')
+        if _type != self._type:
+            msg = 'Wrong value %r for passed-in _type attribute. Expected %r'
+            raise ValueError(msg % (_type, self._type))
+
         for k, v in kwargs.items():
             setattr(self, k, v)
 
