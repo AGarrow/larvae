@@ -23,6 +23,7 @@ class Person(LarvaeBase):
         self.extras = {}
         self._related = []
         self.contact_details = []
+
         for k, v in kwargs.items():
             setattr(self, k, v)
 
@@ -56,3 +57,9 @@ class Person(LarvaeBase):
     def __str__(self):
         return self.name
     __unicode__ = __str__
+
+    def __repr__(self):
+        as_dict = self.as_dict()
+        list(map(as_dict.pop, ('_type', '_id', 'name')))
+        args = (self.__class__.__name__, self.name, as_dict)
+        return '%s(name=%r, **%r)' % args
