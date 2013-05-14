@@ -1,6 +1,16 @@
 from larvae.base import LarvaeBase
 
 
+def _cleanup_list(obj, default):
+    if not obj:
+        obj = default
+    elif isinstance(obj, basestring):
+        obj = [obj]
+    elif not isinstance(obj, list):
+        obj = list(obj)
+    return obj
+
+
 class Bill(LarvaeBase):
     """
     A single OpenCivic bill.
@@ -12,16 +22,13 @@ class Bill(LarvaeBase):
                  'sources', 'sponsors', 'summaries', 'subjects', 'title',
                  'type', 'versions')
 
-    def __init__(self, bill_id, session, title, type=None, **kwargs):
+    def __init__(self, bill_id, session, title, type='bill', **kwargs):
         super(Bill, self).__init__()
 
         self.bill_id = bill_id
         self.session = session
         self.title = title
-        if not isinstance(type, list):
-            type = [type]
         self.type = type
-        # force'd params
 
         self.actions = []
         self.alternate_bill_ids = []
@@ -42,7 +49,7 @@ class Bill(LarvaeBase):
             "action": action,
             "actor": actor,
             "date": date,
-            "type": type or [],
+            "type": _cleanup_list(type, []),
             "related_entities": related_entities or []  # validate
         })
 
