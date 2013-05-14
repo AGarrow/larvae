@@ -1,10 +1,11 @@
 from larvae.base import LarvaeBase
+from six import text_type as str_type
 
 
 def _cleanup_list(obj, default):
     if not obj:
         obj = default
-    elif isinstance(obj, basestring):
+    elif isinstance(obj, str_type):
         obj = [obj]
     elif not isinstance(obj, list):
         obj = list(obj)
@@ -102,7 +103,6 @@ class Bill(LarvaeBase):
             mimetype=mimetype,
             on_duplicate=on_duplicate)
 
-
     def _add_associated_link(self, collection, name, url, date,
                              type, mimetype, on_duplicate):
         """
@@ -133,7 +133,7 @@ class Bill(LarvaeBase):
 
             if False not in (ver.get(x) == version.get(x)
                              for x in ["name", "type", "date"]):
-                matches =+ 1
+                matches = matches + 1
                 ver = version
 
         if matches > 1:

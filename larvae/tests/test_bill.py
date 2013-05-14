@@ -120,10 +120,9 @@ def test_versions():
             date="2013-04",
             type='foo',
         )
-        assert True == False, "We didn't break."
+        assert True is False, "We didn't break."
     except ValueError:
         pass
-
 
     b.add_version_link(
         url="http://pault.ag/foo",
@@ -143,7 +142,7 @@ def test_versions():
             date="2013-04",
             type='foo',
         )
-        assert True == False, "We didn't break."
+        assert True is False, "We didn't break."
     except ValueError:
         pass
 

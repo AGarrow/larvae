@@ -1,5 +1,4 @@
 from larvae.base import LarvaeBase
-from larvae.membership import Membership
 
 
 class Event(LarvaeBase):

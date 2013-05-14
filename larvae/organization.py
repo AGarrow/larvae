@@ -44,7 +44,7 @@ class Organization(LarvaeBase):
         return self.parent_id
 
     @parent.setter
-    def parent(self, val):
+    def parent_set(self, val):
         self.parent_id = val._id
 
     def add_identifier(self, identifier, scheme=None):
