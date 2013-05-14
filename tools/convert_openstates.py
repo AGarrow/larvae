@@ -289,7 +289,7 @@ def migrate_bills():
             translate = {"bill:introduced": "introduced",
                          "bill:reading:1": "reading:1",
                          "bill:reading:2": "reading:2",
-                         "bill:reading:3": "reading:3",}
+                         "bill:reading:3": "reading:3"}
 
             type_ = [translate.get(x, None) for x in action['type']]
 
@@ -318,7 +318,6 @@ def migrate_bills():
                     primary=sponsor['type'] == 'primary',
                     chamber=sponsor.get('chamber', None),
                 )
-
 
         b.validate()
         save_object(b)
