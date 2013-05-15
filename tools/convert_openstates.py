@@ -225,7 +225,7 @@ def migrate_people():
         if district:
             m.district = district
 
-        for office in entry['offices']:
+        for office in entry.get('offices', []):
             note = office['name']
             for key, value in office.items():
                 if not value or key in ["name", "type"]:
@@ -253,17 +253,16 @@ def migrate_bills():
             b.add_source(source['url'], note='old-source')
 
         for document in bill['documents']:
-            b.add_document(name=document['name'],
-                           links=[{"url": document['url']}])
+            b.add_document_link(name=document['name'], url=document['url'])
 
         for version in bill['versions']:
-            link = {"url": version['url']}
+            kwargs = {}
             mime = version.get("mimetype", None)
             if mime:
-                link['mimetype'] = mime
+                kwargs['mimetype'] = mime
 
-            b.add_version(name=version['name'],
-                          links=[link])
+            b.add_version_link(name=version['name'],
+                               url=version['url'], **kwargs)
 
         for subject in bill.get('subjects', []):
             b.add_subject(subject)
