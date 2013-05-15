@@ -313,12 +313,18 @@ def migrate_bills():
                 objid = lookup_entry_id(type_, sponsor_id)
                 etype = {"people": "person",
                          "organizations": "committee"}[type_]
+
+                kwargs = {}
+                if objid is not None:
+                    kwargs['entity_id'] = objid
+
                 b.add_sponsor(
                     name=sponsor['name'],
                     sponsorship_type=sponsor['type'],
                     entity_type=etype,
                     primary=sponsor['type'] == 'primary',
                     chamber=sponsor.get('chamber', None),
+                    **kwargs
                 )
 
         b.validate()

@@ -63,15 +63,21 @@ class Bill(LarvaeBase):
         })
 
     def add_sponsor(self, name, sponsorship_type,
-                    entity_type, primary, chamber=None):
+                    entity_type, primary,
+                    chamber=None, entity_id=None):
         ret = {
             "name": name,
             "sponsorship_type": sponsorship_type,
             "entity_type": entity_type,
             "primary": primary,
         }
+
+        if entity_id:
+            ret["entity_id"] = entity_id
+
         if chamber:
             ret['chamber'] = chamber
+
         self.sponsors.append(ret)
 
     def add_subject(self, subject):
