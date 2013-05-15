@@ -262,7 +262,10 @@ def migrate_bills():
                 kwargs['mimetype'] = mime
 
             b.add_version_link(name=version['name'],
-                               url=version['url'], **kwargs)
+                               url=version['url'],
+                               on_duplicate='ignore',  # Some old OS entries
+                               # are not so good about this.
+                               **kwargs)
 
         for subject in bill.get('subjects', []):
             b.add_subject(subject)
