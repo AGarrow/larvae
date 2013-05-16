@@ -1,4 +1,4 @@
-{
+schema = {
     "$schema": "http://json-schema.org/draft-03/schema#",
     "description": "A relationship between a person and an organization",
     "id": "http://popoloproject.com/schemas/membership.json#",
@@ -6,12 +6,12 @@
         "end_date": {
             "description": "The date on which the relationship ended",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "id": {
             "description": "The membership's unique identifier",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "organization_id": {
@@ -24,18 +24,18 @@
         },
         "post_id": {
             "description": "Post ID key.",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "role": {
             "description": "The role that the holder of the post fulfills",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "start_date": {
             "description": "The date on which the relationship began",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": false,
+            "required": False,
             "type": "string"
         }
     },

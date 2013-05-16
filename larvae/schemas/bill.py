@@ -1,4 +1,4 @@
-{
+schema = {
     "description": "bill data",
     "properties": {
         "_type": {
@@ -14,7 +14,7 @@
                         "type": "string"
                     },
                     "actor": {
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "date": {
@@ -25,7 +25,7 @@
                         "items": {
                             "properties": {
                                 "id": {
-                                    "required": false,
+                                    "required": False,
                                     "type": "string"
                                 },
                                 "name": {
@@ -41,7 +41,7 @@
                             },
                             "type": "object"
                         },
-                        "required": true,
+                        "required": True,
                         "type": "array"
                     },
                     "type": {
@@ -97,7 +97,7 @@
                 "upper",
                 "lower"
             ],
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "documents": {
@@ -105,14 +105,14 @@
                 "properties": {
                     "date": {
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "links": {
                         "items": {
                             "properties": {
                                 "mimetype": {
-                                    "required": false,
+                                    "required": False,
                                     "type": "string"
                                 },
                                 "url": {
@@ -190,11 +190,11 @@
                             "upper",
                             "lower"
                         ],
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "entity_id": {
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "entity_type": {
@@ -218,7 +218,7 @@
             "items": {
                 "type": "string"
             },
-            "required": false,
+            "required": False,
             "type": "array"
         },
         "summaries": {
@@ -249,14 +249,14 @@
                 "properties": {
                     "date": {
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "links": {
                         "items": {
                             "properties": {
                                 "mimetype": {
-                                    "required": false,
+                                    "required": False,
                                     "type": "string"
                                 },
                                 "url": {

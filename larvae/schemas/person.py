@@ -1,70 +1,70 @@
-{
+schema = {
     "$schema": "http://json-schema.org/draft-03/schema#",
     "description": "A real person, alive or dead",
     "id": "http://popoloproject.com/schemas/person.json#",
     "properties": {
         "additional_name": {
             "description": "One or more secondary given names",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "biography": {
             "description": "An extended account of a person's life",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "birth_date": {
             "description": "A date of birth",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "death_date": {
             "description": "A date of death",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "email": {
             "description": "An email address",
             "format": "email",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "family_name": {
             "description": "One or more family names",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "gender": {
             "description": "A gender",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "given_name": {
             "description": "One or more primary given names",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "honorific_prefix": {
             "description": "One or more honorifics preceding a person's name",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "honorific_suffix": {
             "description": "One or more honorifics following a person's name",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "id": {
             "description": "The person's unique identifier",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "image": {
             "description": "A URL of a head shot",
             "format": "uri",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "links": {
@@ -73,7 +73,7 @@
                 "properties": {
                     "note": {
                         "description": "A note, e.g. 'Wikipedia page'",
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "url": {
@@ -84,7 +84,7 @@
                 },
                 "type": "object"
             },
-            "required": false,
+            "required": False,
             "type": "array"
         },
         "name": {
@@ -96,12 +96,12 @@
             "items": {
                 "$ref": "http://popoloproject.com/schemas/other_name.json#"
             },
-            "required": false,
+            "required": False,
             "type": "array"
         },
         "summary": {
             "description": "A one-line account of a person's life",
-            "required": false,
+            "required": False,
             "type": "string"
         }
     },

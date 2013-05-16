@@ -1,4 +1,5 @@
 from larvae.base import LarvaeBase
+from .schemas.organization import schema
 
 
 class Organization(LarvaeBase):
@@ -14,7 +15,8 @@ class Organization(LarvaeBase):
                    'start_date', 'chamber', 'district', 'geography_id',
                    'num_seats')
 
-    _type = _schema_name = "organization"
+    _type = "organization"
+    _schema = schema
 
     def __init__(self, name, **kwargs):
         """

@@ -1,7 +1,4 @@
-import os
-import json
 import uuid
-from collections import defaultdict
 import validictory
 
 
@@ -16,9 +13,8 @@ class LarvaeBase(object):
 
     # to be overridden by children. Something like "person" or "organization".
     # Used in :func:`validate`.
-    _schema_name = None
     _type = None
-    _schema_cache = defaultdict(lambda: None)
+    _schema = None
 
     def __init__(self):
         self._id = str(uuid.uuid1())
@@ -26,9 +22,7 @@ class LarvaeBase(object):
 
     def validate(self):
         """
-        Validate that the Popolo object is a valid object. This uses
-        `self._schema_name` to load the schema, and validate `self` against
-        it.
+        Validate that we have a valid object.
 
         On error, this will either raise a `ValueError` or a
         `validictory.ValidationError` (a subclass of `ValueError`).
@@ -38,13 +32,8 @@ class LarvaeBase(object):
         due to upstream schemas being in JSON Schema v3, and not validictory's
         modified syntax.
         """
-        schema = LarvaeBase._schema_cache[self._schema_name]
-        if schema is None:
-            curpath = os.path.dirname(os.path.abspath(__file__))
-            schema = json.load(open(os.path.join(
-                curpath, "schemas", "%s.json" % (self._schema_name)), 'r'))
-            LarvaeBase._schema_cache[self._schema_name] = schema
-        validictory.validate(self.as_dict(), schema, required_by_default=True)
+        validictory.validate(self.as_dict(), self._schema,
+                             required_by_default=True)
 
     def as_dict(self):
         d = {}

@@ -1,5 +1,6 @@
 from larvae.base import LarvaeBase
 from larvae.membership import Membership
+from .schemas.person import schema
 
 
 class Person(LarvaeBase):
@@ -7,7 +8,8 @@ class Person(LarvaeBase):
     Details for a Person in Popolo format.
     """
 
-    _type = _schema_name = "person"
+    _type = 'person'
+    _schema = schema
 
     __slots__ = ('name', 'gender', 'birth_date',
                  'death_date', 'image', 'summary', 'biography', 'links',

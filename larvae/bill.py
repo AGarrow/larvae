@@ -1,5 +1,6 @@
-from larvae.base import LarvaeBase
 from six import text_type as str_type
+from larvae.base import LarvaeBase
+from .schemas.bill import schema
 
 
 def _cleanup_list(obj, default):
@@ -17,7 +18,8 @@ class Bill(LarvaeBase):
     A single OpenCivic bill.
     """
 
-    _type = _schema_name = "bill"
+    _type = "bill"
+    _schema = schema
     __slots__ = ('actions', 'alternate_bill_ids', 'alternate_titles',
                  'related_bills', 'bill_id', 'chamber', 'documents', 'session',
                  'sources', 'sponsors', 'summaries', 'subjects', 'title',

@@ -1,4 +1,4 @@
-{
+schema = {
     "description": "event data",
     "properties": {
         "_type": {
@@ -8,7 +8,7 @@
             "type": "string"
         },
         "all_day": {
-            "required": false,
+            "required": False,
             "type": "boolean"
         },
         "description": {
@@ -35,7 +35,7 @@
             ]
         },
         "link": {
-            "required": false,
+            "required": False,
             "type": [
                 "string",
                 "null"
@@ -45,7 +45,7 @@
             "type": "string"
         },
         "notes": {
-            "required": false,
+            "required": False,
             "type": [
                 "string",
                 "null"
@@ -55,7 +55,7 @@
             "items": {
                 "properties": {
                     "chamber": {
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "participant": {
@@ -82,7 +82,7 @@
             "type": "array"
         },
         "record_id": {
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "related_bills": {
@@ -119,7 +119,7 @@
             "type": "array"
         },
         "status": {
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "type": {

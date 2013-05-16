@@ -1,4 +1,5 @@
 from larvae.base import LarvaeBase
+from .schemas.membership import schema
 
 
 class Membership(LarvaeBase):
@@ -6,7 +7,8 @@ class Membership(LarvaeBase):
     A single popolo encoded Membership.
     """
 
-    _type = _schema_name = "membership"
+    _type = "membership"
+    _schema = schema
     __slots__ = ("organization_id", "person_id", "post_id", "role",
                  "start_date", "end_date", "contact_details", "district",
                  "chamber")

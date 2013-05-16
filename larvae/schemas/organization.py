@@ -1,28 +1,28 @@
-{
+schema = {
     "$schema": "http://json-schema.org/draft-03/schema#",
     "description": "A group with a common purpose or reason for existence that goes beyond the set of people belonging to it",
     "id": "http://popoloproject.com/schemas/organization.json#",
     "properties": {
         "classification": {
             "description": "An organization category, e.g. committee",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "dissolution_date": {
             "description": "A date of dissolution",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "founding_date": {
             "description": "A date of founding",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "id": {
             "description": "The organization's unique identifier",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "identifiers": {
@@ -35,13 +35,13 @@
                     },
                     "scheme": {
                         "description": "An identifier scheme, e.g. DUNS",
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     }
                 },
                 "type": "object"
             },
-            "required": false,
+            "required": False,
             "type": "array"
         },
         "name": {
@@ -53,12 +53,12 @@
             "items": {
                 "$ref": "http://popoloproject.com/schemas/other_name.json#"
             },
-            "required": false,
+            "required": False,
             "type": "array"
         },
         "parent_id": {
             "description": "An organization that contains this organization",
-            "required": false,
+            "required": False,
             "type": "string"
         },
         "posts": {
@@ -68,19 +68,19 @@
                 "properties": {
                     "contact_details": {
                         "description": "Details regarding how to contact the person.",
-                        "required": false,
+                        "required": False,
                         "type": "array"
                     },
                     "end_date": {
                         "description": "Ending date of the post.",
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "id": {
                         "description": "The post's unique identifier",
                         "type": "string",
-                        "required": false
+                        "required": False
                     },
                     "label": {
                         "description": "A label describing the post",
@@ -88,7 +88,7 @@
                     },
                     "organization_id": {
                         "description": "The ID of the organization in which the post is held",
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     },
                     "role": {
@@ -98,14 +98,14 @@
                     "start_date": {
                         "description": "Startting date of the post.",
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                        "required": false,
+                        "required": False,
                         "type": "string"
                     }
                 },
                 "title": "Post",
                 "type": "object"
             },
-            "required": false,
+            "required": False,
             "type": "array"
         }
     },
