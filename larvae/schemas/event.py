@@ -64,7 +64,8 @@ schema = {
                     "participant_type": {
                         "enum": [
                             "committee",
-                            "legislator"
+                            "legislator",
+                            "person",
                         ],
                         "type": "string"
                     },
@@ -85,18 +86,31 @@ schema = {
             "required": False,
             "type": "string"
         },
-        "related_bills": {
+        "agenda": {
             "items": {
                 "properties": {
-                    "bill_id": {
+                    "note": {
                         "type": "string"
                     },
-                    "description": {
-                        "type": "string"
+                    "related_entities": {
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "entity_id": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "note": {
+                                "type": "string"
+                            },
+                        },
+                        "type": "object"
                     },
-                    "type": {
-                        "type": "string"
-                    }
+                    "minItems": 0,
+                    "type": "array",
                 },
                 "type": "object"
             },
