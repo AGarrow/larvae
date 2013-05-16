@@ -30,7 +30,7 @@ schema = {
         },
         "end": {
             "type": [
-                "datetime",
+                "string",
                 "null"
             ]
         },
@@ -117,9 +117,6 @@ schema = {
             "minItems": 0,
             "type": "array"
         },
-        "session": {
-            "type": "string"
-        },
         "sources": {
             "items": {
                 "properties": {
@@ -140,7 +137,7 @@ schema = {
             "type": "string"
         },
         "when": {
-            "type": "datetime"
+            "type": "string"
         }
     },
     "type": "object"
