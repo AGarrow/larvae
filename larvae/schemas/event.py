@@ -46,10 +46,7 @@ schema = {
         },
         "notes": {
             "required": False,
-            "type": [
-                "string",
-                "null"
-            ]
+            "type": "array"
         },
         "participants": {
             "items": {

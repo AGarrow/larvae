@@ -12,7 +12,7 @@ class Event(LarvaeBase):
                  "end", "links", "location", "notes", "participants",
                  "agenda", "sources", "status", "type",)
 
-    def __init__(self, description, when, **kwargs):
+    def __init__(self, description, when, location, **kwargs):
         super(Event, self).__init__()
         self.when = when
         self.description = description
@@ -20,7 +20,7 @@ class Event(LarvaeBase):
         self.documents = []
         self.end = None
         self.links = []
-        self.location = None
+        self.location = location
         self.notes = []
         self.participants = []
         self.agenda = []
@@ -30,3 +30,9 @@ class Event(LarvaeBase):
 
         for k, v in kwargs.items():
             setattr(self, k, v)
+
+    def add_source(self, url, note=None):
+        self.sources.append({
+            'url': url,
+            "note": note
+        })
