@@ -32,13 +32,17 @@ class Event(LarvaeBase):
             setattr(self, k, v)
 
     def add_source(self, url, note=None):
-        self.sources.append({
-            'url': url,
-            "note": note
-        })
+        info = {
+            "url": url,
+        }
+        if note:
+            info['note'] = note
+        self.sources.append(info)
 
     def add_link(self, url, note=None):
-        self.links.append({
+        info = {
             "url": url,
-            "note": note
-        })
+        }
+        if note:
+            info['note'] = note
+        self.links.append(info)

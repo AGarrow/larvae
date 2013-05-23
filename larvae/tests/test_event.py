@@ -9,3 +9,7 @@ def test_basic_invalid_person():
 
     e.add_source(url='foobar')
     e.validate()
+
+    e.add_link("http://foobar.baz")
+    e.add_link("http://foobar.baz", note="foo")
+    e.validate()
