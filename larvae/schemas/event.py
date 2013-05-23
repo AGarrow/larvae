@@ -25,7 +25,7 @@ schema = {
         "end": { "type": ["string", "null"] },
 
         # **start** - Starting date / time of the event.
-        "start": { "type": ["string", "null"] }
+        "start": { "type": ["string", "null"] },
 
         # **canceled** - Simple boolean if this event has been canceled.
         "canceled": { "required": False, "type": "boolean" },

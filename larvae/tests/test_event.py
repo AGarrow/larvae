@@ -27,6 +27,6 @@ def test_basic_agenda():
     e.validate()
 
     index = e.add_agenda_item("foo bar")
-    index = e.add_add_related_entity("Foo", 
+    # index = e.add_add_related_entity("Foo", 
 
     e.validate()
