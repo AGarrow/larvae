@@ -104,23 +104,23 @@ schema = {
                     },
                     "related_entities": {
                         "properties": {
-                            "type": {
+                            "entity_type": {
                                 "type": "string"
                             },
                             "entity_id": {
                                 "type": "string"
                             },
-                            "name": {
+                            "entity": {
                                 "type": "string"
                             },
                             "note": {
                                 "type": "string"
                             },
+                            "type": "object"
                         },
-                        "type": "object"
+                        "minItems": 0,
+                        "type": "array",
                     },
-                    "minItems": 0,
-                    "type": "array",
                 },
                 "type": "object"
             },

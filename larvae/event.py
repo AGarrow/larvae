@@ -1,4 +1,6 @@
 from larvae.base import LarvaeBase
+from larvae.person import Person
+
 from .schemas.event import schema
 
 
@@ -27,6 +29,7 @@ class Event(LarvaeBase):
         self.sources = []
         self.canceled = False
         self.type = "event"
+        self._related = []
 
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -46,3 +49,27 @@ class Event(LarvaeBase):
         if note:
             info['note'] = note
         self.links.append(info)
+
+    def add_participant(self, participant, participant_type,
+                        type='participant', chamber=None):
+        person = Person(participant)
+        self._related.append(person)
+        self.participants.append({
+            "chamber": chamber,
+            "type": type,
+            "participant_type": participant_type,
+            "participant": participant._id
+        })
+
+    def add_agenda_item(self, note):
+        self.agenda.append({"note": note, "related_entities": []})
+        return len(self.agenda)
+
+    def add_related_entity(self, entity, entity_id, entity_type,
+                           note=None, index=None):
+        agenda = None
+        if index:
+            agenda = self.agenda[index]
+
+        elif note:
+            matches = filter(lambda x: x['note'] == note, self.agenda)

@@ -1,7 +1,7 @@
 from ..event import Event
 
 
-def test_basic_invalid_person():
+def test_basic_event():
     """ test that we can create an event """
     e = Event(description="get-together",
               start="2013-04",
@@ -15,3 +15,18 @@ def test_basic_invalid_person():
     e.validate()
 
     assert len(e.links) == 2
+
+
+
+def test_basic_agenda():
+    e = Event(description="get-together",
+              start="2013-04",
+              location="Joe's Place")
+
+    e.add_source(url='foobar')
+    e.validate()
+
+    index = e.add_agenda_item("foo bar")
+    #index = e.add_add_related_entity("Foo", "fooid", 
+
+    e.validate()
