@@ -11,7 +11,7 @@ class Event(LarvaeBase):
     _type = "event"
     _schema = schema
     __slots__ = ("start", "all_day", "description", "documents",
-                 "end", "links", "location", "notes", "participants",
+                 "end", "links", "location", "participants",
                  "record_id", "agenda", "sources", "canceled", "type",)
 
     def __init__(self, description, start, location, **kwargs):
@@ -23,7 +23,6 @@ class Event(LarvaeBase):
         self.end = None
         self.links = []
         self.location = location
-        self.notes = []
         self.participants = []
         self.agenda = []
         self.sources = []
