@@ -31,6 +31,7 @@ class Bill(LarvaeBase):
         self.bill_id = bill_id
         self.session = session
         self.title = title
+        self.chamber = None
         self.type = _cleanup_list(type, ['bill'])
 
         self.actions = []
@@ -163,10 +164,7 @@ class Bill(LarvaeBase):
                 return None
 
         # OK. This is either new or old. Let's just go for it.
-        ret = {"url": url}
-
-        if mimetype:
-            ret["mimetype"] = mimetype
+        ret = {'url': url, 'mimetype': mimetype}
 
         ver['links'].append(ret)
 

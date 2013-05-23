@@ -77,7 +77,7 @@ def test_verify_sponsors():
     b = toy_bill()
     b.add_sponsor(name="Joe Bleu",
                   sponsorship_type="Author",
-                  entity_type="legislator",
+                  entity_type="person",
                   primary=True,
                   chamber="upper")
     b.validate()
