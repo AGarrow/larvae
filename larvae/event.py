@@ -61,14 +61,6 @@ class Event(LarvaeBase):
         })
 
     def add_agenda_item(self, note):
-        self.agenda.append({"note": note, "related_entities": []})
-        return len(self.agenda)
-
-    def add_related_entity(self, entity, entity_id, entity_type,
-                           note=None, index=None):
-        agenda = None
-        if index:
-            agenda = self.agenda[index]
-
-        elif note:
-            matches = filter(lambda x: x['note'] == note, self.agenda)
+        obj = {"note": note, "related_entities": []}
+        self.agenda.append(obj)
+        return obj
