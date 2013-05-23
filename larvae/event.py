@@ -8,13 +8,13 @@ class Event(LarvaeBase):
     """
     _type = "event"
     _schema = schema
-    __slots__ = ("when", "all_day", "description", "documents",
+    __slots__ = ("start", "all_day", "description", "documents",
                  "end", "links", "location", "notes", "participants",
-                 "agenda", "sources", "status", "type",)
+                 "agenda", "sources", "canceled", "type",)
 
-    def __init__(self, description, when, location, **kwargs):
+    def __init__(self, description, start, location, **kwargs):
         super(Event, self).__init__()
-        self.when = when
+        self.start = start
         self.description = description
         self.all_day = False
         self.documents = []
@@ -25,7 +25,7 @@ class Event(LarvaeBase):
         self.participants = []
         self.agenda = []
         self.sources = []
-        self.status = "current"
+        self.canceled = False
         self.type = "event"
 
         for k, v in kwargs.items():
@@ -34,5 +34,11 @@ class Event(LarvaeBase):
     def add_source(self, url, note=None):
         self.sources.append({
             'url': url,
+            "note": note
+        })
+
+    def add_link(self, url, note=None):
+        self.links.append({
+            "url": url,
             "note": note
         })

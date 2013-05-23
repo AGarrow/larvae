@@ -34,12 +34,25 @@ schema = {
                 "null"
             ]
         },
-        "link": {
+        "links": {
+            "description": "URLs for documents about the event",
+            "items": {
+                "properties": {
+                    "note": {
+                        "description": "A note, e.g. 'Wikipedia page'",
+                        "required": False,
+                        "type": "string"
+                    },
+                    "url": {
+                        "description": "A URL for a document about the event",
+                        "format": "uri",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "required": False,
-            "type": [
-                "string",
-                "null"
-            ]
+            "type": "array"
         },
         "location": {
             "type": "string"
@@ -126,14 +139,14 @@ schema = {
             "minItems": 1,
             "type": "array"
         },
-        "status": {
+        "canceled": {
             "required": False,
-            "type": "string"
+            "type": "boolean"
         },
         "type": {
             "type": "string"
         },
-        "when": {
+        "start": {
             "type": "string"
         }
     },
