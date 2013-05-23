@@ -10,7 +10,7 @@ class Event(LarvaeBase):
     _schema = schema
     __slots__ = ("start", "all_day", "description", "documents",
                  "end", "links", "location", "notes", "participants",
-                 "agenda", "sources", "canceled", "type",)
+                 "record_id", "agenda", "sources", "canceled", "type",)
 
     def __init__(self, description, start, location, **kwargs):
         super(Event, self).__init__()
