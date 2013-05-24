@@ -118,12 +118,12 @@ schema = {
                     # * **primary** - Indicates if sponsor is considered primary by the upstream source.
                     "primary": { "type": "boolean" },
                     # * **chamber** - Chamber of sponsor, for use with resolution. TODO: convert to a 'hint' object?
-                    "chamber": { "enum": [ "upper", "lower" ], "required": False, "type": "string"
+                    "chamber": { "enum": [ "upper", "lower" ], "type": ["string", "null"],
                     },
                     # * **entity_id** - ID of entity if the sponsor has been resolved to another entity in the database.
-                    "entity_id": { "required": False, "type": "string" },
+                    "entity_id": { "type": ["string", "null"] },
                     # * **entity_type** - type of entity if the sponsor has been resolved to another entity in the database.
-                    "entity_type": { "type": "string", "enum": [ "organization", "person" ], }
+                    "entity_type": { "type": ["string", "null"], "enum": [ "organization", "person" ] }
                 },
                 "type": "object"
             },
@@ -138,7 +138,7 @@ schema = {
                     # * **action** - description of the action taken, as given by upstream source.
                     "action": { "type": "string" },
                     # * **actor** - name for the actor (e.g. 'upper', 'lower', 'executive', etc.)
-                    "actor": { "required": False, "type": "string" },
+                    "actor": { "type": ["string", "null"] },
                     # * **date** - date of the action
                     "date": { "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$", "type": "string" },
                     # * **type** - array of categorized action types (TODO: enum)
@@ -160,12 +160,11 @@ schema = {
                         "items": {
                             "properties": {
                                 "name": { "type": "string" },
-                                "entity_id": { "required": False, "type": "string" },
-                                "entity_type": { "enum": [ "organization", "person" ], "type": "string" },
+                                "entity_id": { "type": ["string", "null"] },
+                                "entity_type": { "enum": [ "organization", "person" ], "type": ["string", "null"] },
                             },
                             "type": "object"
                         },
-                        "required": True,
                         "type": "array"
                     },
                 },
@@ -200,8 +199,7 @@ schema = {
                     "type": { "type": "string" },
                     "date": {
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                        "required": False,
-                        "type": "string"
+                        "type": ["string", "null"],
                     },
                     "links": {
                         "items": {
@@ -225,8 +223,7 @@ schema = {
                     "type": { "type": "string" },
                     "date": {
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                        "required": False,
-                        "type": "string"
+                        "type": ["string", "null"],
                     },
                     "links": {
                         "items": {

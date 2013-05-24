@@ -43,7 +43,7 @@ class Event(LarvaeBase):
     _schema = schema
     __slots__ = ("start", "all_day", "description", "documents",
                  "end", "links", "location", "participants",
-                 "record_id", "agenda", "sources", "canceled", "type",)
+                 "agenda", "sources", "canceled", "type",)
 
     def __init__(self, description, start, location, **kwargs):
         super(Event, self).__init__()
@@ -65,19 +65,11 @@ class Event(LarvaeBase):
             setattr(self, k, v)
 
     def add_source(self, url, note=None):
-        info = {
-            "url": url,
-        }
-        if note:
-            info['note'] = note
+        info = { "url": url, "note": note }
         self.sources.append(info)
 
     def add_link(self, url, note=None):
-        info = {
-            "url": url,
-        }
-        if note:
-            info['note'] = note
+        info = { "url": url, "note": note }
         self.links.append(info)
 
     def add_document(self, note, url):
