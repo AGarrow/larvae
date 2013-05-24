@@ -19,7 +19,7 @@ schema = {
 
         # **all_day** - This signals if an event should be considered to be
         # an all-day event, such as a holiday.
-        "all_day": { "required": False, "type": "boolean" },
+        "all_day": { "type": ["boolean", "null"] },
 
         # **end** - Ending date / time of the event.
         "end": { "type": ["string", "null"] },
@@ -28,7 +28,7 @@ schema = {
         "start": { "type": ["string", "null"] },
 
         # **canceled** - Simple boolean if this event has been canceled.
-        "canceled": { "required": False, "type": "boolean" },
+        "canceled": { "type": ["boolean", "null"] },
 
         # **location** - Where the event will take place. This is a
         # Human-readable string, with the best data that can be found as
@@ -75,8 +75,7 @@ schema = {
                     # like "Historical precedent for popsicle procurement"
                     "note": {
                         "description": "A note, e.g. 'Wikipedia page'",
-                        "required": False,
-                        "type": "string"
+                        "type": ["string", "null"]
                     },
 
                     # * **url** - URL where the content may be found
@@ -88,7 +87,6 @@ schema = {
                 },
                 "type": "object"
             },
-            "required": False,
             "type": "array"
         },
 
@@ -113,7 +111,7 @@ schema = {
                 "properties": {
                     # * **chamber** - Optional field storing the chamber
                     # of the related participant.
-                    "chamber": { "required": False, "type": "string" },
+                    "chamber": { "type": ["string", "null"] },
 
                     # * **participant** - Human readable name of the entitity.
                     "participant": { "type": "string" },
@@ -137,13 +135,6 @@ schema = {
                 "type": "object"
             },
             "type": "array"
-        },
-
-        # **record_id** - The unique record identifier (if any) that this
-        # event will be stored as in a semi-permanent way.
-        "record_id": {
-            "required": False,
-            "type": "string"
         },
 
         # **agenda** - Agenda of the event, if any. This contains information
