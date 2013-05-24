@@ -29,10 +29,14 @@ def test_basic_agenda():
     agenda = e.add_agenda_item("foo bar")
     e.validate()
 
-    agenda['related_entities'].append({
-        "entity": "Joe Q. Hacker",
-        "entity_type": "person",
-        "type": "participant"
-    })
+    assert agenda['related_entities'] == []
+
+    agenda.add_entity(
+        entity='John Q. Hacker',
+        entity_type='legislator',
+        type='chair')
+
+    pid = agenda['related_entities'][0]['entity_id']
+    assert pid in (x._id for x in e._related)
 
     e.validate()

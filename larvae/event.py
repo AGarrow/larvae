@@ -4,6 +4,28 @@ from larvae.person import Person
 from .schemas.event import schema
 
 
+class EventAgendaItem(dict):
+    event = None
+
+    def __init__(self, note, event):
+        super(EventAgendaItem, self).__init__({
+            "note": note,
+            "related_entities": []
+        })
+        self.event = event
+
+    def add_entity(self, entity, entity_type, type='participant'):
+        person = Person(entity)
+        self.event._related.append(person)
+
+        self['related_entities'].append({
+            "entity": entity,
+            "entity_type": entity_type,
+            "entity_id": person._id,
+            "type": type,
+        })
+
+
 class Event(LarvaeBase):
     """
     Details for an event in larvae format
@@ -61,24 +83,6 @@ class Event(LarvaeBase):
         })
 
     def add_agenda_item(self, note):
-        obj = {"note": note, "related_entities": []}
+        obj = EventAgendaItem(note, self)
         self.agenda.append(obj)
         return obj
-
-
-    def as_dict(self):
-        # OK. We need to overload this because we need to copy things off the
-        # agenda into _related before we save this object in the scraper. In
-        # a perfect world, we should have pre-save hooks (.prepare?), but for
-        # now, this will do.
-
-        for item in self.agenda:
-            for entity in item['related_entities']:
-                if 'entity_id' in entity:
-                    continue
-                # OK. Let's add a person.
-                person = Person(entity['entity'])
-                self._related.append(person)
-                entity['entity_id'] = person._id
-
-        return super(Event, self).as_dict()  # finally, pass through.
