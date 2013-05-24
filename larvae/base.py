@@ -1,5 +1,5 @@
 import uuid
-import validictory
+from larvae.utils import DatetimeValidator
 
 
 class LarvaeBase(object):
@@ -32,8 +32,8 @@ class LarvaeBase(object):
         due to upstream schemas being in JSON Schema v3, and not validictory's
         modified syntax.
         """
-        validictory.validate(self.as_dict(), self._schema,
-                             required_by_default=True)
+        validator = DatetimeValidator(required_by_default=True)
+        validator.validate(self.as_dict(), self._schema)
 
     def as_dict(self):
         d = {}

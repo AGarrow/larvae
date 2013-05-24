@@ -22,10 +22,10 @@ schema = {
         "all_day": { "type": ["boolean", "null"] },
 
         # **end** - Ending date / time of the event.
-        "end": { "type": ["string", "null"] },
+        "end": { "type": ["datetime", "null"] },
 
         # **start** - Starting date / time of the event.
-        "start": { "type": ["string", "null"] },
+        "start": { "type": ["datetime"] },
 
         # **canceled** - Simple boolean if this event has been canceled.
         "canceled": { "type": ["boolean", "null"] },
