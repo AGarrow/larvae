@@ -27,5 +27,12 @@ def test_basic_agenda():
     e.validate()
 
     agenda = e.add_agenda_item("foo bar")
+    e.validate()
+
+    agenda['related_entities'].append({
+        "entity": "Joe Q. Hacker",
+        "entity_type": "person",
+        "type": "participant"
+    })
 
     e.validate()

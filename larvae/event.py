@@ -64,3 +64,21 @@ class Event(LarvaeBase):
         obj = {"note": note, "related_entities": []}
         self.agenda.append(obj)
         return obj
+
+
+    def as_dict(self):
+        # OK. We need to overload this because we need to copy things off the
+        # agenda into _related before we save this object in the scraper. In
+        # a perfect world, we should have pre-save hooks (.prepare?), but for
+        # now, this will do.
+
+        for item in self.agenda:
+            for entity in item['related_entities']:
+                if 'entity_id' in entity:
+                    continue
+                # OK. Let's add a person.
+                person = Person(entity['entity'])
+                self._related.append(person)
+                entity['entity_id'] = person._id
+
+        return super(Event, self).as_dict()  # finally, pass through.
