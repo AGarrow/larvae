@@ -116,6 +116,9 @@ schema = {
                     # * **participant** - Human readable name of the entitity.
                     "participant": { "type": "string" },
 
+                    # * **participant_id** - ID of the participant
+                    "participant_id": { "type": "string" },
+
                     # * **participant_type** - What type of entity is this?
                     # `person` may be used if the person is not a Legislator,
                     # butattending the event, such as an invited speaker or one

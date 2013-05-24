@@ -80,13 +80,11 @@ class Event(LarvaeBase):
 
     def add_participant(self, participant, participant_type,
                         type='participant', chamber=None):
-        person = Person(participant)
-        self._related.append(person)
         self.participants.append({
             "chamber": chamber,
             "type": type,
             "participant_type": participant_type,
-            "participant": participant._id
+            "participant": participant
         })
 
     def add_agenda_item(self, note):
