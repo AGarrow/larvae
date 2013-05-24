@@ -18,20 +18,13 @@ class EventAgendaItem(dict):
         self.event = event
 
     def add_committee(self, committee, type='participant'):
-        committee = Organization(committee)
-        self.event._related.append(committee)
-        self.add_entity(committee, 'committee', committee._id, type)
+        self.add_entity(committee, 'committee', None, type)
 
-    # XXX: Fix Bill(foo)
-    #def add_bill(self, bill, type='consideration'):
-    #    b = Bill(bill)
-    #    self.event._related.append(b)
-    #    self.add_entity(bill, 'bill', b._id, type)
+    def add_bill(self, bill, type='consideration'):
+        self.add_entity(bill, 'bill', None, type)
 
     def add_person(self, person, type='participant'):
-        person = Person(person)
-        self.event._related.append(person)
-        self.add_entity(person, 'person', person._id, type)
+        self.add_entity(person, 'person', None, type)
 
     def add_entity(self, entity, entity_type, entity_id, type):
         self['related_entities'].append({

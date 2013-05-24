@@ -45,8 +45,6 @@ def test_add_person():
     assert agenda['related_entities'] == []
 
     agenda.add_person(person='John Q. Hacker', type='chair')
-    pid = agenda['related_entities'][0]['entity_id']
-    assert pid in (x._id for x in e._related)
     e.validate()
 
 
@@ -56,21 +54,15 @@ def test_add_committee():
     assert agenda['related_entities'] == []
 
     agenda.add_committee(committee='Hello, World', type='host')
-    pid = agenda['related_entities'][0]['entity_id']
-    assert pid in (x._id for x in e._related)
     e.validate()
 
 
-#def test_add_bill():
-#    e = event_obj()
-#    agenda = e.add_agenda_item("foo bar")
-#    assert agenda['related_entities'] == []
-#
-#    agenda.add_bill(bill='HB 101', type='consideration')
-#
-#    pid = agenda['related_entities'][0]['entity_id']
-#    assert pid in (x._id for x in e._related)
-#    e.validate()
+def test_add_bill():
+    e = event_obj()
+    agenda = e.add_agenda_item("foo bar")
+    assert agenda['related_entities'] == []
+    agenda.add_bill(bill='HB 101', type='consideration')
+    e.validate()
 
 
 def test_add_document():
