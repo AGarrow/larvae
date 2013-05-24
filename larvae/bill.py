@@ -73,13 +73,9 @@ class Bill(LarvaeBase):
             "sponsorship_type": sponsorship_type,
             "entity_type": entity_type,
             "primary": primary,
+            "entity_id": entity_id,
+            "chamber": chamber,
         }
-
-        if entity_id:
-            ret["entity_id"] = entity_id
-
-        if chamber:
-            ret['chamber'] = chamber
 
         self.sponsors.append(ret)
 
