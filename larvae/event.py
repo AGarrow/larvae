@@ -87,6 +87,12 @@ class Event(LarvaeBase):
             info['note'] = note
         self.links.append(info)
 
+    def add_document(self, note, url):
+        self.documents.append({
+            "note": note,
+            "url": url
+        })
+
     def add_participant(self, participant, participant_type,
                         type='participant', chamber=None):
         person = Person(participant)

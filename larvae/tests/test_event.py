@@ -71,3 +71,14 @@ def test_add_committee():
 #    pid = agenda['related_entities'][0]['entity_id']
 #    assert pid in (x._id for x in e._related)
 #    e.validate()
+
+
+def test_add_document():
+    e = event_obj()
+    assert e.documents == []
+    e.add_document(note='hello', url='http://example.com')
+    assert len(e.documents) == 1
+    o = e.documents[0]
+    assert o['note'] == 'hello'
+    assert o['url'] == 'http://example.com'
+    e.validate()
