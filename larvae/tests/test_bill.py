@@ -3,7 +3,7 @@ from validictory import ValidationError
 
 
 def toy_bill():
-    b = Bill(bill_id="HB 2017",
+    b = Bill(name="HB 2017",
              session="2012A",
              title="A bill for an act to raise the cookie budget by 200%",
              type="bill")
@@ -15,7 +15,7 @@ def toy_bill():
 def test_basic_invalid_bill():
     """ Test that we can create an invalid bill, and validation will fail """
     b = toy_bill()
-    b.bill_id = None
+    b.name = None
     try:
         assert ("Big Garbage String") == b.validate()
     except ValidationError:
@@ -33,7 +33,7 @@ def test_verify_actions():
 def test_verify_related_bill():
     """ Make sure related bills work """
     b = toy_bill()
-    b.add_related_bill(bill_id="HB 2020",
+    b.add_related_bill(name="HB 2020",
                        session="2011A",
                        chamber="upper",
                        relation="companion")  # continuation?

@@ -20,46 +20,46 @@ class Bill(LarvaeBase):
 
     _type = "bill"
     _schema = schema
-    __slots__ = ('actions', 'alternate_bill_ids', 'alternate_titles',
-                 'related_bills', 'bill_id', 'chamber', 'documents', 'session',
-                 'sources', 'sponsors', 'summaries', 'subjects', 'title',
+    __slots__ = ('actions', 'other_names', 'other_titles',
+                 'related_bills', 'name', 'chamber', 'documents', 'session',
+                 'sources', 'sponsors', 'summaries', 'subject', 'title',
                  'type', 'versions')
 
-    def __init__(self, bill_id, session, title, type=None, **kwargs):
+    def __init__(self, name, session, title, type=None, **kwargs):
         super(Bill, self).__init__()
 
-        self.bill_id = bill_id
+        self.name = name
         self.session = session
         self.title = title
         self.chamber = None
         self.type = _cleanup_list(type, ['bill'])
 
         self.actions = []
-        self.alternate_bill_ids = []
-        self.alternate_titles = []
+        self.other_names = []
+        self.other_titles = []
         self.documents = []
         self.related_bills = []
         self.sponsors = []
-        self.subjects = []
+        self.subject = []
         self.summaries = []
         self.versions = []
 
         for k, v in kwargs.items():
             setattr(self, k, v)
 
-    def add_action(self, action, actor, date,
+    def add_action(self, description, actor, date,
                    type=None, related_entities=None):
         self.actions.append({
-            "action": action,
+            "description": description,
             "actor": actor,
             "date": date,
             "type": _cleanup_list(type, []),
             "related_entities": related_entities or []  # validate
         })
 
-    def add_related_bill(self, bill_id, session, chamber, relation):
+    def add_related_bill(self, name, session, chamber, relation):
         self.related_bills.append({
-            "bill_id": bill_id,
+            "name": name,
             "session": session,
             "chamber": chamber,
             "relation_type": relation  # validate
@@ -71,16 +71,16 @@ class Bill(LarvaeBase):
         ret = {
             "name": name,
             "sponsorship_type": sponsorship_type,
-            "entity_type": entity_type,
+            "_type": entity_type,
             "primary": primary,
-            "entity_id": entity_id,
+            "id": entity_id,
             "chamber": chamber,
         }
 
         self.sponsors.append(ret)
 
     def add_subject(self, subject):
-        self.subjects.append(subject)
+        self.subject.append(subject)
 
     def add_document_link(
         self, name, url, date=None, type='document',
@@ -173,6 +173,6 @@ class Bill(LarvaeBase):
         return ver
 
     def __str__(self):
-        return self.bill_id + ' in ' + self.session
+        return self.name + ' in ' + self.session
 
     __unicode__ = __str__

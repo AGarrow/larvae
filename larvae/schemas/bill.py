@@ -43,7 +43,7 @@ schema = {
         "summaries": {
             "items": {
                 "properties": {
-                    "text": { "type": "string" }
+                    "text": { "type": "string" },
                     "note": { "type": ["string", "null"] },
                 },
                 "type": "object"
@@ -124,9 +124,9 @@ schema = {
                     # * **chamber** - Chamber of sponsor, for use with resolution. TODO: convert to a 'hint' object?
                     "chamber": { "enum": [ "upper", "lower" ], "type": ["string", "null"],
                     },
-                    # * **entity_id** - ID of entity if the sponsor has been resolved to another entity in the database.
-                    "entity_id": { "type": ["string", "null"] },
-                    # * **entity_type** - type of entity if the sponsor has been resolved to another entity in the database.
+                    # * **id** - ID of entity if the sponsor has been resolved to another entity in the database.
+                    "id": { "type": ["string", "null"] },
+                    # * **_type** - type of entity if the sponsor has been resolved to another entity in the database.
                     "_type": { "type": ["string", "null"], "enum": [ "organization", "person" ] }
                 },
                 "type": "object"
@@ -158,14 +158,14 @@ schema = {
                     # or sponsor for a sponsorship.  An array of objects with
                     # the following properties:
                     #     * **name** - Name of entity, as given by source data.
-                    #     * **entity_id** - ID of entity if the sponsor has been resolved to another entity in the database.
-                    #     * **entity_type** - type of entity if the sponsor has been resolved to another entity in the database.
+                    #     * **_type** - type of entity if the sponsor has been resolved to another entity in the database.
+                    #     * **id** - ID of entity if the sponsor has been resolved to another entity in the database.
                     "related_entities": {
                         "items": {
                             "properties": {
+                                "name": { "type": "string" },
                                 "_type": { "enum": [ "organization", "person" ], "type": ["string", "null"] },
                                 "id": { "type": ["string", "null"] },
-                                "name": { "type": "string" },
                             },
                             "type": "object"
                         },
