@@ -200,6 +200,9 @@ schema = {
                 "properties": {
                     "url": {
                         "type": "string"
+                    },
+                    "note": {
+                        "type": ["null", "string"],
                     }
                 },
                 "type": "object"
