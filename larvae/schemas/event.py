@@ -8,7 +8,7 @@ schema = {
 
         # == Basics ==
 
-        # **type** - All larvae events must have a _type field set to one
+        # **_type** - All larvae events must have a _type field set to one
         # of tne entries in the enum below.
         "_type": { "enum": [ "event" ], "type": "string" },
 
