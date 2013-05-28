@@ -21,7 +21,7 @@ schema = {
             "enum": [ "upper", "lower", "joint" ], "type": ["string", "null"],
         },
 
-        # * **date** - date of the action
+        # **date** - date of the action
         "date": { "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$", "type": "string" },
 
         # **motion** - description of motion (from upstream source)
@@ -36,21 +36,31 @@ schema = {
 
         # == Relationship to Bill ==
 
-        # Votes will have these fields if they are votes on specific pieces
-        # of legislation.
+        # **bill** - Related bill, votes will have a non-null bill object if
+        # they are related to a bill. Bills will have the following fields:
+        #
 
-        # **bill_id** - bill's bill_id if vote was on a bill
-        "bill_id": { "type": ["string", "null"] },
-
-        # **bill_chamber** - bill's chamber if vote was on a bill (and
-        # legislature is bicameral, otherwise null)
-        "bill_chamber": {
-            "enum": [ "upper", "lower" ], "type": ["string", "null"],
+        "bill": {
+            "type": "object",
+            "properties": {
+                # * **id** - bill's internal id if bill was matched with
+                # an object in the database
+                "id": { "type": ["string", "null"] },
+                # * **name** - bill name (e.g. HB 21)
+                "name": { "type": "string" },
+                # * **chamber** - bill's chamber if vote was on a bill (and
+                # legislature is bicameral, otherwise null)
+                "chamber": {
+                    "enum": [ "upper", "lower" ], "type": ["string", "null"],
+                },
+            }
         },
+
+
 
         # == Vote Counts ==
 
-        # **vote_count** is a list of objects with vote_type and count
+        # **vote_counts** is a list of objects with vote_type and count
         # properties.  vote_type is something like 'yes', 'no', 'not-voting',
         # etc.  TODO: enum?
         "vote_counts": {
@@ -63,21 +73,28 @@ schema = {
             },
         },
 
-        # **rollcall** is a list of objects with the following fields:
+        # **roll_call** is a list of objects with the following fields:
         #
-        "rollcall": {
+        "roll_call": {
             "items": {
+                "type": "object",
                 "properties": {
                     # * **vote_type** - type of vote (e.g. yes, no, abstain)
                     "vote_type": { "type": "string" },
-                    # * **person** - name of person, as provided by source
-                    "person": { "type": "string" },
-                    # * **person_id** - person's internal id if they've been
-                    # matched to an entity in the database
-                    "person_id": { "type": ["string", "null"] },
-                },
-                "type": "object"
-            },
+
+                    # * **person** - person object representing the voter,
+                    # has the following fields:
+                    #     * **name** - person's name as provided by source
+                    #     * **id** - person's internal id if they've been
+                    #       matched to an entity in the database
+                    "person": {
+                        "type": "object",
+                        "properties": {
+                            "name": { "type": "string" },
+                            "id": { "type": ["string", "null"] },
+                        }
+                }
+            }
         },
 
 
