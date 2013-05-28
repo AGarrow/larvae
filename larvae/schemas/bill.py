@@ -15,9 +15,11 @@ schema = {
         # **session** - Associated with one of jurisdiction's sessions
         "session": { "type": "string" },
 
-        # **bill_id** - Jurisdiction-assigned id, unique within a given
-        # jurisdiction's session (e.g. HB 3)
-        "bill_id": { "type": "string" },
+        # **name** - Jurisdiction-assigned permanent name, unique within a
+        # given jurisdiction's session (e.g. HB 3)
+        # (this is not guaranteed to be numeric, etc. but should not be
+        #  confused with title)
+        "name": { "type": "string" },
 
         # **chamber** - (if legislature is bicameral) otherwise can be null
         "chamber": {
@@ -30,8 +32,8 @@ schema = {
         # **type** - array of types (e.g. bill, resolution, etc.) [TODO: enum?]
         "type": { "items": { "type": "string" }, "type": "array" },
 
-        # **subjects** - List of related subjects.
-        "subjects": {
+        # **subject** - List of related subjects.
+        "subject": {
             "items": { "type": "string" },
             "type": "array"
         },
@@ -41,42 +43,44 @@ schema = {
         "summaries": {
             "items": {
                 "properties": {
-                    "note": { "type": "string" },
                     "text": { "type": "string" }
+                    "note": { "type": ["string", "null"] },
                 },
                 "type": "object"
             },
             "type": "array"
         },
 
-        # == Alternate and Related Bills ==
+        # == Other/Related Bills ==
 
-        # **alternate_titles** - list of other titles this bill is known by.
+        # **other_titles** - list of other titles this bill is known by.
         # A common use is when a state provides a common title and a long
         # or technical title as well.  It is also acceptable to include
         # popular but unofficial titles of the bill as well, such as
         # 'Obamacare' for the 'Patient Protection and Affordable Care Act'
+        # Note can be used to describe the relationship this has to the
+        # bill, for example Obamacare might be noted as a colloquial name.
         # Each item in the list has a title and a note.
-        "alternate_titles": {
+        "other_titles": {
             "items": {
                 "properties": {
                     "title": { "type": "string" },
-                    "note": { "type": "string" },
+                    "note": { "type": ["string", "null"] },
                 },
                 "type": "object"
             },
             "type": "array"
         },
 
-        # **alternate_bill_ids** - list of other ids this bill is known by
+        # **other_names** - list of other names this bill is known by
         # in the current session, for example if HB 33 and SB 17 refer to the
         # same bill this prevents having to have identical entries for each.
-        # Each item in the list has a bill_id and a note.
-        "alternate_bill_ids": {
+        # Each item in the list has a name and a note.
+        "other_names": {
             "items": {
                 "properties": {
-                    "bill_id": { "type": "string" },
-                    "note": { "type": "string" }
+                    "name": { "type": "string" },
+                    "note": { "type": ["string", "null"] },
                 },
                 "type": "object"
             },
@@ -92,8 +96,8 @@ schema = {
                 "properties": {
                     #  * **session** - session of related bill.
                     "session": { "type": "string" },
-                    #  * **bill_id** - bill_id of related bill.
-                    "bill_id": { "type": "string" },
+                    #  * **name** - name of related bill.
+                    "name": { "type": "string" },
                     #  * **chamber** - TODO: needed?
                     "chamber": { "enum": [ "upper", "lower" ], "type": [ "string", "null" ] },
                     #  * **relation_type** - currently should be 'companion', others may be introduced in the future
@@ -111,19 +115,19 @@ schema = {
         "sponsors": {
             "items": {
                 "properties": {
-                    # * **name** - Name of sponsor, as given by source data.
-                    "name": { "type": "string" },
                     # * **sponsorship_type** - Type of sponsorship, indicated by upstream source.
                     "sponsorship_type": { "type": "string" },
                     # * **primary** - Indicates if sponsor is considered primary by the upstream source.
                     "primary": { "type": "boolean" },
+                    # * **name** - Name of sponsor, as given by source data.
+                    "name": { "type": "string" },
                     # * **chamber** - Chamber of sponsor, for use with resolution. TODO: convert to a 'hint' object?
                     "chamber": { "enum": [ "upper", "lower" ], "type": ["string", "null"],
                     },
                     # * **entity_id** - ID of entity if the sponsor has been resolved to another entity in the database.
                     "entity_id": { "type": ["string", "null"] },
                     # * **entity_type** - type of entity if the sponsor has been resolved to another entity in the database.
-                    "entity_type": { "type": ["string", "null"], "enum": [ "organization", "person" ] }
+                    "_type": { "type": ["string", "null"], "enum": [ "organization", "person" ] }
                 },
                 "type": "object"
             },
@@ -136,7 +140,7 @@ schema = {
             "items": {
                 "properties": {
                     # * **action** - description of the action taken, as given by upstream source.
-                    "action": { "type": "string" },
+                    "description": { "type": "string" },
                     # * **actor** - name for the actor (e.g. 'upper', 'lower', 'executive', etc.)
                     "actor": { "type": ["string", "null"] },
                     # * **date** - date of the action
@@ -159,9 +163,9 @@ schema = {
                     "related_entities": {
                         "items": {
                             "properties": {
+                                "_type": { "enum": [ "organization", "person" ], "type": ["string", "null"] },
+                                "id": { "type": ["string", "null"] },
                                 "name": { "type": "string" },
-                                "entity_id": { "type": ["string", "null"] },
-                                "entity_type": { "enum": [ "organization", "person" ], "type": ["string", "null"] },
                             },
                             "type": "object"
                         },
