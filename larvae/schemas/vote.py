@@ -9,7 +9,7 @@ schema = {
 
         # == Basics ==
 
-        # **_type** - All larvae objects must have a _type field set to bill.
+        # **_type** - All vote objects must have a _type field set to vote.
         "_type": { "enum": [ "vote" ], "type": "string" },
 
         # **session** - Associated with one of jurisdiction's sessions
@@ -93,6 +93,7 @@ schema = {
                             "name": { "type": "string" },
                             "id": { "type": ["string", "null"] },
                         }
+                    }
                 }
             }
         },
@@ -118,6 +119,5 @@ schema = {
             "minItems": 1,
             "type": "array"
         },
-
     }
 }

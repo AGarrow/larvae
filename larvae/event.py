@@ -43,9 +43,9 @@ class Event(LarvaeBase):
     _schema = schema
     __slots__ = ("start", "all_day", "description", "documents",
                  "end", "links", "location", "participants",
-                 "agenda", "sources", "canceled", "type",)
+                 "agenda", "sources", "canceled", "type", 'session')
 
-    def __init__(self, description, start, location, **kwargs):
+    def __init__(self, description, start, location, session, **kwargs):
         super(Event, self).__init__()
         self.start = start
         self.description = description
@@ -60,6 +60,7 @@ class Event(LarvaeBase):
         self.canceled = False
         self.type = "event"
         self._related = []
+        self.session = session
 
         for k, v in kwargs.items():
             setattr(self, k, v)
@@ -77,6 +78,13 @@ class Event(LarvaeBase):
             "note": note,
             "url": url
         })
+
+    def add_person(self, who, type='participant', chamber=None):
+        return self.add_participant(
+            participant=who,
+            participant_type='person',
+            chamber=chamber,
+            type=type)
 
     def add_participant(self, participant, participant_type,
                         type='participant', chamber=None):
