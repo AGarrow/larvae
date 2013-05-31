@@ -45,7 +45,7 @@ class Event(LarvaeBase):
                  "end", "links", "location", "participants",
                  "agenda", "sources", "canceled", "type", 'session')
 
-    def __init__(self, description, start, location, session, **kwargs):
+    def __init__(self, description, start, location, session=None, **kwargs):
         super(Event, self).__init__()
         self.start = start
         self.description = description
