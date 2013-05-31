@@ -17,7 +17,7 @@ class Vote(LarvaeBase):
         super(Vote, self).__init__()
 
         if not isinstance(type, list):
-            type = list(type)
+            type = [type]
 
         self.session = session
         self.date = date
@@ -52,10 +52,10 @@ class Vote(LarvaeBase):
         })
 
     def yes(self, name, **kwargs):
-        pass
+        return self.vote(name, 'yes')
 
     def no(self, name, **kwargs):
-        pass
+        return self.vote(name, 'no')
 
     def other(self, name, **kwargs):
-        pass
+        return self.vote(name, 'other')
