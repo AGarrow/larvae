@@ -16,11 +16,15 @@ class Vote(LarvaeBase):
 
         super(Vote, self).__init__()
 
+        if not isinstance(type, list):
+            type = list(type)
+
         self.session = session
         self.date = date
         self.type = type
         self.passed = passed
         self.chamber = chamber
+        self.roll_call = []
 
         self.vote_counts = [
             {"vote_type": "yes", "count": yes_count},
@@ -37,6 +41,15 @@ class Vote(LarvaeBase):
             "name": name,
             "chamber": chamber
         }
+
+    def vote(self, name, how):
+        self.roll_call.append({
+            "vote_type": how,
+            "person": {
+                "name": name,
+                "id": None,
+            }
+        })
 
     def yes(self, name, **kwargs):
         pass
