@@ -27,8 +27,9 @@ schema = {
         # **start** - Starting date / time of the event.
         "start": { "type": ["datetime"] },
 
-        # **canceled** - Simple boolean if this event has been canceled.
-        "canceled": { "type": ["boolean", "null"] },
+        # **status** - Simple boolean if this event has been canceled.
+        "status": { "type": ["string", "null"],
+                    "enum": ["cancelled", "tentative", "confirmed"] },
 
         # **location** - Where the event will take place. This is a
         # Human-readable string, with the best data that can be found as
@@ -52,7 +53,7 @@ schema = {
                 "properties": {
                     # * **note** - name of the document. Something like
                     # "Fiscal Report" or "John Smith's Slides".
-                    "note": { "type": "string" },
+                    "name": { "type": "string" },
                     # * **url** - URL where the content may be found.
                     "url": { "type": "string" }
 
@@ -97,12 +98,12 @@ schema = {
         # Some entries:
         #
         #      { "participant": "John Q. Smith",
-        #        "participant_type": "legislator", "type": "chair" }
+        #        "participant_type": "person", "type": "chair" }
         #
         # Which expresses the chair of the event will be John Q. Smith.
         #
         #     { "participant": "Ways and Means",
-        #       "participant_type": "committee", "type": "host" }
+        #       "participant_type": "organization", "type": "host" }
         #
         # Which expresses the host of the event is the Ways and Means
         # committee.
@@ -125,7 +126,7 @@ schema = {
                     # butattending the event, such as an invited speaker or one
                     # who is offering testimony.
                     "participant_type": {
-                        "enum": [ "committee", "legislator", "person", ],
+                        "enum": [ "organization", "person", ],
                         "type": "string"
                     },
 
@@ -147,11 +148,11 @@ schema = {
         "agenda": {
             "items": {
                 "properties": {
-                    # * **note** - Human-readable string that represents
+                    # * **description** - Human-readable string that represents
                     # this agenda item. A good example would be something like
                     #
                     # > The Committee will consider SB 2339, HB 100
-                    "note": { "type": "string" },
+                    "description": { "type": "string" },
 
                     # * **related_entities** - Entities that relate to this
                     # agenda item, such as presenters, legislative instruments,

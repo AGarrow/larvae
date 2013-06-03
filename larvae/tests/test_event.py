@@ -69,9 +69,9 @@ def test_add_bill():
 def test_add_document():
     e = event_obj()
     assert e.documents == []
-    e.add_document(note='hello', url='http://example.com')
+    e.add_document(name='hello', url='http://example.com')
     assert len(e.documents) == 1
     o = e.documents[0]
-    assert o['note'] == 'hello'
+    assert o['name'] == 'hello'
     assert o['url'] == 'http://example.com'
     e.validate()

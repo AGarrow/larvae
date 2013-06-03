@@ -10,9 +10,9 @@ from .schemas.event import schema
 class EventAgendaItem(dict):
     event = None
 
-    def __init__(self, note, event):
+    def __init__(self, description, event):
         super(EventAgendaItem, self).__init__({
-            "note": note,
+            "description": description,
             "related_entities": []
         })
         self.event = event
@@ -43,7 +43,7 @@ class Event(LarvaeBase):
     _schema = schema
     __slots__ = ("start", "all_day", "description", "documents",
                  "end", "links", "location", "participants",
-                 "agenda", "sources", "canceled", "type", 'session')
+                 "agenda", "sources", "status", "type", 'session')
 
     def __init__(self, description, start, location, session=None, **kwargs):
         super(Event, self).__init__()
@@ -57,7 +57,7 @@ class Event(LarvaeBase):
         self.participants = []
         self.agenda = []
         self.sources = []
-        self.canceled = False
+        self.status = "confirmed"
         self.type = "event"
         self._related = []
         self.session = session
@@ -73,9 +73,9 @@ class Event(LarvaeBase):
         info = { "url": url, "note": note }
         self.links.append(info)
 
-    def add_document(self, note, url):
+    def add_document(self, name, url):
         self.documents.append({
-            "note": note,
+            "name": name,
             "url": url
         })
 
@@ -95,7 +95,7 @@ class Event(LarvaeBase):
             "participant": participant
         })
 
-    def add_agenda_item(self, note):
-        obj = EventAgendaItem(note, self)
+    def add_agenda_item(self, description):
+        obj = EventAgendaItem(description, self)
         self.agenda.append(obj)
         return obj
