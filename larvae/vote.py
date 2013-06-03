@@ -35,7 +35,7 @@ class Vote(LarvaeBase):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
-    def add_bill(self, id, name, chamber=None):
+    def add_bill(self, name, id=None, chamber=None):
         self.bill = {
             "id": id,
             "name": name,
