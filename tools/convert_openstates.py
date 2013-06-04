@@ -4,6 +4,7 @@ from larvae.organization import Organization
 from larvae.membership import Membership
 from larvae.person import Person
 from larvae.event import Event
+from larvae.vote import Vote
 from larvae.bill import Bill
 
 from billy.core import db
@@ -23,6 +24,7 @@ type_tables = {
     Person: "people",
     Bill: "bills",
     Event: "events",
+    Vote: "votes",
 }
 
 _hot_cache = {}
@@ -337,6 +339,44 @@ def migrate_bills():
         save_object(b)
 
 
+def migrate_votes():
+    for entry in db.votes.find():
+        #def __init__(self, session, date, type, passed,
+        #             yes_count, no_count, other_count=0,
+        #             chamber=None, **kwargs):
+
+        when = dt.datetime.strftime(entry['date'], "%Y-%m-%d")
+
+        v = Vote(
+            motion=entry['motion'],
+            session=entry['session'],
+            date=when,
+            type=entry['type'],
+            passed=entry['passed'],
+            yes_count=entry['yes_count'],
+            no_count=entry['no_count'],
+            other_count=entry['other_count'],
+            chamber=entry['chamber'])
+
+
+        for source in entry['sources']:
+            v.add_source(url=source['url'])
+
+        for voter in entry['yes_votes']:
+            v.yes(name=voter['name'], id=voter.get('leg_id', None))
+
+        for voter in entry['no_votes']:
+            v.no(name=voter['name'], id=voter.get('leg_id', None))
+
+        for voter in entry['other_votes']:
+            v.other(name=voter['name'], id=voter.get('leg_id', None))
+
+        bid = entry['bill_id']
+        v.add_bill(name=bid, id=bid)
+
+        save_object(v)
+
+
 def migrate_events():
     for entry in db.events.find():
 
@@ -390,6 +430,7 @@ SEQUENCE = [
     migrate_committees,  # depends on people
     migrate_bills,
     migrate_events,
+    migrate_votes,
 ]
 
 

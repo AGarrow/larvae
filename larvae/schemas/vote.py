@@ -113,7 +113,7 @@ schema = {
             "items": {
                 "properties": {
                     "url": { "type": "string" },
-                    "note": { "type": "string" },
+                    "note": { "type": ["string", "null"] },
                 },
                 "type": "object"
             },
