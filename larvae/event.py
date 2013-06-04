@@ -17,14 +17,14 @@ class EventAgendaItem(dict):
         })
         self.event = event
 
-    def add_committee(self, committee, type='participant'):
-        self.add_entity(committee, 'committee', None, type)
+    def add_committee(self, committee, id=None, type='participant'):
+        self.add_entity(committee, 'committee', id, type)
 
-    def add_bill(self, bill, type='consideration'):
-        self.add_entity(bill, 'bill', None, type)
+    def add_bill(self, bill, id=None, type='consideration'):
+        self.add_entity(bill, 'bill', id, type)
 
-    def add_person(self, person, type='participant'):
-        self.add_entity(person, 'person', None, type)
+    def add_person(self, person, id=None, type='participant'):
+        self.add_entity(person, 'person', id, type)
 
     def add_entity(self, entity, entity_type, entity_id, type):
         self['related_entities'].append({

@@ -3,6 +3,7 @@
 from larvae.organization import Organization
 from larvae.membership import Membership
 from larvae.person import Person
+from larvae.event import Event
 from larvae.bill import Bill
 
 from billy.core import db
@@ -21,6 +22,7 @@ type_tables = {
     Membership: "memberships",
     Person: "people",
     Bill: "bills",
+    Event: "events",
 }
 
 _hot_cache = {}
@@ -245,7 +247,7 @@ def migrate_bills():
     #                                                    "$ne": []}})
     bills = db.bills.find()
     for bill in bills:
-        b = Bill(bill_id=bill['bill_id'],
+        b = Bill(name=bill['bill_id'],
                  session=bill['session'],
                  title=bill['title'],
                  type=bill['type'])
@@ -282,8 +284,12 @@ def migrate_bills():
                     }[rentry['type']]
 
                     nid = rentry['id'] = lookup_entry_id(type_, rentry['id'])
-                    if nid is None:
-                        rentry.pop('id')
+
+                    rentry['_type'] = {
+                        "committee": "organization",
+                        "legislator": "person"
+                    }[rentry.pop('type')]
+
                     related_entities.append(rentry)
 
             when = dt.datetime.strftime(action['date'], "%Y-%m-%d")
@@ -295,7 +301,7 @@ def migrate_bills():
 
             type_ = [translate.get(x, None) for x in action['type']]
 
-            b.add_action(action=action['action'],
+            b.add_action(description=action['action'],
                          actor=action['actor'],
                          date=when,
                          type=filter(lambda x: x is not None, type_),
@@ -312,7 +318,7 @@ def migrate_bills():
             if sponsor_id:
                 objid = lookup_entry_id(type_, sponsor_id)
                 etype = {"people": "person",
-                         "organizations": "committee"}[type_]
+                         "organizations": "organization"}[type_]
 
                 kwargs = {}
                 if objid is not None:
@@ -331,12 +337,59 @@ def migrate_bills():
         save_object(b)
 
 
+def migrate_events():
+    for entry in db.events.find():
+
+        e = Event(
+            description=entry['description'],
+            start=entry['when'],
+            location=entry['location'],
+            session=entry['session'],
+        )
+
+        for source in entry['sources']:
+            e.add_source(url=source['url'])
+
+        if e.sources == []:
+            continue  # print warning
+
+        for document in entry.get('documents', []):
+            e.add_document(name=document.get('name'),
+                           url=document['url'])
+
+        agenda = None
+        for bill in entry.get('related_bills', []):
+            if agenda is None:
+                agenda = e.add_agenda_item(
+                    description="Bills up for Consideration"
+                )
+            agenda.add_bill(bill=bill['bill_id'], id=bill.get('id', None))
+
+        for who in entry.get('participants', []):
+            if who.get('participant_type') is None:
+                continue
+
+            e.add_participant(
+                participant=who['participant'],
+                participant_type={
+                    "committee": "organization",
+                    "legislator": "person",
+                    "person": "person",
+                }[who['participant_type']],
+                type=who['type'],
+                chamber=who['chamber'])
+
+        e.validate()
+        save_object(e)
+
+
 SEQUENCE = [
     drop_existing_data,
     migrate_legislatures,
     migrate_people,  # depends on legislatures
     migrate_committees,  # depends on people
     migrate_bills,
+    migrate_events,
 ]
 
 
