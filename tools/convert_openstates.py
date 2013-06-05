@@ -362,6 +362,9 @@ def migrate_votes():
         for source in entry['sources']:
             v.add_source(url=source['url'])
 
+        if v.sources == []:
+            continue  # emit warning
+
         for voter in entry['yes_votes']:
             v.yes(name=voter['name'], id=voter.get('leg_id', None))
 
