@@ -33,10 +33,7 @@ _hot_cache = {}
 def ocd_namer(obj):
     # ocd-person/UUID
     # ocd-organization/UUID
-    if obj._type in ["person", "organization"]:
-        return "ocd-{type_}/{uuid}".format(type_=obj._type,
-                                           uuid=uuid.uuid1())
-    return None
+    return "ocd-{type_}/{uuid}".format(type_=obj._type, uuid=uuid.uuid1())
 
 
 def is_ocd_id(string):
@@ -346,6 +343,8 @@ def migrate_votes():
         #             chamber=None, **kwargs):
 
         when = dt.datetime.strftime(entry['date'], "%Y-%m-%d")
+        if entry.get('type') is None:
+            continue
 
         v = Vote(
             motion=entry['motion'],
