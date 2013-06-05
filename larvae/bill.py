@@ -23,7 +23,7 @@ class Bill(LarvaeBase):
     __slots__ = ('actions', 'other_names', 'other_titles',
                  'related_bills', 'name', 'chamber', 'documents', 'session',
                  'sources', 'sponsors', 'summaries', 'subject', 'title',
-                 'type', 'versions')
+                 'openstates_id', 'type', 'versions')
 
     def __init__(self, name, session, title, type=None, **kwargs):
         super(Bill, self).__init__()

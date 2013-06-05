@@ -30,9 +30,34 @@ type_tables = {
 _hot_cache = {}
 
 
+def load_hot_cache():
+    #print "Loading cache"
+    for entry in nudb.openstates_cache.find():
+        _hot_cache[entry['_id']] = entry['ocd-id']
+    #print "Cache loaded"
+
+
+def write_hot_cache():
+    #print "Writing cache"
+    for entry in _hot_cache:
+        nudb.openstates_cache.update({"_id": entry},
+                                     {"_id": entry,
+                                      "ocd-id": _hot_cache[entry]},
+                                      upsert=True,
+                                      safe=True)
+    #print "Cache saved"
+
+
 def ocd_namer(obj):
     # ocd-person/UUID
     # ocd-organization/UUID
+    if hasattr(obj, 'openstates_id'):
+        ret = _hot_cache.get(obj.openstates_id)
+        if ret is not None:
+            return ret
+    elif obj._type != 'membership':
+        raise Exception  # We need stable IDs
+
     return "ocd-{type_}/{uuid}".format(type_=obj._type, uuid=uuid.uuid1())
 
 
@@ -164,9 +189,12 @@ def create_or_get_party(what):
         "name": what
     })
     if org:
+        _hot_cache[what] = org['_id']
         return org['_id']
 
     org = Organization(what)
+    org.openstates_id = what
+
     save_object(org)
 
     _hot_cache[what] = org._id
@@ -250,6 +278,9 @@ def migrate_bills():
                  session=bill['session'],
                  title=bill['title'],
                  type=bill['type'])
+
+        b.openstates_id = bill['_id']
+
         for source in bill['sources']:
             b.add_source(source['url'], note='old-source')
 
@@ -356,6 +387,7 @@ def migrate_votes():
             no_count=entry['no_count'],
             other_count=entry['other_count'],
             chamber=entry['chamber'])
+        v.openstates_id = entry['_id']
 
 
         for source in entry['sources']:
@@ -388,6 +420,7 @@ def migrate_events():
             location=entry['location'],
             session=entry['session'],
         )
+        e.openstates_id = entry['_id']
 
         for source in entry['sources']:
             e.add_source(url=source['url'])
@@ -426,13 +459,15 @@ def migrate_events():
 
 
 SEQUENCE = [
-    drop_existing_data,
+    load_hot_cache,
+    drop_existing_data,  # Not needed if we load the cache
     migrate_legislatures,
     migrate_people,  # depends on legislatures
     migrate_committees,  # depends on people
-    migrate_bills,
-    migrate_events,
-    migrate_votes,
+    #migrate_bills,
+    #migrate_events,
+    #migrate_votes,
+    write_hot_cache,
 ]
 
 

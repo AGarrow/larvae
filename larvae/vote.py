@@ -8,7 +8,8 @@ class Vote(LarvaeBase):
     _type = "vote"
     _schema = schema
     __slots__ = ("session", "chamber", "date", "motion", "type", "passed",
-                 "bill", "vote_counts", "roll_call", "sources")
+                 "bill", "vote_counts", "roll_call", "sources",
+                 'openstates_id',)
 
     def __init__(self, session, date, type, passed,
                  yes_count, no_count, other_count=0,
