@@ -460,7 +460,7 @@ def migrate_events():
 
 SEQUENCE = [
     load_hot_cache,
-    drop_existing_data,  # Not needed if we load the cache
+    #drop_existing_data,  # Not needed if we load the cache
     migrate_legislatures,
     migrate_people,  # depends on legislatures
     migrate_committees,  # depends on people
