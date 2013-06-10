@@ -260,11 +260,7 @@ def migrate_people():
                 if not value or key in ["name", "type"]:
                     continue
 
-                m.contact_details.append([
-                    key,
-                    value,
-                    note
-                ])
+                m.add_contact_detail(type=key, value=value, note=note)
 
         save_object(m)
 
