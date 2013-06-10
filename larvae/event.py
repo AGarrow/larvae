@@ -26,7 +26,7 @@ class EventAgendaItem(dict):
     def add_person(self, person, id=None, type='participant'):
         self.add_entity(person, 'person', id, type)
 
-    def add_entity(self, entity, entity_type, entity_id, type):
+    def add_entity(self, namey, type, id, type):
         self['related_entities'].append({
             "entity": entity,
             "entity_type": entity_type,

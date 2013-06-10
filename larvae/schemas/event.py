@@ -160,16 +160,16 @@ schema = {
                     "related_entities": {
                         "properties": {
 
-                            # * * **entity_type** - type of relation, such as
+                            # * * **type** - type of relation, such as
                             # `consideration` or `presenter`.
-                            "entity_type": { "type": "string" },
+                            "type": { "type": "string" },
 
-                            # * * **entity_id** - ID of the related entity
-                            "entity_id": { "type": "string" },
+                            # * * **id** - ID of the related entity
+                            "id": { "type": "string" },
 
-                            # * * **entity** - human readable string
+                            # * * **name** - human readable string
                             # representing the entity, such as `John Q. Smith`.
-                            "entity": { "type": "string" },
+                            "name": { "type": "string" },
 
                             # * * **note** - human readable string (if any)
                             # noting the relationship between the entity and
