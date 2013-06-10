@@ -37,7 +37,26 @@ schema = {
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
             "required": False,
             "type": "string"
-        }
+        },
+        "contact_details": {
+            "description": "Details regarding how to contact the holder of this membership.",
+            "required": False,
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    },
+                    "note": {
+                        "type": "string"
+                    },
+                }
+            }
+        },
     },
     "title": "Membership",
     "type": "object"

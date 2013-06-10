@@ -61,15 +61,48 @@ schema = {
             "required": False,
             "type": "string"
         },
+        "contact_details": {
+            "description": "Details regarding how to contact the organization.",
+            "required": False,
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    },
+                    "note": {
+                        "type": "string"
+                    },
+                }
+            }
+        },
         "posts": {
             "description": "All posts.",
             "items": {
                 "description": "A position that exists independent of the person holding it",
                 "properties": {
                     "contact_details": {
-                        "description": "Details regarding how to contact the person.",
+                        "description": "Details regarding how to contact the holder of this post.",
                         "required": False,
-                        "type": "array"
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                },
+                                "note": {
+                                    "type": "string"
+                                },
+                            }
+                        }
                     },
                     "end_date": {
                         "description": "Ending date of the post.",

@@ -464,9 +464,9 @@ SEQUENCE = [
     migrate_legislatures,
     migrate_people,  # depends on legislatures
     migrate_committees,  # depends on people
-    migrate_bills,
+    #migrate_bills,
     migrate_events,
-    migrate_votes,
+    #migrate_votes,
     write_hot_cache,
 ]
 

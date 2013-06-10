@@ -42,3 +42,15 @@ def test_add_post():
     assert orga.identifiers[-1]['scheme'] == "kruft"
     assert orga.identifiers[0]['identifier'] == "id10t"
     assert not hasattr(orga.identifiers[0], "scheme")
+
+
+def test_add_contact():
+    """ test we can add a contact detail to an orga """
+    orga = Organization("name")
+    orga.validate()
+
+    orga.add_contact_detail(type='pigeon',
+                            value='39328',
+                            note='His name is Joe')
+
+    orga.validate()

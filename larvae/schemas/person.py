@@ -8,6 +8,25 @@ schema = {
             "required": False,
             "type": "string"
         },
+        "contact_details": {
+            "description": "Details regarding how to contact this person.",
+            "required": False,
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    },
+                    "note": {
+                        "type": "string"
+                    },
+                }
+            }
+        },
         "biography": {
             "description": "An extended account of a person's life",
             "required": False,

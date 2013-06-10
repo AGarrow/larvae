@@ -29,6 +29,11 @@ class Membership(LarvaeBase):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
+    def add_contact_detail(self, type, value, note):
+        self.contact_details.append({"type": type,
+                                     "value": value,
+                                     "note": note})
+
     def __str__(self):
         return self.person_id + ' membership in ' + self.organization_id
     __unicode__ = __str__

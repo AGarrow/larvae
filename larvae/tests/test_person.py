@@ -53,3 +53,17 @@ def test_magic_methods():
          "start_date": "1920-01",
          "end_date": "1949-12-31"}
     ]
+
+
+def test_add_contact_information():
+    """ Test that we can add contact information """
+    bob = Person("John Q. Public, Esq.",
+                 gender="male", image="http://example.com/john.jpg",
+                 summary="Some person")
+    bob.validate()
+
+    bob.add_contact_detail(type='voice',
+                           value='876-5309',
+                           note='Jenny Cell')
+
+    bob.validate()
