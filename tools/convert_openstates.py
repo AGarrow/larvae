@@ -392,14 +392,11 @@ def migrate_votes():
         if v.sources == []:
             continue  # emit warning
 
-        for voter in entry['yes_votes']:
-            v.yes(name=voter['name'], id=voter.get('leg_id', None))
-
-        for voter in entry['no_votes']:
-            v.no(name=voter['name'], id=voter.get('leg_id', None))
-
-        for voter in entry['other_votes']:
-            v.other(name=voter['name'], id=voter.get('leg_id', None))
+        for vtype in ['yes', 'no', 'other']:
+            for voter in entry["%s_votes" % (vtype)]:
+                id = voter.get('leg_id', None)
+                hcid = _hot_cache.get(id, None)
+                getattr(v, vtype)(name=voter['name'], id=hcid)
 
         bid = entry['bill_id']
         v.add_bill(name=bid, id=bid)

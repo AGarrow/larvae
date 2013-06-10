@@ -43,20 +43,20 @@ class Vote(LarvaeBase):
             "chamber": chamber
         }
 
-    def vote(self, name, how):
+    def vote(self, name, how, id=None):
         self.roll_call.append({
             "vote_type": how,
             "person": {
                 "name": name,
-                "id": None,
+                "id": id,
             }
         })
 
-    def yes(self, name, **kwargs):
-        return self.vote(name, 'yes')
+    def yes(self, name, id=None, **kwargs):
+        return self.vote(name, 'yes', id=id, **kwargs)
 
-    def no(self, name, **kwargs):
-        return self.vote(name, 'no')
+    def no(self, name, id=None, **kwargs):
+        return self.vote(name, 'no', id=id, **kwargs)
 
-    def other(self, name, **kwargs):
-        return self.vote(name, 'other')
+    def other(self, name, id=None, **kwargs):
+        return self.vote(name, 'other', id=id, **kwargs)
