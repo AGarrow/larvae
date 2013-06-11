@@ -75,3 +75,17 @@ def test_add_document():
     assert o['name'] == 'hello'
     assert o['url'] == 'http://example.com'
     e.validate()
+
+
+def test_add_media():
+    e = event_obj()
+    e.validate()
+    name = "Hello, World"
+
+    e.add_media_link(name=name, url="http://pault.ag", type='media',
+                     mimetype="text/html")
+
+    e.add_media_link(name=name, url="ftp://pault.ag",
+                     type='media', mimetype="text/ftp-or-something")
+
+    e.validate()

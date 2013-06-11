@@ -1,6 +1,7 @@
 from larvae.base import LarvaeBase
 
 from larvae.organization import Organization
+from larvae.utils import add_associated_link
 from larvae.person import Person
 from larvae.bill import Bill
 
@@ -45,6 +46,7 @@ class Event(LarvaeBase):
     """
     _type = "event"
     _schema = schema
+    _add_associated_link = add_associated_link
     __slots__ = ("when", "all_day", "name", "description", "documents",
                  "end", "links", "location", "participants", "media",
                  "agenda", "sources", "status", "type", 'session',
@@ -86,6 +88,21 @@ class Event(LarvaeBase):
             "name": name,
             "url": url
         })
+
+    def add_media_link(
+        self, name, url, type='media',
+        mimetype=None,
+        offset=None,
+        on_duplicate='error'
+    ):
+        return self._add_associated_link(
+            collection='media',
+            name=name,
+            url=url,
+            type=type,
+            offset=offset,
+            mimetype=mimetype,
+            on_duplicate=on_duplicate)
 
     def add_person(self, who, type='participant', chamber=None):
         return self.add_participant(

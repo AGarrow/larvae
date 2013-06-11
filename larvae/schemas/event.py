@@ -227,7 +227,8 @@ schema = {
                                 "mimetype": { "type": ["string", "null"] },
                                 "url": { "type": "string" },
                                 "offset": {
-                                    "type": "integer"
+                                    "type": "integer",
+                                    "required": False,
                                 }
                             },
                             "type": "object"
