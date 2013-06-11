@@ -3,8 +3,8 @@ import datetime as dt
 
 
 def event_obj():
-    e = Event(description="get-together",
-              start=dt.datetime.utcnow(),
+    e = Event(name="get-together",
+              when=dt.datetime.utcnow(),
               location="Joe's Place")
 
     e.add_source(url='foobar')
@@ -14,8 +14,8 @@ def event_obj():
 
 def test_basic_event():
     """ test that we can create an event """
-    e = Event(description="get-together",
-              start=dt.datetime.utcnow(),
+    e = Event(name="get-together",
+              when=dt.datetime.utcnow(),
               location="Joe's Place")
 
     e.add_source(url='foobar')
@@ -29,8 +29,8 @@ def test_basic_event():
 
 
 def test_basic_agenda():
-    e = Event(description="get-together",
-              start=dt.datetime.utcnow(),
+    e = Event(name="get-together",
+              when=dt.datetime.utcnow(),
               location="Joe's Place")
 
     e.add_source(url='foobar')

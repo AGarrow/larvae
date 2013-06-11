@@ -12,10 +12,14 @@ schema = {
         # of tne entries in the enum below.
         "_type": { "enum": [ "event" ], "type": "string" },
 
-        # **description** - A simple description describing the event. As
-        # an example, "Fiscal subcommittee hearing on pudding cups" is a valid
-        # string.
-        "description": { "type": "string" },
+        # **name** - A simple name of the event, such as
+        # "Fiscal subcommittee hearing on pudding cups"
+        "name": { "type": "string" },
+
+        # **description** - A longer description describing the event. As
+        # an example, "Topics for discussion include this that and the other
+        # thing. In addition, lunch will be served".
+        "description": { "type": "string", "required": False },
 
         # **all_day** - This signals if an event should be considered to be
         # an all-day event, such as a holiday.
@@ -24,26 +28,42 @@ schema = {
         # **end** - Ending date / time of the event.
         "end": { "type": ["datetime", "null"] },
 
-        # **start** - Starting date / time of the event.
-        "start": { "type": ["datetime"] },
+        # **when** - Starting date / time of the event.
+        "when": { "type": ["datetime"] },
 
         # **status** - Simple boolean if this event has been canceled.
         "status": { "type": ["string", "null"],
                     "enum": ["cancelled", "tentative", "confirmed"] },
 
-        # **location** - Where the event will take place. This is a
-        # Human-readable string, with the best data that can be found as
-        # to the location of the event. Good strings include:
-        #
-        # > Room E201, Dolan Science Center, 20700 North Park Blvd
-        # > University Heights Ohio, 44118
-        #
-        # Or:
-        #
-        # > Minority Whip's desk, Floor of the House, Nowhere Ohio
-        "location": { "type": "string" },
+        # **location** - Where the event will take place.
+        "location": {
+            "type": "object",
+            "properties": {
 
-        # == Related Entities ==
+                # **name** - name of the location, such as "City Hall, Boston,
+                # MA, USA", or "Room E201, Dolan Science Center, 20700 North
+                # Park Blvd University Heights Ohio, 44118"
+                "name": { "type": "string" },
+
+                # **note** - human readable notes regarding the location,
+                # something like "The meeting will take place at the
+                # Minority Whip's desk on the floor"
+                "note": { "type": ["string", "null"] },
+
+                "coordinates": {
+                    "type": "object",
+                    "properties": {
+                        # **latitude** - latitude of the location, if any
+                        "latitude": {"type": ["string", "null"]},
+
+                        # **longitude** - longitude of the location, if any
+                        "longitude": {"type": ["string", "null"]}
+                    }
+                },
+            },
+        },
+
+        # == Linked Entities ==
 
         # **documents** - Links to related documents for the event. Usually,
         # this includes things like pre-written testimony, spreadsheets or
@@ -153,6 +173,14 @@ schema = {
                     #
                     # > The Committee will consider SB 2339, HB 100
                     "description": { "type": "string" },
+                    "order": {"type": "integer", "required": False },
+
+                    # **subjects** - List of related topics of this agenda
+                    # item relates to.
+                    "subjects": {
+                        "items": { "type": "string" },
+                        "type": "array"
+                    },
 
                     # * **related_entities** - Entities that relate to this
                     # agenda item, such as presenters, legislative instruments,

@@ -13,9 +13,13 @@ class EventAgendaItem(dict):
     def __init__(self, description, event):
         super(EventAgendaItem, self).__init__({
             "description": description,
-            "related_entities": []
+            "related_entities": [],
+            "subjects": [],
         })
         self.event = event
+
+    def add_subject(self, what):
+        self['subjects'].append(what)
 
     def add_committee(self, committee, id=None, type='participant'):
         self.add_entity(committee, 'committee', id, type)
@@ -41,20 +45,22 @@ class Event(LarvaeBase):
     """
     _type = "event"
     _schema = schema
-    __slots__ = ("start", "all_day", "description", "documents",
+    __slots__ = ("when", "all_day", "name", "description", "documents",
                  "end", "links", "location", "participants",
                  "agenda", "sources", "status", "type", 'session',
                  'openstates_id',)
 
-    def __init__(self, description, start, location, session=None, **kwargs):
+    def __init__(self, name, when, location, session=None, **kwargs):
         super(Event, self).__init__()
-        self.start = start
-        self.description = description
+        self.when = when
+        self.name = name
         self.all_day = False
         self.documents = []
         self.end = None
         self.links = []
-        self.location = location
+        self.location = {"name": location,
+                         "note": None,
+                         "coordinates": {"latitude": None, "longitude": None}}
         self.participants = []
         self.agenda = []
         self.sources = []
