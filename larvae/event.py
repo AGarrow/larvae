@@ -46,7 +46,7 @@ class Event(LarvaeBase):
     _type = "event"
     _schema = schema
     __slots__ = ("when", "all_day", "name", "description", "documents",
-                 "end", "links", "location", "participants",
+                 "end", "links", "location", "participants", "media",
                  "agenda", "sources", "status", "type", 'session',
                  'openstates_id',)
 
@@ -58,6 +58,7 @@ class Event(LarvaeBase):
         self.documents = []
         self.end = None
         self.links = []
+        self.media = []
         self.location = {"name": location,
                          "note": None,
                          "coordinates": {"latitude": None, "longitude": None}}

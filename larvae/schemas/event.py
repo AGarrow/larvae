@@ -216,6 +216,29 @@ schema = {
             "minItems": 0,
             "type": "array"
         },
+        "media": {
+            "items": {
+                "properties": {
+                    "name": { "type": "string" },
+                    "type": { "type": "string" },
+                    "links": {
+                        "items": {
+                            "properties": {
+                                "mimetype": { "type": ["string", "null"] },
+                                "url": { "type": "string" },
+                                "offset": {
+                                    "type": "integer"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+                },
+                "type": "object"
+            },
+            "type": "array"
+        },
 
         # == Sources ==
 
