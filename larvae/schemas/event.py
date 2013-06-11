@@ -21,10 +21,6 @@ schema = {
         # thing. In addition, lunch will be served".
         "description": { "type": "string", "required": False },
 
-        # **all_day** - This signals if an event should be considered to be
-        # an all-day event, such as a holiday.
-        "all_day": { "type": ["boolean", "null"] },
-
         # **end** - Ending date / time of the event.
         "end": { "type": ["datetime", "null"] },
 
@@ -182,6 +178,7 @@ schema = {
                         "type": "array"
                     },
 
+                    # **media** - List of media links this item relates to
                     "media": {
                         "items": {
                             "properties": {
@@ -190,7 +187,9 @@ schema = {
                                 "links": {
                                     "items": {
                                         "properties": {
-                                            "mimetype": { "type": ["string", "null"] },
+                                            "mimetype": {
+                                                "type": ["string", "null"]
+                                            },
                                             "url": { "type": "string" },
                                             "offset": {
                                                 "type": "integer",
