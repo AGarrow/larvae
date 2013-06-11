@@ -16,7 +16,11 @@ def add_associated_link(self, collection, name, url,
         raise TypeError("Sorry; we accept either `error' or `ignore' for "
                         "on_duplicate behavior.")
 
-    versions = getattr(self, collection)
+    try:
+        versions = getattr(self, collection)
+    except AttributeError:
+        versions = self[collection]
+
     ver = {"name": name, "links": []}
 
     if offset:

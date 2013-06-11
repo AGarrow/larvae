@@ -82,10 +82,15 @@ def test_add_media():
     e.validate()
     name = "Hello, World"
 
-    e.add_media_link(name=name, url="http://pault.ag", type='media',
+    a = e.add_agenda_item(description='foo')
+
+    a.add_media_link(name=name, url="http://pault.ag", type='media',
                      mimetype="text/html")
 
-    e.add_media_link(name=name, url="ftp://pault.ag",
+    a.add_media_link(name=name, url="ftp://pault.ag",
                      type='media', mimetype="text/ftp-or-something")
 
     e.validate()
+
+    assert len(e.agenda[0]['media']) == 1
+    assert len(e.agenda[0]['media'][0]['links']) == 2
