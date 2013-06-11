@@ -128,7 +128,7 @@ schema = {
                 "properties": {
                     # * **chamber** - Optional field storing the chamber
                     # of the related participant.
-                    "chamber": { "type": ["string", "null"] },
+                    "chamber": {"type": ["string", "null"]},
 
                     # * **participant** - Human readable name of the entitity.
                     "participant": { "type": "string" },
@@ -151,7 +151,16 @@ schema = {
                     "type": {
                         "enum": [ "host", "chair", "participant" ],
                         "type": "string"
-                    }
+                    },
+                    "notes": {
+                        "items": {
+                            "properties": {
+                                "description": { "type": "string" },
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
                 },
                 "type": "object"
             },
@@ -184,6 +193,10 @@ schema = {
                             "properties": {
                                 "name": { "type": "string" },
                                 "type": { "type": "string" },
+                                "date": {
+                                    "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
+                                    "type": ["string", "null"]
+                                },
                                 "links": {
                                     "items": {
                                         "properties": {

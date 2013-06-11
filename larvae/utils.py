@@ -21,16 +21,13 @@ def add_associated_link(self, collection, name, url,
     except AttributeError:
         versions = self[collection]
 
-    ver = {"name": name, "links": []}
+    ver = {"name": name, "links": [], "date": date}
 
     if offset:
         ver['offset'] = offset
 
     if type:
         ver["type"] = type
-
-    if date:
-        ver['date'] = date
 
     seen_links = set()  # We iterate over everything anyway. Meh. Storing
     # as an instance var is actually non-trivial, since we abuse __slots__

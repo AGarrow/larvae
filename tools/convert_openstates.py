@@ -281,7 +281,9 @@ def migrate_bills():
             b.add_source(source['url'], note='old-source')
 
         for document in bill['documents']:
-            b.add_document_link(name=document['name'], url=document['url'])
+            b.add_document_link(name=document['name'], url=document['url'],
+                                on_duplicate='ignore')  # Old docs are bad
+            # about this
 
         for version in bill['versions']:
             kwargs = {}
@@ -408,8 +410,8 @@ def migrate_events():
     for entry in db.events.find():
 
         e = Event(
-            description=entry['description'],
-            start=entry['when'],
+            name=entry['description'],
+            when=entry['when'],
             location=entry['location'],
             session=entry['session'],
         )
