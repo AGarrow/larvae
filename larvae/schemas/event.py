@@ -20,10 +20,15 @@ schema = {
         # thing. In addition, lunch will be served".
         "description": { "type": "string", "required": False },
 
-        # **end** - Ending date / time of the event.
-        "end": { "type": ["datetime", "null"] },
+        # **end** - Ending date / time of the event. This should be fully
+        # timezone qualified.
+        "end": {
+            "required": False,
+            "type": ["datetime", "null"]
+        },
 
-        # **when** - Starting date / time of the event.
+        # **when** - Starting date / time of the event. This should be
+        # fully timezone qualified.
         "when": { "type": ["datetime"] },
 
         # **status** - String that denotes the status of the meeting. This is
@@ -45,7 +50,10 @@ schema = {
                 # * **note** - human readable notes regarding the location,
                 # something like "The meeting will take place at the
                 # Minority Whip's desk on the floor"
-                "note": { "type": ["string", "null"] },
+                "note": {
+                    "required": False,
+                    "type": ["string", "null"],
+                },
 
                 # * **coordinates** - coordinates where this event will take
                 # place. This is purely optional.
@@ -69,6 +77,7 @@ schema = {
         # this includes things like pre-written testimony, spreadsheets or
         # a slide deck that a presenter will use.
         "documents": {
+            "required": False,
             "items": {
                 "properties": {
                     # * **note** - name of the document. Something like
@@ -89,6 +98,7 @@ schema = {
         # links to learn more about subjects related to the event.
         "links": {
             "description": "URLs for documents about the event",
+            "required": False,
             "items": {
                 "properties": {
 
@@ -188,12 +198,14 @@ schema = {
                     # **subjects** - List of related topics of this agenda
                     # item relates to.
                     "subjects": {
+                        "required": False,
                         "items": { "type": "string" },
                         "type": "array"
                     },
 
                     # **media** - List of media links this item relates to
                     "media": {
+                        "required": False,
                         "items": {
                             "properties": {
                                 "name": { "type": "string" },
@@ -241,6 +253,7 @@ schema = {
                     # agenda item, such as presenters, legislative instruments,
                     # or committees.
                     "related_entities": {
+                        "required": False,
                         "properties": {
 
                             # * * **type** - type of relation, such as
