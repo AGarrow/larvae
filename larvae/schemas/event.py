@@ -2,6 +2,61 @@
     Schema for event objects.
 """
 
+# == Reused Schemas ==
+
+# **media_schema** - This "special" schema is used in two places in the
+# Event scema, on the top level and inside the agenda item. This is an
+# optional component that may be omited entirely from a document.
+media_schema = {
+    "required": False,
+    "items": {
+        "properties": {
+            # * **name** - name of the media link, such as "Recording of the
+            # meeting" or "Discussion of construction near the watershed"
+            "name": { "type": "string" },
+
+            # * **type** - type of the set of recordings, such as "recording"
+            # or "testimony".
+            "type": { "type": "string" },
+
+            # * **date** - date of the recording.
+            "date": {
+                "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
+                "type": ["string", "null"]
+            },
+
+            # * **links** - List of links to the same media item, each with
+            # a different MIME type.
+            "links": {
+                "items": {
+                    "properties": {
+                        # * * **mimetype** - Mimetype of the media, such as
+                        # video/mp4 or audio/webm
+                        "mimetype": {
+                            "type": ["string", "null"]
+                        },
+
+                        # * * **url** - URL where this media may be accessed
+                        "url": { "type": "string" },
+
+                        # * * **offset** - Offset where the related
+                        # part starts. This is optional and may be ommited
+                        # entirely.
+                        "offset": {
+                            "type": "number",
+                            "required": False,
+                        }
+                    },
+                    "type": "object"
+                },
+                "type": "array"
+            },
+        },
+        "type": "object"
+    },
+    "type": "array"
+}
+
 schema = {
     "description": "event data",
     "properties": {
@@ -72,6 +127,10 @@ schema = {
         },
 
         # == Linked Entities ==
+
+
+        # **media** - See the description above for the Media schema.
+        "media": media_schema,
 
         # **documents** - Links to related documents for the event. Usually,
         # this includes things like pre-written testimony, spreadsheets or
@@ -203,38 +262,8 @@ schema = {
                         "type": "array"
                     },
 
-                    # **media** - List of media links this item relates to
-                    "media": {
-                        "required": False,
-                        "items": {
-                            "properties": {
-                                "name": { "type": "string" },
-                                "type": { "type": "string" },
-                                "date": {
-                                    "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                                    "type": ["string", "null"]
-                                },
-                                "links": {
-                                    "items": {
-                                        "properties": {
-                                            "mimetype": {
-                                                "type": ["string", "null"]
-                                            },
-                                            "url": { "type": "string" },
-                                            "offset": {
-                                                "type": "integer",
-                                                "required": False,
-                                            }
-                                        },
-                                        "type": "object"
-                                    },
-                                    "type": "array"
-                                },
-                            },
-                            "type": "object"
-                        },
-                        "type": "array"
-                    },
+                    # **media** - See the description above for the Media schema.
+                    "media": media_schema,
 
                     # * **notes** - List of notes taken during this agenda item,
                     # may be used to construct meeting minutes.
