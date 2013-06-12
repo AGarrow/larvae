@@ -14,4 +14,8 @@ docs:
 	pycco larvae/schemas/*py
 
 
-.PHONY: test docs install build develop all
+devel-docs:
+	pycco -w larvae/schemas/*py
+
+
+.PHONY: test docs devel-docs install build develop all
