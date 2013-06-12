@@ -75,6 +75,10 @@ schema = {
         # thing. In addition, lunch will be served".
         "description": { "type": "string", "required": False },
 
+        # **when** - Starting date / time of the event. This should be
+        # fully timezone qualified.
+        "when": { "type": ["datetime"] },
+
         # **end** - Ending date / time of the event. This should be fully
         # timezone qualified.
         "end": {
@@ -82,9 +86,6 @@ schema = {
             "type": ["datetime", "null"]
         },
 
-        # **when** - Starting date / time of the event. This should be
-        # fully timezone qualified.
-        "when": { "type": ["datetime"] },
 
         # **status** - String that denotes the status of the meeting. This is
         # useful for showing the meeting is cancelled in a machine-readable
@@ -217,15 +218,6 @@ schema = {
                     "participant_type": {
                         "enum": [ "organization", "person", ],
                         "type": "string"
-                    },
-
-                    # * **votes** - This field may be used if the person is
-                    # eligible to vote, and may contain a numerical value
-                    # (including decimal points, in some locales) denoting how
-                    # many votes they have. This may be ommited.
-                    "votes": {
-                        "type": "number",
-                        "required": False
                     },
 
                     # * **type** - Role of the entity we're relating to, such
