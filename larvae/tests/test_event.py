@@ -94,3 +94,15 @@ def test_add_media():
 
     assert len(e.agenda[0]['media']) == 1
     assert len(e.agenda[0]['media'][0]['links']) == 2
+
+
+    e.add_media_link(name=name, url="http://pault.ag", type='media',
+                     mimetype="text/html")
+
+    e.add_media_link(name=name, url="ftp://pault.ag",
+                     type='media', mimetype="text/ftp-or-something")
+
+    e.validate()
+
+    assert len(e.media) == 1
+    assert len(e.media[0]['links']) == 2

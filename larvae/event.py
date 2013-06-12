@@ -67,7 +67,7 @@ class Event(LarvaeBase):
     __slots__ = ("when", "all_day", "name", "description", "documents",
                  "end", "links", "location", "participants",
                  "agenda", "sources", "status", "type", 'session',
-                 'openstates_id',)
+                 "media", 'openstates_id',)
 
     def __init__(self, name, when, location, session=None, **kwargs):
         super(Event, self).__init__()
@@ -81,6 +81,7 @@ class Event(LarvaeBase):
                          "note": None,
                          "coordinates": None}
         self.participants = []
+        self.media = []
         self.agenda = []
         self.sources = []
         self.status = "confirmed"
@@ -131,3 +132,20 @@ class Event(LarvaeBase):
         obj = EventAgendaItem(description, self)
         self.agenda.append(obj)
         return obj
+
+    _add_associated_link = add_associated_link
+
+    def add_media_link(
+        self, name, url, type='media',
+        mimetype=None,
+        offset=None,
+        on_duplicate='error'
+    ):
+        return self._add_associated_link(
+            collection='media',
+            name=name,
+            url=url,
+            type=type,
+            offset=offset,
+            mimetype=mimetype,
+            on_duplicate=on_duplicate)
