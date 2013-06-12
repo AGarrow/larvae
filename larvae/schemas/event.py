@@ -244,6 +244,9 @@ schema = {
                     #
                     # > The Committee will consider SB 2339, HB 100
                     "description": { "type": "string" },
+
+                    # * **order** - order of this item, useful for re-creating
+                    # meeting minutes. This may be ommited entirely.
                     "order": {"type": "integer", "required": False },
 
                     # **subjects** - List of related topics of this agenda
@@ -263,6 +266,8 @@ schema = {
                         "required": False,
                         "items": {
                             "properties": {
+                                # * * **description** - simple string containing
+                                # the content of the note.
                                 "description": { "type": "string" },
                             },
                             "type": "object"
