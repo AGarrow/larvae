@@ -5,7 +5,6 @@
 schema = {
     "description": "event data",
     "properties": {
-
         # == Basics ==
 
         # **_type** - All larvae events must have a _type field set to one
@@ -27,7 +26,9 @@ schema = {
         # **when** - Starting date / time of the event.
         "when": { "type": ["datetime"] },
 
-        # **status** - Simple boolean if this event has been canceled.
+        # **status** - String that denotes the status of the meeting. This is
+        # useful for showing the meeting is cancelled in a machine-readable
+        # way.
         "status": { "type": ["string", "null"],
                     "enum": ["cancelled", "tentative", "confirmed"] },
 
@@ -36,23 +37,26 @@ schema = {
             "type": "object",
             "properties": {
 
-                # **name** - name of the location, such as "City Hall, Boston,
+                # * **name** - name of the location, such as "City Hall, Boston,
                 # MA, USA", or "Room E201, Dolan Science Center, 20700 North
                 # Park Blvd University Heights Ohio, 44118"
                 "name": { "type": "string" },
 
-                # **note** - human readable notes regarding the location,
+                # * **note** - human readable notes regarding the location,
                 # something like "The meeting will take place at the
                 # Minority Whip's desk on the floor"
                 "note": { "type": ["string", "null"] },
 
+                # * **coordinates** - coordinates where this event will take
+                # place. This is purely optional.
                 "coordinates": {
                     "type": "object",
+                    "required": False,
                     "properties": {
-                        # **latitude** - latitude of the location, if any
+                        # * * **latitude** - latitude of the location, if any
                         "latitude": {"type": ["string", "null"]},
 
-                        # **longitude** - longitude of the location, if any
+                        # * * **longitude** - longitude of the location, if any
                         "longitude": {"type": ["string", "null"]}
                     }
                 },
@@ -146,21 +150,22 @@ schema = {
                         "type": "string"
                     },
 
+                    # * **votes** - This field may be used if the person is
+                    # eligible to vote, and may contain a numerical value
+                    # (including decimal points, in some locales) denoting how
+                    # many votes they have. This may be ommited.
+                    "votes": {
+                        "type": "number",
+                        "required": False
+                    },
+
                     # * **type** - Role of the entity we're relating to, such
                     # as `chair` for the chair of a meeting.
                     "type": {
                         "enum": [ "host", "chair", "participant" ],
                         "type": "string"
                     },
-                    "notes": {
-                        "items": {
-                            "properties": {
-                                "description": { "type": "string" },
-                            },
-                            "type": "object"
-                        },
-                        "type": "array"
-                    },
+
                 },
                 "type": "object"
             },
@@ -213,6 +218,19 @@ schema = {
                                     },
                                     "type": "array"
                                 },
+                            },
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+
+                    # * **notes** - List of notes taken during this agenda item,
+                    # may be used to construct meeting minutes.
+                    "notes": {
+                        "required": False,
+                        "items": {
+                            "properties": {
+                                "description": { "type": "string" },
                             },
                             "type": "object"
                         },
@@ -278,9 +296,6 @@ schema = {
             "type": "array"
         },
 
-        "type": {
-            "type": "string"
-        },
-    },
+   },
     "type": "object"
 }
