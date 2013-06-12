@@ -173,6 +173,9 @@ def migrate_committees():
         save_object(org)
         attach_members(committee, org)
 
+def drop_memberships():
+    nudb.memberships.drop()
+
 
 def drop_existing_data():
     for entry in type_tables.values():
@@ -400,8 +403,9 @@ def migrate_votes():
                 hcid = _hot_cache.get(id, None)
                 getattr(v, vtype)(name=voter['name'], id=hcid)
 
-        bid = entry['bill_id']
-        v.add_bill(name=bid, id=bid)
+        hcid = _hot_cache.get(entry['bill_id'], None)
+        bid = hcid
+        v.add_bill(name=entry['bill_id'], id=bid)
 
         save_object(v)
 
@@ -458,6 +462,8 @@ def migrate_events():
 SEQUENCE = [
     load_hot_cache,
     #drop_existing_data,  # Not needed if we load the cache
+    drop_memberships,  # If you migrate leg / people / com, you have to drop
+    # the table, since it'll keep inserting.
     migrate_legislatures,
     migrate_people,  # depends on legislatures
     migrate_committees,  # depends on people
