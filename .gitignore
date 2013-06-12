@@ -3,3 +3,5 @@
 dist
 *larvae*egg*
 .tox
+build
+docs
