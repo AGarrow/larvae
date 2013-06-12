@@ -280,26 +280,30 @@ schema = {
                     # or committees.
                     "related_entities": {
                         "required": False,
-                        "properties": {
+                        "items": {
+                            "properties": {
+                                # * * **type** - type of relation, such as
+                                # `consideration` or `presenter`.
+                                "type": { "type": "string" },
 
-                            # * * **type** - type of relation, such as
-                            # `consideration` or `presenter`.
-                            "type": { "type": "string" },
+                                # * * **entity_type** - type of the related
+                                # object, like `bill` or `organization`.
+                                "entity_type": { "type": "string" },
 
-                            # * * **id** - ID of the related entity
-                            "id": { "type": "string" },
+                                # * * **id** - ID of the related entity
+                                "id": { "type": "string" },
 
-                            # * * **name** - human readable string
-                            # representing the entity, such as `John Q. Smith`.
-                            "name": { "type": "string" },
+                                # * * **name** - human readable string
+                                # representing the entity, such as `John Q. Smith`.
+                                "name": { "type": "string" },
 
-                            # * * **note** - human readable string (if any)
-                            # noting the relationship between the entity and
-                            # the agenda item, such as "Jeff will be presenting
-                            # on the effects of too much cookie dough"
-                            "note": { "type": "string" },
-
-                            "type": "object"
+                                # * * **note** - human readable string (if any)
+                                # noting the relationship between the entity and
+                                # the agenda item, such as "Jeff will be presenting
+                                # on the effects of too much cookie dough"
+                                "note": { "type": "string" },
+                            },
+                            "type": "object",
                         },
                         "minItems": 0,
                         "type": "array",
