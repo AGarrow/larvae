@@ -79,7 +79,7 @@ class Event(LarvaeBase):
         self.links = []
         self.location = {"name": location,
                          "note": None,
-                         "coordinates": {"latitude": None, "longitude": None}}
+                         "coordinates": None}
         self.participants = []
         self.agenda = []
         self.sources = []
@@ -90,6 +90,12 @@ class Event(LarvaeBase):
 
         for k, v in kwargs.items():
             setattr(self, k, v)
+
+    def set_coordinates(self, lat, lon):
+        self.location['coordinates'] = {
+            "latitude": lat,
+            "longitude": lon
+        }
 
     def add_source(self, url, note=None):
         info = { "url": url, "note": note }

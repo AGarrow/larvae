@@ -114,14 +114,13 @@ schema = {
                 # * **coordinates** - coordinates where this event will take
                 # place. This is purely optional.
                 "coordinates": {
-                    "type": "object",
-                    "required": False,
+                    "type": ["object", "null"],
                     "properties": {
                         # * * **latitude** - latitude of the location, if any
-                        "latitude": {"type": ["string", "null"]},
+                        "latitude": {"type": "string"},
 
                         # * * **longitude** - longitude of the location, if any
-                        "longitude": {"type": ["string", "null"]}
+                        "longitude": {"type": "string"}
                     }
                 },
             },
