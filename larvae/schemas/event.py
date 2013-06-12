@@ -112,7 +112,8 @@ schema = {
                 },
 
                 # * **coordinates** - coordinates where this event will take
-                # place. This is purely optional.
+                # place. If the location hasn't (or isn't) geolocated or
+                # geocodable, than this should be set to null.
                 "coordinates": {
                     "type": ["object", "null"],
                     "properties": {
