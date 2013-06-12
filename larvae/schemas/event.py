@@ -291,7 +291,7 @@ schema = {
                                 "entity_type": { "type": "string" },
 
                                 # * * **id** - ID of the related entity
-                                "id": { "type": "string" },
+                                "id": { "type": ["string", "null"] },
 
                                 # * * **name** - human readable string
                                 # representing the entity, such as `John Q. Smith`.
@@ -301,7 +301,7 @@ schema = {
                                 # noting the relationship between the entity and
                                 # the agenda item, such as "Jeff will be presenting
                                 # on the effects of too much cookie dough"
-                                "note": { "type": "string" },
+                                "note": { "type": ["string", "null"] },
                             },
                             "type": "object",
                         },

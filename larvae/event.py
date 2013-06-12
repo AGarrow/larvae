@@ -49,12 +49,13 @@ class EventAgendaItem(dict):
             on_duplicate=on_duplicate)
 
 
-    def add_entity(self, name, entity_type, id, type):
+    def add_entity(self, name, entity_type, id, type, note=None):
         self['related_entities'].append({
             "name": name,
             "entity_type": entity_type,
             "id": id,
             "type": type,
+            "note": note,
         })
 
 
