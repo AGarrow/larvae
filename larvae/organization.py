@@ -24,6 +24,11 @@ class Organization(LarvaeBase):
         """
         super(Organization, self).__init__()
         self.name = name
+        self.classification = None
+        self.founding_date = None
+        self.dissolution_date = None
+        self.parent_id = None
+        self.other_names = []
         self.identifiers = []
         self.posts = []
         self.contact_details = []
