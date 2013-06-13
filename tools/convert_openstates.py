@@ -55,8 +55,12 @@ def ocd_namer(obj):
         ret = _hot_cache.get(obj.openstates_id)
         if ret is not None:
             return ret
+
     elif obj._type != 'membership':
         raise Exception  # We need stable IDs
+
+    if obj._type == 'membership':
+        return None
 
     return "ocd-{type_}/{uuid}".format(type_=obj._type, uuid=uuid.uuid1())
 
@@ -78,11 +82,12 @@ def save_objects(payload):
             pass
 
         ocd_id = ocd_namer(entry)
-        if _id and not is_ocd_id(_id):
-            _id = None
+        if ocd_id:
+            if _id and not is_ocd_id(_id):
+                _id = None
 
-        if _id is None and ocd_id:
-            entry._id = ocd_id
+            if _id is None:
+                entry._id = ocd_id
 
         eo = entry.as_dict()
         mongo_id = table.save(eo)
