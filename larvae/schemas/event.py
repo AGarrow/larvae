@@ -247,8 +247,11 @@ schema = {
                     "description": { "type": "string" },
 
                     # * **order** - order of this item, useful for re-creating
-                    # meeting minutes. This may be ommited entirely.
-                    "order": {"type": "integer", "required": False },
+                    # meeting minutes. This may be ommited entirely. It may
+                    # also optionally contains "dots" to denote nested
+                    # agenda items, such as "1.1.2.1" or "2", which may
+                    # go on as needed.
+                    "order": {"type": "string", "required": False },
 
                     # **subjects** - List of related topics of this agenda
                     # item relates to.
