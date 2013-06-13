@@ -72,10 +72,10 @@ schema = {
         "name": { "type": "string" },
 
         # **updated_at** - the time that this object was last updated.
-        "updated_at": { "type": "string" },
+        "updated_at": { "type": "string", "required": False },
 
         # **created_at** - the time that this object was first created.
-        "created_at": { "type": "string" },
+        "created_at": { "type": "string", "required": False },
 
         # **description** - A longer description describing the event. As
         # an example, "Topics for discussion include this that and the other

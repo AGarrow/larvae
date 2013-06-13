@@ -16,10 +16,10 @@ schema = {
         "session": { "type": "string" },
 
         # **updated_at** - the time that this object was last updated.
-        "updated_at": { "type": "string" },
+        "updated_at": { "type": "string", "required": False },
 
         # **created_at** - the time that this object was first created.
-        "created_at": { "type": "string" },
+        "created_at": { "type": "string", "required": False },
 
         # **chamber** - chamber vote took place in (if legislature is
         # bicameral, otherwise null)
