@@ -209,7 +209,7 @@ schema = {
                     "name": { "type": "string" },
 
                     # * **id** - ID of the participant
-                    "id": { "type": "string", "required": False },
+                    "id": { "type": ["string", "null"] },
 
                     # * **type** - What type of entity is this?
                     # `person` may be used if the person is not a Legislator,

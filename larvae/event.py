@@ -112,20 +112,21 @@ class Event(LarvaeBase):
             "url": url
         })
 
-    def add_person(self, who, type='participant', chamber=None):
+    def add_person(self, name, note='participant', chamber=None, id=None):
         return self.add_participant(
-            participant=who,
-            participant_type='person',
+            name=who,
+            type='person',
             chamber=chamber,
-            type=type)
+            note=note)
 
-    def add_participant(self, participant, participant_type,
-                        type='participant', chamber=None):
+    def add_participant(self, name, type, note='participant', chamber=None,
+                       id=None):
         self.participants.append({
             "chamber": chamber,
             "type": type,
-            "participant_type": participant_type,
-            "participant": participant
+            "note": note,
+            "name": name,
+            "id": id,
         })
 
     def add_agenda_item(self, description):
