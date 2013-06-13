@@ -71,6 +71,12 @@ schema = {
         # "Fiscal subcommittee hearing on pudding cups"
         "name": { "type": "string" },
 
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string", "required": False },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string", "required": False },
+
         # **description** - A longer description describing the event. As
         # an example, "Topics for discussion include this that and the other
         # thing. In addition, lunch will be served".
@@ -205,28 +211,24 @@ schema = {
                     # of the related participant.
                     "chamber": {"type": ["string", "null"]},
 
-                    # * **participant** - Human readable name of the entitity.
-                    "participant": { "type": "string" },
+                    # * **name** - Human readable name of the entitity.
+                    "name": { "type": "string" },
 
-                    # * **participant_id** - ID of the participant
-                    "participant_id": { "type": "string",
-                                        "required": False },
+                    # * **id** - ID of the participant
+                    "id": { "type": ["string", "null"] },
 
-                    # * **participant_type** - What type of entity is this?
+                    # * **type** - What type of entity is this?
                     # `person` may be used if the person is not a Legislator,
                     # butattending the event, such as an invited speaker or one
                     # who is offering testimony.
-                    "participant_type": {
+                    "type": {
                         "enum": [ "organization", "person", ],
                         "type": "string"
                     },
 
-                    # * **type** - Role of the entity we're relating to, such
+                    # * **note** - Note regarding the relationship, such
                     # as `chair` for the chair of a meeting.
-                    "type": {
-                        "enum": [ "host", "chair", "participant" ],
-                        "type": "string"
-                    },
+                    "note": {"type": "string"},
 
                 },
                 "type": "object"
@@ -247,8 +249,11 @@ schema = {
                     "description": { "type": "string" },
 
                     # * **order** - order of this item, useful for re-creating
-                    # meeting minutes. This may be ommited entirely.
-                    "order": {"type": "integer", "required": False },
+                    # meeting minutes. This may be ommited entirely. It may
+                    # also optionally contains "dots" to denote nested
+                    # agenda items, such as "1.1.2.1" or "2", which may
+                    # go on as needed.
+                    "order": {"type": "string", "required": False },
 
                     # **subjects** - List of related topics of this agenda
                     # item relates to.
@@ -283,25 +288,23 @@ schema = {
                         "required": False,
                         "items": {
                             "properties": {
-                                # * * **type** - type of relation, such as
-                                # `consideration` or `presenter`.
-                                "type": { "type": "string" },
-
-                                # * * **entity_type** - type of the related
+                                # * * **type** - type of the related
                                 # object, like `bill` or `organization`.
-                                "entity_type": { "type": "string" },
+                                "type": { "type": "string" },
 
                                 # * * **id** - ID of the related entity
                                 "id": { "type": ["string", "null"] },
 
                                 # * * **name** - human readable string
-                                # representing the entity, such as `John Q. Smith`.
+                                # representing the entity, such as
+                                # `John Q. Smith`.
                                 "name": { "type": "string" },
 
                                 # * * **note** - human readable string (if any)
                                 # noting the relationship between the entity and
-                                # the agenda item, such as "Jeff will be presenting
-                                # on the effects of too much cookie dough"
+                                # the agenda item, such as "Jeff will be
+                                # presenting on the effects of too much
+                                # cookie dough"
                                 "note": { "type": ["string", "null"] },
                             },
                             "type": "object",

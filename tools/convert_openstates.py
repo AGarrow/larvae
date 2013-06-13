@@ -109,7 +109,8 @@ def save_object(payload):
 def migrate_legislatures():
     for metad in db.metadata.find():
         abbr = metad['abbreviation']
-        cow = Organization(metad['legislature_name'])
+        cow = Organization(metad['legislature_name'],
+                           classification="jurisdiction")
         cow.openstates_id = abbr
 
         for post in db.districts.find({"abbr": abbr}):
@@ -153,7 +154,8 @@ def migrate_committees():
     for committee in db.committees.find({"subcommittee": None}):
         # OK, we need to do the root committees first, so that we have IDs that
         # we can latch onto down below.
-        org = Organization(committee['committee'])
+        org = Organization(committee['committee'],
+                           classification="committee")
         org.parent_id = lookup_entry_id('organizations', committee['state'])
         org.openstates_id = committee['_id']
         org.sources = committee['sources']
@@ -162,7 +164,8 @@ def migrate_committees():
         attach_members(committee, org)
 
     for committee in db.committees.find({"subcommittee": {"$ne": None}}):
-        org = Organization(committee['subcommittee'])
+        org = Organization(committee['subcommittee'],
+                           classification="committee")
 
         org.parent_id = lookup_entry_id(
             'organizations',
@@ -200,7 +203,7 @@ def create_or_get_party(what):
         _hot_cache[what] = org['_id']
         return org['_id']
 
-    org = Organization(what)
+    org = Organization(what, classification="party")
     org.openstates_id = what
 
     save_object(org)
@@ -454,14 +457,17 @@ def migrate_events():
             if who.get('participant_type') is None:
                 continue
 
+            hcid = _hot_cache.get(who.get('id', None), None)
+
             e.add_participant(
-                participant=who['participant'],
-                participant_type={
+                name=who['participant'],
+                type={
                     "committee": "organization",
                     "legislator": "person",
                     "person": "person",
                 }[who['participant_type']],
-                type=who['type'],
+                id=hcid,
+                note=who['type'],
                 chamber=who['chamber'])
 
         e.validate()

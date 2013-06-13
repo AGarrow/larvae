@@ -8,10 +8,10 @@ schema = {
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
             "type": ["string", "null"],
         },
-        #"id": {
-        #    "description": "The membership's unique identifier",
-        #    "type": ["string", "null"],
-        #},
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string", "required": False },
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string", "required": False },
         "organization_id": {
             "description": "The ID of the organization that is a party to the relationship",
             "type": "string"
