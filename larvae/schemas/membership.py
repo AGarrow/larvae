@@ -6,14 +6,12 @@ schema = {
         "end_date": {
             "description": "The date on which the relationship ended",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
-        "id": {
-            "description": "The membership's unique identifier",
-            "required": False,
-            "type": "string"
-        },
+        #"id": {
+        #    "description": "The membership's unique identifier",
+        #    "type": ["string", "null"],
+        #},
         "organization_id": {
             "description": "The ID of the organization that is a party to the relationship",
             "type": "string"
@@ -24,23 +22,19 @@ schema = {
         },
         "post_id": {
             "description": "Post ID key.",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "role": {
             "description": "The role that the holder of the post fulfills",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "start_date": {
             "description": "The date on which the relationship began",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "contact_details": {
             "description": "Details regarding how to contact the holder of this membership.",
-            "required": False,
             "type": "array",
             "items": {
                 "type": "object",

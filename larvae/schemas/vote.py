@@ -41,8 +41,7 @@ schema = {
         #
 
         "bill": {
-            "type": "object",
-            "required": False,
+            "type": ["object", "null"],
             "properties": {
                 # * **id** - bill's internal id if bill was matched with
                 # an object in the database
