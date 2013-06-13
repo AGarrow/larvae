@@ -15,6 +15,12 @@ schema = {
         # **session** - Associated with one of jurisdiction's sessions
         "session": { "type": "string" },
 
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string" },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string" },
+
         # **chamber** - chamber vote took place in (if legislature is
         # bicameral, otherwise null)
         "chamber": {

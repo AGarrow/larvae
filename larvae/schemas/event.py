@@ -71,6 +71,12 @@ schema = {
         # "Fiscal subcommittee hearing on pudding cups"
         "name": { "type": "string" },
 
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string" },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string" },
+
         # **description** - A longer description describing the event. As
         # an example, "Topics for discussion include this that and the other
         # thing. In addition, lunch will be served".

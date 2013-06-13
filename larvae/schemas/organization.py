@@ -20,6 +20,13 @@ schema = {
             "required": False,
             "type": "string"
         },
+
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string" },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string" },
+
         "id": {
             "description": "The organization's unique identifier",
             "required": False,

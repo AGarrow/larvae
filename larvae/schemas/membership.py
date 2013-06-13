@@ -14,6 +14,13 @@ schema = {
             "required": False,
             "type": "string"
         },
+
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string" },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string" },
+
         "organization_id": {
             "description": "The ID of the organization that is a party to the relationship",
             "type": "string"
