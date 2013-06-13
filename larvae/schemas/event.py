@@ -8,7 +8,6 @@
 # Event scema, on the top level and inside the agenda item. This is an
 # optional component that may be omited entirely from a document.
 media_schema = {
-    "required": False,
     "items": {
         "properties": {
             # * **name** - name of the media link, such as "Recording of the
@@ -29,8 +28,7 @@ media_schema = {
             # part starts. This is optional and may be ommited
             # entirely.
             "offset": {
-                "type": "number",
-                "required": False,
+                "type": ["number", "null"],
             },
 
             # * **links** - List of links to the same media item, each with
@@ -80,7 +78,7 @@ schema = {
         # **description** - A longer description describing the event. As
         # an example, "Topics for discussion include this that and the other
         # thing. In addition, lunch will be served".
-        "description": { "type": "string", "required": False },
+        "description": { "type": ["string", "null"] },
 
         # **when** - Starting date / time of the event. This should be
         # fully timezone qualified.
@@ -89,7 +87,6 @@ schema = {
         # **end** - Ending date / time of the event. This should be fully
         # timezone qualified.
         "end": {
-            "required": False,
             "type": ["datetime", "null"]
         },
 
@@ -114,7 +111,6 @@ schema = {
                 # something like "The meeting will take place at the
                 # Minority Whip's desk on the floor"
                 "note": {
-                    "required": False,
                     "type": ["string", "null"],
                 },
 
@@ -144,7 +140,6 @@ schema = {
         # this includes things like pre-written testimony, spreadsheets or
         # a slide deck that a presenter will use.
         "documents": {
-            "required": False,
             "items": {
                 "properties": {
                     # * **note** - name of the document. Something like
@@ -165,7 +160,6 @@ schema = {
         # links to learn more about subjects related to the event.
         "links": {
             "description": "URLs for documents about the event",
-            "required": False,
             "items": {
                 "properties": {
 
@@ -253,12 +247,11 @@ schema = {
                     # also optionally contains "dots" to denote nested
                     # agenda items, such as "1.1.2.1" or "2", which may
                     # go on as needed.
-                    "order": {"type": "string", "required": False },
+                    "order": {"type": ["string", "null"] },
 
                     # **subjects** - List of related topics of this agenda
                     # item relates to.
                     "subjects": {
-                        "required": False,
                         "items": { "type": "string" },
                         "type": "array"
                     },
@@ -269,7 +262,6 @@ schema = {
                     # * **notes** - List of notes taken during this agenda item,
                     # may be used to construct meeting minutes.
                     "notes": {
-                        "required": False,
                         "items": {
                             "properties": {
                                 # * * **description** - simple string containing
@@ -285,7 +277,6 @@ schema = {
                     # agenda item, such as presenters, legislative instruments,
                     # or committees.
                     "related_entities": {
-                        "required": False,
                         "items": {
                             "properties": {
                                 # * * **type** - type of the related

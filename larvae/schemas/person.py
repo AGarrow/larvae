@@ -54,11 +54,6 @@ schema = {
         #    "description": "One or more honorifics following a person's name",
         #    "type": ["string", "null"],
         #},
-        "id": {
-            "description": "The person's unique identifier",
-            "required": False,
-            "type": "string"
-        },
         "image": {
             "description": "A URL of a head shot",
             "format": "uri",

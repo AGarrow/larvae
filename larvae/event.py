@@ -18,6 +18,8 @@ class EventAgendaItem(dict):
             "related_entities": [],
             "subjects": [],
             "media": [],
+            "notes": [],
+            "order": None,
         })
         self.event = event
 
@@ -75,6 +77,7 @@ class Event(LarvaeBase):
         self.name = name
         self.all_day = False
         self.documents = []
+        self.description = None
         self.end = None
         self.links = []
         self.location = {"name": location,

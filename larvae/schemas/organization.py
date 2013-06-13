@@ -22,11 +22,6 @@ schema = {
         # **created_at** - the time that this object was first created.
         "created_at": { "type": "string", "required": False },
 
-        "id": {
-            "description": "The organization's unique identifier",
-            "required": False,
-            "type": "string"
-        },
         "identifiers": {
             "description": "Issued identifiers",
             "items": {
