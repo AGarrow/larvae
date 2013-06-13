@@ -45,7 +45,7 @@ def test_add_person():
     agenda = e.add_agenda_item("foo bar")
     assert agenda['related_entities'] == []
 
-    agenda.add_person(person='John Q. Hacker', type='chair')
+    agenda.add_person(person='John Q. Hacker', note='chair')
     e.validate()
 
 
@@ -54,7 +54,7 @@ def test_add_committee():
     agenda = e.add_agenda_item("foo bar")
     assert agenda['related_entities'] == []
 
-    agenda.add_committee(committee='Hello, World', type='host')
+    agenda.add_committee(committee='Hello, World', note='host')
     e.validate()
 
 
@@ -62,7 +62,7 @@ def test_add_bill():
     e = event_obj()
     agenda = e.add_agenda_item("foo bar")
     assert agenda['related_entities'] == []
-    agenda.add_bill(bill='HB 101', type='consideration')
+    agenda.add_bill(bill='HB 101', note='consideration')
     e.validate()
 
 

@@ -24,14 +24,14 @@ class EventAgendaItem(dict):
     def add_subject(self, what):
         self['subjects'].append(what)
 
-    def add_committee(self, committee, id=None, type='participant'):
-        self.add_entity(committee, 'committee', id, type)
+    def add_committee(self, committee, id=None, note='participant'):
+        self.add_entity(name=committee, type='committee', id=id, note=note)
 
-    def add_bill(self, bill, id=None, type='consideration'):
-        self.add_entity(bill, 'bill', id, type)
+    def add_bill(self, bill, id=None, note='consideration'):
+        self.add_entity(name=bill, type='bill', id=id, note=note)
 
-    def add_person(self, person, id=None, type='participant'):
-        self.add_entity(person, 'person', id, type)
+    def add_person(self, person, id=None, note='participant'):
+        self.add_entity(name=person, type='person', id=id, note=note)
 
     def add_media_link(
         self, name, url, type='media',
@@ -49,12 +49,11 @@ class EventAgendaItem(dict):
             on_duplicate=on_duplicate)
 
 
-    def add_entity(self, name, entity_type, id, type, note=None):
+    def add_entity(self, name, type, id, note):
         self['related_entities'].append({
             "name": name,
-            "entity_type": entity_type,
-            "id": id,
             "type": type,
+            "id": id,
             "note": note,
         })
 
