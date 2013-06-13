@@ -205,28 +205,24 @@ schema = {
                     # of the related participant.
                     "chamber": {"type": ["string", "null"]},
 
-                    # * **participant** - Human readable name of the entitity.
-                    "participant": { "type": "string" },
+                    # * **name** - Human readable name of the entitity.
+                    "name": { "type": "string" },
 
-                    # * **participant_id** - ID of the participant
-                    "participant_id": { "type": "string",
-                                        "required": False },
+                    # * **id** - ID of the participant
+                    "id": { "type": "string", "required": False },
 
-                    # * **participant_type** - What type of entity is this?
+                    # * **type** - What type of entity is this?
                     # `person` may be used if the person is not a Legislator,
                     # butattending the event, such as an invited speaker or one
                     # who is offering testimony.
-                    "participant_type": {
+                    "type": {
                         "enum": [ "organization", "person", ],
                         "type": "string"
                     },
 
-                    # * **type** - Role of the entity we're relating to, such
+                    # * **note** - Note regarding the relationship, such
                     # as `chair` for the chair of a meeting.
-                    "type": {
-                        "enum": [ "host", "chair", "participant" ],
-                        "type": "string"
-                    },
+                    "note": {"type": "string"},
 
                 },
                 "type": "object"
@@ -286,25 +282,23 @@ schema = {
                         "required": False,
                         "items": {
                             "properties": {
-                                # * * **type** - type of relation, such as
-                                # `consideration` or `presenter`.
-                                "type": { "type": "string" },
-
-                                # * * **entity_type** - type of the related
+                                # * * **type** - type of the related
                                 # object, like `bill` or `organization`.
-                                "entity_type": { "type": "string" },
+                                "type": { "type": "string" },
 
                                 # * * **id** - ID of the related entity
                                 "id": { "type": ["string", "null"] },
 
                                 # * * **name** - human readable string
-                                # representing the entity, such as `John Q. Smith`.
+                                # representing the entity, such as
+                                # `John Q. Smith`.
                                 "name": { "type": "string" },
 
                                 # * * **note** - human readable string (if any)
                                 # noting the relationship between the entity and
-                                # the agenda item, such as "Jeff will be presenting
-                                # on the effects of too much cookie dough"
+                                # the agenda item, such as "Jeff will be
+                                # presenting on the effects of too much
+                                # cookie dough"
                                 "note": { "type": ["string", "null"] },
                             },
                             "type": "object",
