@@ -444,7 +444,11 @@ def migrate_events():
                 )
 
             hcid = _hot_cache.get(bill.get('id', None), None)
-            agenda.add_bill(bill=bill['bill_id'], id=hcid)
+            bid = bill['bill_id']
+            if bid is None:
+                continue
+
+            agenda.add_bill(bill=bid, id=hcid)
 
         for who in entry.get('participants', []):
             if who.get('participant_type') is None:
