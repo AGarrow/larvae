@@ -25,6 +25,14 @@ media_schema = {
                 "type": ["string", "null"]
             },
 
+            # * * **offset** - Offset where the related
+            # part starts. This is optional and may be ommited
+            # entirely.
+            "offset": {
+                "type": "number",
+                "required": False,
+            },
+
             # * **links** - List of links to the same media item, each with
             # a different MIME type.
             "links": {
@@ -39,13 +47,6 @@ media_schema = {
                         # * * **url** - URL where this media may be accessed
                         "url": { "type": "string" },
 
-                        # * * **offset** - Offset where the related
-                        # part starts. This is optional and may be ommited
-                        # entirely.
-                        "offset": {
-                            "type": "number",
-                            "required": False,
-                        }
                     },
                     "type": "object"
                 },
@@ -91,7 +92,7 @@ schema = {
         # useful for showing the meeting is cancelled in a machine-readable
         # way.
         "status": { "type": ["string", "null"],
-                    "enum": ["cancelled", "tentative", "confirmed"] },
+                    "enum": ["cancelled", "tentative", "confirmed", "passed"] },
 
         # **location** - Where the event will take place.
         "location": {
