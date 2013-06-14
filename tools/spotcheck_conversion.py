@@ -14,14 +14,57 @@ nudb = connection.larvae  # XXX: Fix the db name
 
 pdb = nudb.people
 
-total_people = pdb.find().count()
-spotcheck_pct = 0.3
+
+def check_people():
+    for person in pdb.find():
+        pid, osid = (person.get(x) for x in ('_id', 'openstates_id'))
+        refobj = db.legislators.find_one({"_id": osid})
+        assert refobj is not None  # OK. We have a valid backref.
+
+        memberships = nudb.memberships.find({"person_id": pid})
+        has_juris = False
+        has_party = False
+
+        for membership in memberships:
+            orgid = membership['organization_id']
+            orga = nudb.organizations.find_one({"_id": orgid})
+            assert orga is not None
+
+            klass = orga['classification']
+            if klass == 'party':
+                has_party = True
+
+            if klass == 'jurisdiction':
+                assert has_juris is False
+
+                has_juris = True
+                # validate state
+
+        assert has_juris, has_party
+        print pid
 
 
-for person in pdb.find().limit(int(total_people * spotcheck_pct)):
-    pid, osid = (person.get(x) for x in ('_id', 'openstates_id'))
-    refobj = db.legislators.find_one({"_id": osid})
-    assert refobj is not None  # OK. We have a valid backref.
+def check_bills():
+    for bill in nudb.bills.find():
+        osbill = db.bills.find_one({"_id": bill['openstates_id']})
+        for sponsor in bill['sponsors']:
+            ocdid = sponsor.get('id', None)
+            if ocdid is None:
+                continue
 
-    memberships = nudb.memberships.find({"person_id": pid})
-    print list(memberships), pid
+            who = None
+            type_ = sponsor['_type']
+            if type_ == 'organization':
+                who = nudb.organizations.find_one({"_id": ocdid})
+
+            if type_ == 'person':
+                who = pdb.find_one({"_id": ocdid})
+
+            assert who
+
+        oactions = [x['description'] for x in bill['actions']]
+        for action in osbill['actions']:
+            assert action['action'] in oactions
+
+check_bills()
+check_people()

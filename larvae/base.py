@@ -32,7 +32,7 @@ class LarvaeBase(object):
         due to upstream schemas being in JSON Schema v3, and not validictory's
         modified syntax.
         """
-        validator = DatetimeValidator(required_by_default=True)
+        validator = DatetimeValidator(required_by_default=False)
         validator.validate(self.as_dict(), self._schema)
 
     def as_dict(self):
