@@ -25,13 +25,6 @@ def test_add_post():
     assert orga.posts[0]['label'] == "Human Readable Name"
 
     try:
-        orga.add_post("Human Readable Name", "Chef")
-        orga.posts[1]['id'] = None
-        assert ("Garbage compare") == orga.validate()
-    except ValidationError:
-        pass
-
-    try:
         assert "Garbage" == orga.add_identifier("id10t", foo="bar")
     except TypeError:
         pass

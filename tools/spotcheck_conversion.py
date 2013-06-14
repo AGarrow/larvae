@@ -16,6 +16,7 @@ pdb = nudb.people
 
 
 def check_people():
+    print "Checking people"
     for person in pdb.find():
         pid, osid = (person.get(x) for x in ('_id', 'openstates_id'))
         refobj = db.legislators.find_one({"_id": osid})
@@ -29,22 +30,18 @@ def check_people():
             orgid = membership['organization_id']
             orga = nudb.organizations.find_one({"_id": orgid})
             assert orga is not None
-
             klass = orga['classification']
             if klass == 'party':
                 has_party = True
-
             if klass == 'jurisdiction':
                 assert has_juris is False
-
                 has_juris = True
                 # validate state
-
         assert has_juris, has_party
-        print pid
 
 
 def check_bills():
+    print "Checking bills"
     for bill in nudb.bills.find():
         osbill = db.bills.find_one({"_id": bill['openstates_id']})
         for sponsor in bill['sponsors']:
@@ -56,7 +53,6 @@ def check_bills():
             type_ = sponsor['_type']
             if type_ == 'organization':
                 who = nudb.organizations.find_one({"_id": ocdid})
-
             if type_ == 'person':
                 who = pdb.find_one({"_id": ocdid})
 
