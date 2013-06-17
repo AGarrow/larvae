@@ -8,7 +8,6 @@
 # Event scema, on the top level and inside the agenda item. This is an
 # optional component that may be omited entirely from a document.
 media_schema = {
-    "required": False,
     "items": {
         "properties": {
             # * **name** - name of the media link, such as "Recording of the
@@ -25,6 +24,13 @@ media_schema = {
                 "type": ["string", "null"]
             },
 
+            # * * **offset** - Offset where the related
+            # part starts. This is optional and may be ommited
+            # entirely.
+            "offset": {
+                "type": ["number", "null"],
+            },
+
             # * **links** - List of links to the same media item, each with
             # a different MIME type.
             "links": {
@@ -39,13 +45,6 @@ media_schema = {
                         # * * **url** - URL where this media may be accessed
                         "url": { "type": "string" },
 
-                        # * * **offset** - Offset where the related
-                        # part starts. This is optional and may be ommited
-                        # entirely.
-                        "offset": {
-                            "type": "number",
-                            "required": False,
-                        }
                     },
                     "type": "object"
                 },
@@ -70,10 +69,16 @@ schema = {
         # "Fiscal subcommittee hearing on pudding cups"
         "name": { "type": "string" },
 
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string", "required": False },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string", "required": False },
+
         # **description** - A longer description describing the event. As
         # an example, "Topics for discussion include this that and the other
         # thing. In addition, lunch will be served".
-        "description": { "type": "string", "required": False },
+        "description": { "type": ["string", "null"] },
 
         # **when** - Starting date / time of the event. This should be
         # fully timezone qualified.
@@ -82,7 +87,6 @@ schema = {
         # **end** - Ending date / time of the event. This should be fully
         # timezone qualified.
         "end": {
-            "required": False,
             "type": ["datetime", "null"]
         },
 
@@ -91,7 +95,7 @@ schema = {
         # useful for showing the meeting is cancelled in a machine-readable
         # way.
         "status": { "type": ["string", "null"],
-                    "enum": ["cancelled", "tentative", "confirmed"] },
+                    "enum": ["cancelled", "tentative", "confirmed", "passed"] },
 
         # **location** - Where the event will take place.
         "location": {
@@ -107,7 +111,6 @@ schema = {
                 # something like "The meeting will take place at the
                 # Minority Whip's desk on the floor"
                 "note": {
-                    "required": False,
                     "type": ["string", "null"],
                 },
 
@@ -137,7 +140,6 @@ schema = {
         # this includes things like pre-written testimony, spreadsheets or
         # a slide deck that a presenter will use.
         "documents": {
-            "required": False,
             "items": {
                 "properties": {
                     # * **note** - name of the document. Something like
@@ -158,7 +160,6 @@ schema = {
         # links to learn more about subjects related to the event.
         "links": {
             "description": "URLs for documents about the event",
-            "required": False,
             "items": {
                 "properties": {
 
@@ -204,28 +205,24 @@ schema = {
                     # of the related participant.
                     "chamber": {"type": ["string", "null"]},
 
-                    # * **participant** - Human readable name of the entitity.
-                    "participant": { "type": "string" },
+                    # * **name** - Human readable name of the entitity.
+                    "name": { "type": "string" },
 
-                    # * **participant_id** - ID of the participant
-                    "participant_id": { "type": "string",
-                                        "required": False },
+                    # * **id** - ID of the participant
+                    "id": { "type": ["string", "null"] },
 
-                    # * **participant_type** - What type of entity is this?
+                    # * **type** - What type of entity is this?
                     # `person` may be used if the person is not a Legislator,
                     # butattending the event, such as an invited speaker or one
                     # who is offering testimony.
-                    "participant_type": {
+                    "type": {
                         "enum": [ "organization", "person", ],
                         "type": "string"
                     },
 
-                    # * **type** - Role of the entity we're relating to, such
+                    # * **note** - Note regarding the relationship, such
                     # as `chair` for the chair of a meeting.
-                    "type": {
-                        "enum": [ "host", "chair", "participant" ],
-                        "type": "string"
-                    },
+                    "note": {"type": "string"},
 
                 },
                 "type": "object"
@@ -246,13 +243,15 @@ schema = {
                     "description": { "type": "string" },
 
                     # * **order** - order of this item, useful for re-creating
-                    # meeting minutes. This may be ommited entirely.
-                    "order": {"type": "integer", "required": False },
+                    # meeting minutes. This may be ommited entirely. It may
+                    # also optionally contains "dots" to denote nested
+                    # agenda items, such as "1.1.2.1" or "2", which may
+                    # go on as needed.
+                    "order": {"type": ["string", "null"] },
 
                     # **subjects** - List of related topics of this agenda
                     # item relates to.
                     "subjects": {
-                        "required": False,
                         "items": { "type": "string" },
                         "type": "array"
                     },
@@ -263,7 +262,6 @@ schema = {
                     # * **notes** - List of notes taken during this agenda item,
                     # may be used to construct meeting minutes.
                     "notes": {
-                        "required": False,
                         "items": {
                             "properties": {
                                 # * * **description** - simple string containing
@@ -279,28 +277,25 @@ schema = {
                     # agenda item, such as presenters, legislative instruments,
                     # or committees.
                     "related_entities": {
-                        "required": False,
                         "items": {
                             "properties": {
-                                # * * **type** - type of relation, such as
-                                # `consideration` or `presenter`.
-                                "type": { "type": "string" },
-
-                                # * * **entity_type** - type of the related
+                                # * * **type** - type of the related
                                 # object, like `bill` or `organization`.
-                                "entity_type": { "type": "string" },
+                                "type": { "type": "string" },
 
                                 # * * **id** - ID of the related entity
                                 "id": { "type": ["string", "null"] },
 
                                 # * * **name** - human readable string
-                                # representing the entity, such as `John Q. Smith`.
+                                # representing the entity, such as
+                                # `John Q. Smith`.
                                 "name": { "type": "string" },
 
                                 # * * **note** - human readable string (if any)
                                 # noting the relationship between the entity and
-                                # the agenda item, such as "Jeff will be presenting
-                                # on the effects of too much cookie dough"
+                                # the agenda item, such as "Jeff will be
+                                # presenting on the effects of too much
+                                # cookie dough"
                                 "note": { "type": ["string", "null"] },
                             },
                             "type": "object",

@@ -21,6 +21,12 @@ schema = {
         #  confused with title)
         "name": { "type": "string" },
 
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string", "required": False },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string", "required": False },
+
         # **chamber** - (if legislature is bicameral) otherwise can be null
         "chamber": {
             "enum": [ "upper", "lower" ], "type": ["string", "null"],
@@ -228,7 +234,6 @@ schema = {
                     "date": {
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
                         "type": ["string", "null"],
-                        "required": False,
                     },
                     "links": {
                         "items": {

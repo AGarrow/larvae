@@ -1,30 +1,27 @@
 schema = {
-    "$schema": "http://json-schema.org/draft-03/schema#",
     "description": "A group with a common purpose or reason for existence that goes beyond the set of people belonging to it",
-    "id": "http://popoloproject.com/schemas/organization.json#",
     "properties": {
         "classification": {
-            "description": "An organization category, e.g. committee",
-            "required": False,
-            "type": "string"
+            "description": "An organization category, e.g. committee",  # TODO: enum?
+            "type": ["string", "null"]
         },
         "dissolution_date": {
             "description": "A date of dissolution",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "founding_date": {
             "description": "A date of founding",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
-        "id": {
-            "description": "The organization's unique identifier",
-            "required": False,
-            "type": "string"
-        },
+
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string", "required": False },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string", "required": False },
+
         "identifiers": {
             "description": "Issued identifiers",
             "items": {
@@ -35,13 +32,11 @@ schema = {
                     },
                     "scheme": {
                         "description": "An identifier scheme, e.g. DUNS",
-                        "required": False,
-                        "type": "string"
+                        "type": "string",
                     }
                 },
                 "type": "object"
             },
-            "required": False,
             "type": "array"
         },
         "name": {
@@ -53,17 +48,14 @@ schema = {
             "items": {
                 "$ref": "http://popoloproject.com/schemas/other_name.json#"
             },
-            "required": False,
             "type": "array"
         },
         "parent_id": {
             "description": "An organization that contains this organization",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "contact_details": {
             "description": "Details regarding how to contact the organization.",
-            "required": False,
             "type": "array",
             "items": {
                 "type": "object",
@@ -87,7 +79,6 @@ schema = {
                 "properties": {
                     "contact_details": {
                         "description": "Details regarding how to contact the holder of this post.",
-                        "required": False,
                         "type": "array",
                         "items": {
                             "type": "object",
@@ -107,13 +98,11 @@ schema = {
                     "end_date": {
                         "description": "Ending date of the post.",
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                        "required": False,
-                        "type": "string"
+                        "type": ["string", "null"],
                     },
                     "id": {
                         "description": "The post's unique identifier",
-                        "type": "string",
-                        "required": False
+                        "type": ["string", "null"],
                     },
                     "label": {
                         "description": "A label describing the post",
@@ -121,8 +110,7 @@ schema = {
                     },
                     "organization_id": {
                         "description": "The ID of the organization in which the post is held",
-                        "required": False,
-                        "type": "string"
+                        "type": ["string", "null"],
                     },
                     "role": {
                         "description": "The role that the holder of the post fulfills",
@@ -131,14 +119,12 @@ schema = {
                     "start_date": {
                         "description": "Startting date of the post.",
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-                        "required": False,
-                        "type": "string"
+                        "type": ["string", "null"],
                     }
                 },
                 "title": "Post",
                 "type": "object"
             },
-            "required": False,
             "type": "array"
         }
     },

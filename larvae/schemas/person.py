@@ -3,14 +3,14 @@ schema = {
     "description": "A real person, alive or dead",
     "id": "http://popoloproject.com/schemas/person.json#",
     "properties": {
-        "additional_name": {
-            "description": "One or more secondary given names",
-            "required": False,
-            "type": "string"
-        },
+        # **updated_at** - the time that this object was last updated.
+        "updated_at": { "type": "string", "required": False },
+
+        # **created_at** - the time that this object was first created.
+        "created_at": { "type": "string", "required": False },
+
         "contact_details": {
             "description": "Details regarding how to contact this person.",
-            "required": False,
             "type": "array",
             "items": {
                 "type": "object",
@@ -30,62 +30,35 @@ schema = {
         },
         "biography": {
             "description": "An extended account of a person's life",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "birth_date": {
             "description": "A date of birth",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "death_date": {
             "description": "A date of death",
             "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
-            "required": False,
-            "type": "string"
-        },
-        "email": {
-            "description": "An email address",
-            "format": "email",
-            "required": False,
-            "type": "string"
-        },
-        "family_name": {
-            "description": "One or more family names",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "gender": {
             "description": "A gender",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
-        "given_name": {
-            "description": "One or more primary given names",
-            "required": False,
-            "type": "string"
-        },
-        "honorific_prefix": {
-            "description": "One or more honorifics preceding a person's name",
-            "required": False,
-            "type": "string"
-        },
-        "honorific_suffix": {
-            "description": "One or more honorifics following a person's name",
-            "required": False,
-            "type": "string"
-        },
-        "id": {
-            "description": "The person's unique identifier",
-            "required": False,
-            "type": "string"
-        },
+        # reinstate these?
+        #"honorific_prefix": {
+        #    "description": "One or more honorifics preceding a person's name",
+        #    "type": ["string", "null"],
+        #},
+        #"honorific_suffix": {
+        #    "description": "One or more honorifics following a person's name",
+        #    "type": ["string", "null"],
+        #},
         "image": {
             "description": "A URL of a head shot",
             "format": "uri",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         },
         "links": {
             "description": "URLs for documents about the person",
@@ -93,8 +66,7 @@ schema = {
                 "properties": {
                     "note": {
                         "description": "A note, e.g. 'Wikipedia page'",
-                        "required": False,
-                        "type": "string"
+                        "type": ["string", "null"],
                     },
                     "url": {
                         "description": "A URL for a document about the person",
@@ -104,7 +76,6 @@ schema = {
                 },
                 "type": "object"
             },
-            "required": False,
             "type": "array"
         },
         "name": {
@@ -116,13 +87,11 @@ schema = {
             "items": {
                 "$ref": "http://popoloproject.com/schemas/other_name.json#"
             },
-            "required": False,
             "type": "array"
         },
         "summary": {
             "description": "A one-line account of a person's life",
-            "required": False,
-            "type": "string"
+            "type": ["string", "null"],
         }
     },
     "title": "Person",

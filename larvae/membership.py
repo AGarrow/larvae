@@ -25,6 +25,10 @@ class Membership(LarvaeBase):
         self.person_id = person_id
         self.organization_id = organization_id
         self.contact_details = []
+        self.start_date = None
+        self.end_date = None
+        self.post_id = None
+        self.role = None
 
         for k, v in kwargs.items():
             setattr(self, k, v)
