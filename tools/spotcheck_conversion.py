@@ -62,5 +62,28 @@ def check_bills():
         for action in osbill['actions']:
             assert action['action'] in oactions
 
+
+def check_events():
+    print "Checking events"
+    for event in nudb.events.find():
+        osevent = db.events.find_one({"_id": event['openstates_id']})
+        fkname = [x['participant'] for x in osevent['participants']]
+
+        for whom in event['participants']:
+            assert whom['name'] in fkname
+
+        for thing in osevent.get('related_bills', []):
+            pass
+
+        for item in event['agenda']:
+            for entity in item['related_entities']:
+                print entity
+
+        assert osevent
+        assert osevent['when'] == event['when']
+        assert osevent.get('end') == event.get('end')
+
+
+check_events()
 check_bills()
 check_people()

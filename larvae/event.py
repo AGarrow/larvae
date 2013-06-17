@@ -117,7 +117,7 @@ class Event(LarvaeBase):
 
     def add_person(self, name, note='participant', chamber=None, id=None):
         return self.add_participant(
-            name=who,
+            name=name,
             type='person',
             chamber=chamber,
             note=note)

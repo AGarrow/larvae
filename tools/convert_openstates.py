@@ -429,6 +429,9 @@ def migrate_events():
         )
         e.openstates_id = entry['_id']
 
+        if entry.get('end'):
+            e.end = entry['end']
+
         for source in entry['sources']:
             e.add_source(url=source['url'])
 
@@ -482,9 +485,9 @@ SEQUENCE = [
     migrate_legislatures,
     migrate_people,  # depends on legislatures
     migrate_committees,  # depends on people
-    migrate_bills,
+    #migrate_bills,
     migrate_events,
-    migrate_votes,
+    #migrate_votes,
     write_hot_cache,
 ]
 
