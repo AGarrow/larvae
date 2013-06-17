@@ -9,7 +9,8 @@ class Organization(LarvaeBase):
 
     __slots__ = ('classification', 'dissolution_date', 'founding_date',
                  'identifiers', 'name', 'other_names', 'parent_id',
-                 'posts', 'openstates_id', 'contact_details', 'geography_id')
+                 'posts', 'openstates_id', 'contact_details', 'geography_id',
+                 'abbreviation')
 
     _post_slots = ('end_date', 'id', 'label', 'organization_id', 'role',
                    'start_date', 'chamber', 'district', 'geography_id',
