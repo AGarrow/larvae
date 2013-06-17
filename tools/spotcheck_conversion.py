@@ -75,9 +75,13 @@ def check_events():
         for thing in osevent.get('related_bills', []):
             pass
 
+        info = filter(lambda x: x is not None,
+                      [x.get('bill_id', None) for x
+                       in osevent.get('related_bills', [])])
+
         for item in event['agenda']:
             for entity in item['related_entities']:
-                print entity
+                assert entity['name'] in info
 
         assert osevent
         assert osevent['when'] == event['when']
