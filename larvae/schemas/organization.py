@@ -46,7 +46,19 @@ schema = {
         "other_names": {
             "description": "Alternate or former names",
             "items": {
-                "$ref": "http://popoloproject.com/schemas/other_name.json#"
+                "properties": {
+                    "name": { "type": "string" },
+                    "start_date": {
+                        "type": ["string", "null"],
+                        "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$"
+                    },
+                    "end_date": {
+                        "type": ["string", "null"],
+                        "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$"
+                    },
+                    "note": { "type": ["string", "null"] }
+                },
+                "type": "object",
             },
             "type": "array"
         },
