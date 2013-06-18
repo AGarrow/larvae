@@ -2,7 +2,7 @@ schema = {
     "description": "A group with a common purpose or reason for existence that goes beyond the set of people belonging to it",
     "properties": {
         "classification": {
-            "description": "An organization category, e.g. committee",  # TODO: enum?
+            "description": "An organization category, e.g. committee",
             "type": ["string", "null"]
         },
         "dissolution_date": {

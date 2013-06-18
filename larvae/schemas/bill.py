@@ -35,7 +35,7 @@ schema = {
         # **title** - primary display title for bill
         "title": { "type": "string" },
 
-        # **type** - array of types (e.g. bill, resolution, etc.) [TODO: enum?]
+        # **type** - array of types (e.g. bill, resolution, etc.)
         "type": { "items": { "type": "string" }, "type": "array" },
 
         # **subject** - List of related subjects.
@@ -104,8 +104,6 @@ schema = {
                     "session": { "type": "string" },
                     #  * **name** - name of related bill.
                     "name": { "type": "string" },
-                    #  * **chamber** - TODO: needed?
-                    "chamber": { "enum": [ "upper", "lower" ], "type": [ "string", "null" ] },
                     #  * **relation_type** - currently should be 'companion', others may be introduced in the future
                     "relation_type": { "enum": [ "companion" ], "type": "string" },
                 },
@@ -151,10 +149,9 @@ schema = {
                     "actor": { "type": ["string", "null"] },
                     # * **date** - date of the action
                     "date": { "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$", "type": "string" },
-                    # * **type** - array of categorized action types (TODO: enum)
+                    # * **type** - array of categorized action types
                     "type": {
                         "items": {
-                            "enum": [ "introduced", "reading:1", "reading:2", "reading:3" ],
                             "type": "string"
                         },
                         "type": "array"
@@ -195,7 +192,7 @@ schema = {
         # Properties of document/version objects are:
         #
         # * **name** - name of document/version
-        # * **type** - type of document/version (TODO: enum?)
+        # * **type** - type of document/version
         # * **date** - date that document/version was created
         # * **links** - array of links to the version/document.
         #               Multiple links should point to same version/document

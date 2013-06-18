@@ -34,7 +34,6 @@ schema = {
         "motion": { "type": "string" },
 
         # **type** - array of types (e.g. passage, veto_override, etc.)
-        # [TODO: enum?]
         "type": { "items": { "type": "string" }, "type": "array" },
 
         # **passed** - boolean indicating passage
@@ -68,7 +67,7 @@ schema = {
 
         # **vote_counts** is a list of objects with vote_type and count
         # properties.  vote_type is something like 'yes', 'no', 'not-voting',
-        # etc.  TODO: enum?
+        # etc.
         "vote_counts": {
             "items": {
                 "properties": {
