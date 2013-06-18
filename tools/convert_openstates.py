@@ -101,6 +101,7 @@ def save_objects(payload):
 
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
+            entry.jurisdiction = entry.openstates_id[:2].lower()
 
         sys.stdout.write(entry._type[0])
         sys.stdout.flush()
@@ -115,7 +116,7 @@ def migrate_legislatures(state):
     if state:
         spec['_id'] = state
 
-    for metad in db.metadata.find():
+    for metad in db.metadata.find(spec):
         abbr = metad['abbreviation']
         cow = Organization(metad['legislature_name'],
                            classification="jurisdiction",
@@ -177,7 +178,9 @@ def migrate_committees(state):
         save_object(org)
         attach_members(committee, org)
 
-    for committee in db.committees.find({"subcommittee": {"$ne": None}}):
+    spec.update({"subcommittee": {"$ne": None}})
+
+    for committee in db.committees.find(spec):
         org = Organization(committee['subcommittee'],
                            classification="committee")
 
@@ -464,7 +467,7 @@ def migrate_events(state):
     if state:
         spec['state'] = state
 
-    for entry in db.events.find():
+    for entry in db.events.find(spec):
 
         e = Event(
             name=entry['description'],
