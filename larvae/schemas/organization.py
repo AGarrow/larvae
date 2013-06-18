@@ -67,8 +67,7 @@ schema = {
                         "type": "string"
                     },
                     "note": {
-                        "type": "string",
-                        "required": False
+                        "type": ["string", "null"],
                     },
                 }
             }
@@ -91,7 +90,7 @@ schema = {
                                     "type": "string"
                                 },
                                 "note": {
-                                    "type": "string"
+                                    "type": ["string", "null"],
                                 },
                             }
                         }

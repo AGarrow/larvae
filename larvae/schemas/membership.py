@@ -46,8 +46,7 @@ schema = {
                         "type": "string"
                     },
                     "note": {
-                        "type": "string",
-                        "required": False
+                        "type": ["string", "null"],
                     },
                 }
             }
