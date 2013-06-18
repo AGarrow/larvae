@@ -30,18 +30,22 @@ type_tables = {
 _hot_cache = {}
 
 
-def load_hot_cache():
+def load_hot_cache(state):
+    spec = {}
+    if state:
+        spec['state'] = state
     #print "Loading cache"
-    for entry in nudb.openstates_cache.find():
+    for entry in nudb.openstates_cache.find(spec):
         _hot_cache[entry['_id']] = entry['ocd-id']
     #print "Cache loaded"
 
 
-def write_hot_cache():
+def write_hot_cache(state):
     #print "Writing cache"
     for entry in _hot_cache:
         nudb.openstates_cache.update({"_id": entry},
                                      {"_id": entry,
+                                      "state": entry[:2].lower(),
                                       "ocd-id": _hot_cache[entry]},
                                       upsert=True,
                                       safe=True)
@@ -106,11 +110,16 @@ def save_object(payload):
     return save_objects([payload])
 
 
-def migrate_legislatures():
+def migrate_legislatures(state):
+    spec = {}
+    if state:
+        spec['_id'] = state
+
     for metad in db.metadata.find():
         abbr = metad['abbreviation']
         cow = Organization(metad['legislature_name'],
-                           classification="jurisdiction")
+                           classification="jurisdiction",
+                           abbreviation=abbr)
         cow.openstates_id = abbr
 
         for post in db.districts.find({"abbr": abbr}):
@@ -141,7 +150,7 @@ def lookup_entry_id(collection, openstates_id):
     return id_
 
 
-def migrate_committees():
+def migrate_committees(state):
 
     def attach_members(committee, org):
         for member in committee['members']:
@@ -151,7 +160,12 @@ def migrate_committees():
                 m = Membership(person_id, org._id)
                 save_object(m)
 
-    for committee in db.committees.find({"subcommittee": None}):
+    spec = {"subcommittee": None}
+
+    if state:
+        spec['state'] = state
+
+    for committee in db.committees.find(spec):
         # OK, we need to do the root committees first, so that we have IDs that
         # we can latch onto down below.
         org = Organization(committee['committee'],
@@ -181,11 +195,27 @@ def migrate_committees():
         save_object(org)
         attach_members(committee, org)
 
-def drop_memberships():
-    nudb.memberships.drop()
+def drop_memberships(state):
+    if state is None:
+        return nudb.memberships.drop()
+
+    orga = nudb.organizations.find_one({"openstates_id": state})
+    if orga is None:
+        return  # likely initial run
+
+    oid = orga['_id']
+    for membership in nudb.memberships.find({"organization_id": oid}):
+        person = nudb.people.find_one({"_id": membership['person_id']})
+
+        if person is None:
+            assert "cows" == "fly"
+            # boggle
+
+        nudb.memberships.remove({"person_id": person['_id']}, safe=True)
+        assert nudb.memberships.find({"person_id": person['_id']}).count() == 0
 
 
-def drop_existing_data():
+def drop_existing_data(state):
     for entry in type_tables.values():
         print("Dropping %s" % (entry))
         nudb.drop_collection(entry)
@@ -213,8 +243,11 @@ def create_or_get_party(what):
     return org._id
 
 
-def migrate_people():
-    for entry in db.legislators.find():
+def migrate_people(state):
+    spec = {}
+    if state:
+        spec["state"] = state
+    for entry in db.legislators.find(spec):
         who = Person(entry['full_name'])
         who.openstates_id = entry['_id']
 
@@ -276,10 +309,14 @@ def migrate_people():
         save_object(m)
 
 
-def migrate_bills():
+def migrate_bills(state):
     #bills = db.bills.find({"actions.related_entities": {"$exists": True,
     #                                                    "$ne": []}})
-    bills = db.bills.find()
+    spec = {}
+    if state:
+        spec['state'] = state
+
+    bills = db.bills.find(spec)
     for bill in bills:
         b = Bill(name=bill['bill_id'],
                  session=bill['session'],
@@ -376,8 +413,12 @@ def migrate_bills():
         save_object(b)
 
 
-def migrate_votes():
-    for entry in db.votes.find():
+def migrate_votes(state):
+    spec = {}
+    if state:
+        spec['state'] = state
+
+    for entry in db.votes.find(spec):
         #def __init__(self, session, date, type, passed,
         #             yes_count, no_count, other_count=0,
         #             chamber=None, **kwargs):
@@ -418,7 +459,11 @@ def migrate_votes():
         save_object(v)
 
 
-def migrate_events():
+def migrate_events(state):
+    spec = {}
+    if state:
+        spec['state'] = state
+
     for entry in db.events.find():
 
         e = Event(
@@ -479,7 +524,10 @@ def migrate_events():
 
 SEQUENCE = [
     load_hot_cache,
+    #
+    # XXX: WILL IGNORE STATE, DON'T ENABLE ME.
     #drop_existing_data,  # Not needed if we load the cache
+    #
     drop_memberships,  # If you migrate leg / people / com, you have to drop
     # the table, since it'll keep inserting.
     migrate_legislatures,
@@ -493,8 +541,17 @@ SEQUENCE = [
 
 
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Re-convert a state.')
+    parser.add_argument('state', type=str, help='State to rebuild',
+                       default=None, nargs='?')
+    args = parser.parse_args()
+
+    state = args.state
+
     for seq in SEQUENCE:
-        seq()
+        seq(state)
 
     print("")
     print("Migration complete.")
