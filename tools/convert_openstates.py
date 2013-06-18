@@ -79,6 +79,9 @@ def save_objects(payload):
         what = type_tables[type(entry)]
         table = getattr(nudb, what)
 
+        if hasattr(entry, "openstates_id"):
+            entry.jurisdiction = entry.openstates_id[:2].lower()
+
         _id = None
         try:
             _id = entry._id
@@ -101,7 +104,6 @@ def save_objects(payload):
 
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
-            entry.jurisdiction = entry.openstates_id[:2].lower()
 
         sys.stdout.write(entry._type[0])
         sys.stdout.flush()
