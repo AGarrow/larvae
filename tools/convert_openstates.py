@@ -265,7 +265,7 @@ def migrate_people(state):
                      "active", "old_roles"]
 
         for key, value in entry.items():
-            if key in blacklist or not value:
+            if key in blacklist or not value or key.startswith("_"):
                 continue
             who.extras[key] = value
 
