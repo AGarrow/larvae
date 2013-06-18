@@ -198,10 +198,21 @@ def migrate_committees(state):
 def drop_memberships(state):
     if state is None:
         return nudb.memberships.drop()
+
     orga = nudb.organizations.find_one({"openstates_id": state})
+    if orga is None:
+        return  # likely initial run
+
     oid = orga['_id']
-    nudb.memberships.remove({"organization_id": oid}, safe=True)
-    assert nudb.memberships.find({"organization_id": oid}).count() == 0
+    for membership in nudb.memberships.find({"organization_id": oid}):
+        person = nudb.people.find_one({"_id": membership['person_id']})
+
+        if person is None:
+            assert "cows" == "fly"
+            # boggle
+
+        nudb.memberships.remove({"person_id": person['_id']}, safe=True)
+        assert nudb.memberships.find({"person_id": person['_id']}).count() == 0
 
 
 def drop_existing_data(state):
