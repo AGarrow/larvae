@@ -16,9 +16,14 @@ state = args.state
 
 
 def normalize_person(entry):
-    entry['memberships'] = list(db.memberships.find({
+    data = list(db.memberships.find({
         "person_id": entry['_id']
     }))
+    for datum in data:
+        datum.pop('_id')
+
+    entry['memberships'] = data
+
     return entry
 
 
