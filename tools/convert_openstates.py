@@ -14,8 +14,8 @@ import datetime as dt
 import uuid
 import sys
 
-connection = Connection('localhost', 27017)
-nudb = connection.larvae  # XXX: Fix the db name
+
+QUIET = True
 
 
 type_tables = {
@@ -105,8 +105,9 @@ def save_objects(payload):
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
 
-        sys.stdout.write(entry._type[0])
-        sys.stdout.flush()
+        if QUIET:
+            sys.stdout.write(entry._type[0])
+            sys.stdout.flush()
 
 
 def save_object(payload):
@@ -540,10 +541,28 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Re-convert a state.')
     parser.add_argument('state', type=str, help='State to rebuild',
-                       default=None, nargs='?')
+                        default=None, nargs='?')
+
+    parser.add_argument('--server', type=str, help='Mongo Server',
+                        default="localhost")
+
+    parser.add_argument('--database', type=str, help='Mongo Database',
+                        default="larvae")
+
+    parser.add_argument('--port', type=int, help='Mongo Server Port',
+                        default=27017)
+
+    parser.add_argument('--quiet', action='store_false',
+                        help='Dont spam my screen',
+                        default=True)
+
     args = parser.parse_args()
 
     state = args.state
+    QUIET = args.quiet
+
+    connection = Connection(args.server, args.port)
+    nudb = getattr(connection, args.database)
 
     for seq in SEQUENCE:
         seq(state)
