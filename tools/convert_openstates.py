@@ -119,8 +119,10 @@ def migrate_legislatures(state):
 
     for metad in db.metadata.find(spec):
         abbr = metad['abbreviation']
+        geoid = "ocd-division/country:us/state:%s" % (abbr)
         cow = Organization(metad['legislature_name'],
                            classification="jurisdiction",
+                           geography_id=geoid,
                            abbreviation=abbr)
         cow.openstates_id = abbr
 
