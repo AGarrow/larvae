@@ -574,8 +574,16 @@ if __name__ == "__main__":
     connection = Connection(args.ocd_server, args.ocd_port)
     nudb = getattr(connection, args.ocd_database)
 
-    for seq in SEQUENCE:
-        seq(state)
+
+    def handle_state(state):
+        for seq in SEQUENCE:
+            seq(state)
+
+    if state:
+        handle_state(state)
+    else:
+        for state in (x['abbreviation'] for x in db.metadata.find()):
+            handle_state(state)
 
     print("")
     print("Migration complete.")
