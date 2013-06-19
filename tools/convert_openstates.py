@@ -7,8 +7,6 @@ from larvae.event import Event
 from larvae.vote import Vote
 from larvae.bill import Bill
 
-from billy.core import db
-
 from pymongo import Connection
 import datetime as dt
 import uuid
@@ -543,14 +541,21 @@ if __name__ == "__main__":
     parser.add_argument('state', type=str, help='State to rebuild',
                         default=None, nargs='?')
 
-    parser.add_argument('--server', type=str, help='Mongo Server',
+    parser.add_argument('--billy-server', type=str, help='Billy Mongo Server',
                         default="localhost")
-
-    parser.add_argument('--database', type=str, help='Mongo Database',
-                        default="larvae")
-
-    parser.add_argument('--port', type=int, help='Mongo Server Port',
+    parser.add_argument('--billy-database', type=str,
+                        help='Billy Mongo Database', default="fiftystates")
+    parser.add_argument('--billy-port', type=int, help='Billy Mongo Server Port',
                         default=27017)
+
+
+    parser.add_argument('--ocd-server', type=str, help='OCD Mongo Server',
+                        default="localhost")
+    parser.add_argument('--ocd-database', type=str, help='OCD Mongo Database',
+                        default="larvae")
+    parser.add_argument('--ocd-port', type=int, help='OCD Mongo Server Port',
+                        default=27017)
+
 
     parser.add_argument('--quiet', action='store_false',
                         help='Dont spam my screen',
@@ -561,8 +566,11 @@ if __name__ == "__main__":
     state = args.state
     QUIET = args.quiet
 
-    connection = Connection(args.server, args.port)
-    nudb = getattr(connection, args.database)
+    connection = Connection(args.billy_server, args.billy_port)
+    db = getattr(connection, args.billy_database)
+
+    connection = Connection(args.ocd_server, args.ocd_port)
+    nudb = getattr(connection, args.ocd_database)
 
     for seq in SEQUENCE:
         seq(state)
