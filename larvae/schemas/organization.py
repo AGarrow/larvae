@@ -1,4 +1,4 @@
-CLASSIFICATIONS = ['jursidiction', 'party', 'committee']
+CLASSIFICATIONS = ['jurisdiction', 'party', 'committee']
 
 schema = {
     "description": "A group with a common purpose or reason for existence that goes beyond the set of people belonging to it",
