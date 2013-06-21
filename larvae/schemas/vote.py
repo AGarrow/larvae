@@ -4,7 +4,7 @@
 
 VOTE_TYPES = ['passage', 'amendment', 'reading:2', 'reading:3',
               'veto_override', 'other']
-ROLLCALL_TYPES = ['yes', 'no', 'abstain', 'not-voting']
+ROLLCALL_TYPES = ['yes', 'no', 'abstain', 'not-voting', 'other']
 
 schema = {
     "description": "vote data",
