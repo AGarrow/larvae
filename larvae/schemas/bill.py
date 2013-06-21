@@ -2,6 +2,12 @@
     Schema for bill objects.
 """
 
+BILL_TYPES = ['bill', 'resolution', 'concurrent resolution',
+              'joint resolution', 'memorial']
+ACTION_TYPES = ['introduced', 'reading:1', 'reading:2', 'reading:3']
+VERSION_TYPES = []
+DOCUMENT_TYPES = []
+
 schema = {
     "description": "bill data",
     "type": "object",
@@ -203,7 +209,8 @@ schema = {
             "items": {
                 "properties": {
                     "name": { "type": "string" },
-                    "type": { "type": "string" },
+                    "type": { "type": ["string", "null"],
+                              "enum": DOCUMENT_TYPES },
                     "date": {
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
                         "type": ["string", "null"]
@@ -227,7 +234,8 @@ schema = {
             "items": {
                 "properties": {
                     "name": { "type": "string" },
-                    "type": { "type": "string" },
+                    "type": { "type": ["string", "null"],
+                              "enum": VERSION_TYPES },
                     "date": {
                         "pattern": "^[0-9]{4}(-[0-9]{2}){0,2}$",
                         "type": ["string", "null"],

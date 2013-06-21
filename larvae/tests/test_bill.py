@@ -45,25 +45,21 @@ def test_verify_documents():
     b = toy_bill()
     b.add_document_link(name="Fiscal Impact",
                         date="2013-04",
-                        type='foo',
                         url='http://foo.bar.baz')
 
     b.add_document_link(name="Fiscal Impact",
                         date="2013-04",
-                        type='foo',
                         url="http://hi.example.com/foo#bar",
                         mimetype="text/html")
 
     b.add_document_link(name="Fiscal Impact",
                         date="2013-04",
-                        type='foo',
                         url='http://foobar.baz')
 
     b.validate()
 
     b.add_document_link(name="Fiscal Impact",
                         date="2013-04",
-                        type='foo',
                         url=None,
                         mimetype='foo')
     try:
@@ -99,14 +95,12 @@ def test_versions():
         url="http://pault.ag/",
         name="Final Version",
         date="2013-04",
-        type='foo'
     )
 
     b.add_version_link(
         url="http://pault.ag/foo",
         name="Final Version",
         date="2013-04",
-        type='foo'
     )
     b.validate()
 
@@ -118,7 +112,6 @@ def test_versions():
             url="http://pault.ag/foo",
             name="Final Version",
             date="2013-04",
-            type='foo',
         )
         assert True is False, "We didn't break."
     except ValueError:
@@ -128,7 +121,6 @@ def test_versions():
         url="http://pault.ag/foo",
         name="Final Version",
         date="2013-04",
-        type='foo',
         on_duplicate='ignore'
     )
 
@@ -140,7 +132,6 @@ def test_versions():
             url="http://pault.ag/foo",
             name="Finals Versions",
             date="2013-04",
-            type='foo',
         )
         assert True is False, "We didn't break."
     except ValueError:
@@ -153,7 +144,6 @@ def test_versions():
         url="http://pault.ag/foovbar",
         name="Finals Versions",
         date="2013-04",
-        type='foo',
     )
 
     assert len(b.versions) == 2

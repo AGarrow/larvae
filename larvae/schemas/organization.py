@@ -1,9 +1,12 @@
+CLASSIFICATIONS = ['jursidiction', 'party', 'committee']
+
 schema = {
     "description": "A group with a common purpose or reason for existence that goes beyond the set of people belonging to it",
     "properties": {
         "classification": {
             "description": "An organization category, e.g. committee",
-            "type": ["string", "null"]
+            "type": ["string", "null"],
+            "enum": CLASSIFICATIONS,
         },
         "dissolution_date": {
             "description": "A date of dissolution",

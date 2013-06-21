@@ -2,6 +2,10 @@
     Schema for vote objects.
 """
 
+VOTE_TYPES = ['passage', 'amendment', 'reading:2', 'reading:3',
+              'veto_override', 'other']
+ROLLCALL_TYPES = ['yes', 'no', 'abstain', 'not-voting']
+
 schema = {
     "description": "vote data",
     "type": "object",
@@ -34,7 +38,8 @@ schema = {
         "motion": { "type": "string" },
 
         # **type** - array of types (e.g. passage, veto_override, etc.)
-        "type": { "items": { "type": "string" }, "type": "array" },
+        "type": { "items": { "type": "string", "enum": VOTE_TYPES },
+                  "type": "array" },
 
         # **passed** - boolean indicating passage
         "passed": { "type": "boolean" },
@@ -71,7 +76,7 @@ schema = {
         "vote_counts": {
             "items": {
                 "properties": {
-                    "vote_type": { "type": "string" },
+                    "vote_type": { "type": "string", "enum": ROLLCALL_TYPES },
                     "count": { "type": "integer", "minimum": 0 }
                 },
                 "type": "object"
@@ -85,7 +90,7 @@ schema = {
                 "type": "object",
                 "properties": {
                     # * **vote_type** - type of vote (e.g. yes, no, abstain)
-                    "vote_type": { "type": "string" },
+                    "vote_type": { "type": "string", "enum": ROLLCALL_TYPES },
 
                     # * **person** - person object representing the voter,
                     # has the following fields:

@@ -83,10 +83,8 @@ class Bill(LarvaeBase):
     def add_subject(self, subject):
         self.subject.append(subject)
 
-    def add_document_link(
-        self, name, url, date=None, type='document',
-        mimetype=None, on_duplicate='error'
-    ):
+    def add_document_link(self, name, url, date=None, type=None,
+                          mimetype=None, on_duplicate='error'):
         return self._add_associated_link(
             collection='documents',
             name=name,
@@ -96,10 +94,8 @@ class Bill(LarvaeBase):
             mimetype=mimetype,
             on_duplicate=on_duplicate)
 
-    def add_version_link(
-        self, name, url, date=None, type='version',
-        mimetype=None, on_duplicate='error'
-    ):
+    def add_version_link(self, name, url, date=None, type=None,
+                         mimetype=None, on_duplicate='error'):
         return self._add_associated_link(
             collection='versions',
             name=name,
