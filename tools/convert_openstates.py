@@ -7,15 +7,13 @@ from larvae.event import Event
 from larvae.vote import Vote
 from larvae.bill import Bill
 
-from billy.core import db
-
 from pymongo import Connection
 import datetime as dt
 import uuid
 import sys
 
-connection = Connection('localhost', 27017)
-nudb = connection.larvae  # XXX: Fix the db name
+
+QUIET = True
 
 
 type_tables = {
@@ -105,8 +103,9 @@ def save_objects(payload):
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
 
-        sys.stdout.write(entry._type[0])
-        sys.stdout.flush()
+        if QUIET:
+            sys.stdout.write(entry._type[0])
+            sys.stdout.flush()
 
 
 def save_object(payload):
@@ -120,8 +119,10 @@ def migrate_legislatures(state):
 
     for metad in db.metadata.find(spec):
         abbr = metad['abbreviation']
+        geoid = "ocd-division/country:us/state:%s" % (abbr)
         cow = Organization(metad['legislature_name'],
                            classification="jurisdiction",
+                           geography_id=geoid,
                            abbreviation=abbr)
         cow.openstates_id = abbr
 
@@ -265,7 +266,7 @@ def migrate_people(state):
                      "active", "old_roles"]
 
         for key, value in entry.items():
-            if key in blacklist or not value:
+            if key in blacklist or not value or key.startswith("_"):
                 continue
             who.extras[key] = value
 
@@ -540,13 +541,49 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Re-convert a state.')
     parser.add_argument('state', type=str, help='State to rebuild',
-                       default=None, nargs='?')
+                        default=None, nargs='?')
+
+    parser.add_argument('--billy-server', type=str, help='Billy Mongo Server',
+                        default="localhost")
+    parser.add_argument('--billy-database', type=str,
+                        help='Billy Mongo Database', default="fiftystates")
+    parser.add_argument('--billy-port', type=int, help='Billy Mongo Server Port',
+                        default=27017)
+
+
+    parser.add_argument('--ocd-server', type=str, help='OCD Mongo Server',
+                        default="localhost")
+    parser.add_argument('--ocd-database', type=str, help='OCD Mongo Database',
+                        default="larvae")
+    parser.add_argument('--ocd-port', type=int, help='OCD Mongo Server Port',
+                        default=27017)
+
+
+    parser.add_argument('--quiet', action='store_false',
+                        help='Dont spam my screen',
+                        default=True)
+
     args = parser.parse_args()
 
     state = args.state
+    QUIET = args.quiet
 
-    for seq in SEQUENCE:
-        seq(state)
+    connection = Connection(args.billy_server, args.billy_port)
+    db = getattr(connection, args.billy_database)
+
+    connection = Connection(args.ocd_server, args.ocd_port)
+    nudb = getattr(connection, args.ocd_database)
+
+
+    def handle_state(state):
+        for seq in SEQUENCE:
+            seq(state)
+
+    if state:
+        handle_state(state)
+    else:
+        for state in (x['abbreviation'] for x in db.metadata.find()):
+            handle_state(state)
 
     print("")
     print("Migration complete.")
