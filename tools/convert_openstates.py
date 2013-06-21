@@ -173,10 +173,7 @@ def migrate_committees(state):
     for committee in db.committees.find(spec):
         # OK, we need to do the root committees first, so that we have IDs that
         # we can latch onto down below.
-        abbr = committee['state']
-        geoid = "ocd-division/country:us/state:%s" % (abbr)
         org = Organization(committee['committee'],
-                           geography_id=geoid,
                            classification="committee")
         org.parent_id = lookup_entry_id('organizations', committee['state'])
         org.openstates_id = committee['_id']
@@ -188,10 +185,7 @@ def migrate_committees(state):
     spec.update({"subcommittee": {"$ne": None}})
 
     for committee in db.committees.find(spec):
-        abbr = committee['state']
-        geoid = "ocd-division/country:us/state:%s" % (abbr)
         org = Organization(committee['subcommittee'],
-                           geography_id=geoid,
                            classification="committee")
 
         org.parent_id = lookup_entry_id(
@@ -234,8 +228,7 @@ def create_or_get_party(what):
         _hot_cache[what] = org['_id']
         return org['_id']
 
-    geoid = "ocd-division/country:us"
-    org = Organization(what, classification="party", geography_id=geoid)
+    org = Organization(what, classification="party")
     org.openstates_id = what
 
     save_object(org)
