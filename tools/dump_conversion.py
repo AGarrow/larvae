@@ -63,7 +63,7 @@ def dump(collection, spec):
         path = entry['_id']
         where = entry.get('openstates_id')
         if where:
-            where = where[:2]
+            where = where[:2].lower()
         else:
             where = 'unknown'
 
