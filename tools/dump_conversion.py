@@ -1,100 +1,83 @@
 #!/usr/bin/env python
 from larvae.utils import JSONEncoderPlus
-from contextlib import contextmanager
 from pymongo import Connection
-import argparse
 import json
 import os
 
-parser = argparse.ArgumentParser(description='Re-convert a state.')
-parser.add_argument('state', type=str, help='State to rebuild',
-                    default=None, nargs='?')
-
-parser.add_argument('--server', type=str, help='Mongo Server',
-                    default="localhost")
-
-parser.add_argument('--database', type=str, help='Mongo Database',
-                    default="larvae")
-
-parser.add_argument('--port', type=int, help='Mongo Server Port',
-                    default=27017)
-
-parser.add_argument('--output', type=str, help='Output Directory',
-                    default="dump")
-
-args = parser.parse_args()
 
 
-@contextmanager
-def cd(path):
-    pop = os.getcwd()
-    os.chdir(path)
-    try:
-        yield path
-    finally:
-        os.chdir(pop)
+SERVER = "ec2-184-73-58-184.compute-1.amazonaws.com"
+DATABASE = "ocd"
+
+connection = Connection(SERVER, 27017)
+db = getattr(connection, DATABASE)
 
 
-state = args.state
+def dump(jurisdiction, obj):
+    path = "%s/%s" % (jurisdiction, obj['_id'])
+    if not os.path.exists(os.path.dirname(path)):
+        os.makedirs(os.path.dirname(path))
 
-connection = Connection(args.server, args.port)
-db = getattr(connection, args.database)
-
-
-def normalize_person(entry):
-    data = list(db.memberships.find({
-        "person_id": entry['_id']
-    }))
-    for datum in data:
-        datum.pop('_id')
-
-    entry['memberships'] = data
-
-    return entry
+    json.dump(obj, open(path, 'w'), cls=JSONEncoderPlus)
 
 
-normalizers = {
-    "ocd-person": normalize_person
-}
+def dump_person(who, jurisdiction):
+    obj = db.people.find_one({"_id": who})
+    obj['memberships'] = list(db.memberships.find({"person_id": who}))
+    for membership in obj['memberships']:
+        membership.pop("_id")
+        if 'jurisdiction' in membership:
+            membership.pop("jurisdiction")
+    dump(jurisdiction, obj)
 
 
-def dump(collection, spec):
-    for entry in collection.find(spec):
-        path = entry['_id']
-        where = entry.get('openstates_id')
-        if where:
-            where = where[:2].lower()
-        else:
-            where = 'unknown'
-
-        path = "%s/%s" % (where, path)
-        basename = os.path.dirname(path)
-        if not os.path.exists(basename):
-            os.makedirs(basename)
-
-        for hook in normalizers:
-            if entry['_id'].startswith(hook):
-                entry = normalizers[hook](entry)
-
-        with open(path, 'w') as fd:
-            print path
-            json.dump(entry, fd, cls=JSONEncoderPlus)
+def dump_suborg(what, jurisdiction):
+    for org in db.organizations.find({"parent_id": what}):
+        dump(jurisdiction, org)
+        dump_suborg(org['_id'], jurisdiction)
 
 
-path = args.output
-if not os.path.exists(path):
-    os.makedirs(path)
+def dump_bills(abbr, jurisdiction, key='jurisdiction_id'):
+    for bill in db.bills.find({key: abbr}):
+        dump(jurisdiction, bill)
 
-with cd(path):
-    spec = {}
-    if state:
-        spec = {"jurisdiction": state}
 
-    for collection in [
-        db.orgnizations,
-        db.people,
-        db.bills,
-        db.votes,
-        db.events
-    ]:
-        dump(collection, spec)
+def dump_votes(abbr, jurisdiction, key='jurisdiction_id'):
+    for vote in db.votes.find({key: abbr}):
+        dump(jurisdiction, vote)
+
+
+def dump_events(abbr, jurisdiction, key='jurisdiction_id'):
+    for event in db.events.find({key: abbr}):
+        dump(jurisdiction, event)
+
+
+def dump_org(what, jurisdiction):
+    org = db.organizations.find_one({"_id": what})
+    print org['name']
+
+    dump_suborg(what, jurisdiction)
+    for membership in db.memberships.find({"organization_id": what}):
+        dump_person(membership['person_id'], jurisdiction)
+
+    kwargs = {}
+    abbr = None
+    if org.get('openstates_id'):
+        abbr = org['openstates_id']
+        assert len(abbr) == 2
+        kwargs['key'] = "jurisdiction"
+    elif org.get('jurisdiction_id'):
+        abbr = org['jurisdiction_id']
+    else:
+        return
+
+    if abbr is None:
+        raise Exception
+
+    dump_bills(abbr, jurisdiction, **kwargs)
+    dump_votes(abbr, jurisdiction, **kwargs)
+    dump_events(abbr, jurisdiction, **kwargs)
+
+
+for org in db.organizations.find({"$or": [{"classification": "jurisdiction"}, {"classification": {"$exists": False}}]}):
+    dump_org(org['_id'], org['_id'])
