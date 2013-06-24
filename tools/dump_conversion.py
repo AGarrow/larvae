@@ -55,6 +55,7 @@ def dump_events(abbr, jurisdiction, key='jurisdiction_id'):
 def dump_org(what, jurisdiction):
     org = db.organizations.find_one({"_id": what})
     print org['name']
+    dump(jurisdiction, org)
 
     dump_suborg(what, jurisdiction)
     for membership in db.memberships.find({"organization_id": what}):
