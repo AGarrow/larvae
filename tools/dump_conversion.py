@@ -61,7 +61,13 @@ normalizers = {
 def dump(collection, spec):
     for entry in collection.find(spec):
         path = entry['_id']
-        path = "%s/%s" % (entry['jurisdiction'], path)
+        where = entry.get('openstates_id')
+        if where:
+            where = where[:2]
+        else:
+            where = 'unknown'
+
+        path = "%s/%s" % (where, path)
         basename = os.path.dirname(path)
         if not os.path.exists(basename):
             os.makedirs(basename)

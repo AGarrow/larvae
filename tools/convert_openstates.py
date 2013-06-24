@@ -26,6 +26,7 @@ type_tables = {
 }
 
 _hot_cache = {}
+_cache_touched = {}
 
 
 def load_hot_cache(state):
@@ -39,18 +40,21 @@ def load_hot_cache(state):
 
 
 def write_hot_cache(state):
+    global _cache_touched
     #print "Writing cache"
     for entry in _hot_cache:
         if entry is None:
             continue
 
-        nudb.openstates_cache.update({"_id": entry},
-                                     {"_id": entry,
-                                      "state": entry[:2].lower(),
-                                      "ocd-id": _hot_cache[entry]},
-                                      upsert=True,
-                                      safe=True)
+        if _cache_touched.get(entry, False):
+            nudb.openstates_cache.update({"_id": entry},
+                                         {"_id": entry,
+                                          "state": entry[:2].lower(),
+                                          "ocd-id": _hot_cache[entry]},
+                                          upsert=True,
+                                          safe=True)
     #print "Cache saved"
+    _cache_touched = {}
 
 
 def ocd_namer(obj):
@@ -80,9 +84,6 @@ def save_objects(payload):
         what = type_tables[type(entry)]
         table = getattr(nudb, what)
 
-        if hasattr(entry, "openstates_id"):
-            entry.jurisdiction = entry.openstates_id[:2].lower()
-
         _id = None
         try:
             _id = entry._id
@@ -105,6 +106,7 @@ def save_objects(payload):
 
         if hasattr(entry, "openstates_id"):
             _hot_cache[entry.openstates_id] = entry._id
+            _cache_touched[entry.openstates_id] = True
 
         if QUIET:
             sys.stdout.write(entry._type[0])
@@ -154,6 +156,7 @@ def lookup_entry_id(collection, openstates_id):
 
     id_ = str(org['_id'])
     _hot_cache[openstates_id] = id_
+    _cache_touched[openstates_id] = True
     return id_
 
 
@@ -164,8 +167,7 @@ def migrate_committees(state):
             osid = member.get('leg_id', None)
             person_id = lookup_entry_id('people', osid)
             if person_id:
-                m = Membership(person_id, org._id,
-                               jurisdiction=org.jurisdiction)
+                m = Membership(person_id, org._id)
                 save_object(m)
 
     spec = {"subcommittee": None}
@@ -222,6 +224,7 @@ def create_or_get_party(what):
     })
     if org:
         _hot_cache[what] = org['_id']
+        _cache_touched[what] = True
         return org['_id']
 
     org = Organization(what, classification="party")
@@ -230,6 +233,7 @@ def create_or_get_party(what):
     save_object(org)
 
     _hot_cache[what] = org._id
+    _cache_touched[what] = True
 
     return org._id
 
@@ -277,11 +281,10 @@ def migrate_people(state):
         nudb.memberships.remove({"person_id": who._id}, safe=True)
 
         if party:
-            m = Membership(who._id, create_or_get_party(entry['party']),
-                           jurisdiction=who.jurisdiction)
+            m = Membership(who._id, create_or_get_party(entry['party']))
             save_object(m)
 
-        m = Membership(who._id, legislature, jurisdiction=who.jurisdiction)
+        m = Membership(who._id, legislature)
 
         chamber, district = (entry.get(x, None)
                              for x in ['chamber', 'district'])
