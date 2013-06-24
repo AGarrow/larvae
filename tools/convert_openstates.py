@@ -205,13 +205,6 @@ def migrate_committees(state):
         save_object(org)
         attach_members(committee, org)
 
-def drop_memberships(state):
-    if state is None:
-        return nudb.memberships.drop()
-
-    nudb.memberships.remove({"jurisdiction": state}, safe=True)
-    assert nudb.memberships.find({"jurisdiction": state}).count() == 0
-
 
 def drop_existing_data(state):
     for entry in type_tables.values():
@@ -280,6 +273,8 @@ def migrate_people(state):
         save_object(who)  # gives who an id, btw.
 
         party = entry.get('party', None)
+
+        nudb.memberships.remove({"person_id": who._id}, safe=True)
 
         if party:
             m = Membership(who._id, create_or_get_party(entry['party']),
@@ -527,10 +522,16 @@ SEQUENCE = [
     # XXX: WILL IGNORE STATE, DON'T ENABLE ME.
     #drop_existing_data,  # Not needed if we load the cache
     #
-    drop_memberships,  # If you migrate leg / people / com, you have to drop
-    # the table, since it'll keep inserting.
     migrate_legislatures,
     migrate_people,  # depends on legislatures
+    #
+    # XXX: migrate_people needs to be called for migrate_committees, for two
+    #      reasons:
+    #
+    #   - committess look up person _id entries
+    #   - migrating people drops memberships, which means it'd avoid
+    #     dupes.
+    #
     migrate_committees,  # depends on people
     migrate_bills,
     migrate_events,
