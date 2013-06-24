@@ -41,6 +41,9 @@ def load_hot_cache(state):
 def write_hot_cache(state):
     #print "Writing cache"
     for entry in _hot_cache:
+        if entry is None:
+            continue
+
         nudb.openstates_cache.update({"_id": entry},
                                      {"_id": entry,
                                       "state": entry[:2].lower(),
