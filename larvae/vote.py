@@ -11,7 +11,7 @@ class Vote(LarvaeBase):
                  "bill", "vote_counts", "roll_call", "sources",
                  'openstates_id',)
 
-    def __init__(self, session, date, type, passed,
+    def __init__(self, session, date, motion, type, passed,
                  yes_count, no_count, other_count=0,
                  chamber=None, **kwargs):
 
@@ -22,6 +22,7 @@ class Vote(LarvaeBase):
 
         self.session = session
         self.date = date
+        self.motion = motion
         self.type = type
         self.passed = passed
         self.chamber = chamber
